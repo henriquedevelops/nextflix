@@ -8,8 +8,8 @@ datasource db {
 }
 
 model Movie {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
   description String
   genre       String
   imageUrl    String?
