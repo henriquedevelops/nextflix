@@ -2,14 +2,6 @@ import { Prisma } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "./appErrorClass";
 
-interface PrismaError {
-  code: string;
-  clientVersion: string;
-  meta: {
-    message: string;
-  };
-}
-
 export default (
   err: Error | Prisma.PrismaClientKnownRequestError,
   req: Request,
@@ -18,9 +10,19 @@ export default (
 ) => {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     if (err.code === "P2023") {
-      res.status(400).json({
+      res.status(404).json({
         message: "Requested resource was not found.",
         statusCode: 404,
+      });
+    } else if (err.code === "P2002") {
+      res.status(409).json({
+        message: "Conflict in database.",
+        statusCode: 409,
+      });
+    } else {
+      res.status(400).json({
+        message: "Invalid request",
+        statusCode: 400,
       });
     }
   }

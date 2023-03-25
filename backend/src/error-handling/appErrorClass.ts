@@ -19,18 +19,6 @@ export class CustomError extends Error {
   }
 }
 
-export class BadRequestError extends CustomError {
-  get statusCode(): number {
-    return 400;
-  }
-}
-
-export class NotFoundError extends CustomError {
-  get statusCode(): number {
-    return 404;
-  }
-}
-
 export class UnauthorizedError extends CustomError {
   get statusCode(): number {
     return 401;

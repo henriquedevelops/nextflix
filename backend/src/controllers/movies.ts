@@ -1,9 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "../../prisma/client";
-import {
-  BadRequestError,
-  NotFoundError,
-} from "../error-handling/appErrorClass";
 import tryCatch from "../error-handling/tryCatch";
 
 export const getMovies = tryCatch(
