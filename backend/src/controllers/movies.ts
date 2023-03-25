@@ -1,46 +1,44 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import prisma from "../../prisma/client";
+import tryCatch from "../error-handling/tryCatch";
 
-export const getAllMovies = async (req: Request, res: Response) => {
-  const { selectedGenre, page = 1, pageSize = 10 } = req.query;
+export const getAllMovies = tryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { selectedGenre } = req.query;
 
-  let moviesResponse;
+    let moviesResponse;
 
-  if (selectedGenre) {
-    moviesResponse = await prisma.movie.findMany({
-      where: {
-        genre: {
-          equals: selectedGenre.toString(),
+    if (selectedGenre) {
+      moviesResponse = await prisma.movie.findMany({
+        where: {
+          genre: {
+            equals: selectedGenre.toString(),
+          },
         },
-      },
-    });
-  } else {
-    moviesResponse = await prisma.movie.findMany();
+      });
+    } else {
+      moviesResponse = await prisma.movie.findMany();
+    }
+
+    res.json(moviesResponse);
   }
+);
 
-  res.json(moviesResponse);
-};
-
-export const createMovie = async (req: Request, res: Response) => {
+export const createMovie = tryCatch(async (req: Request, res: Response) => {
   const { title, genre, description } = req.body;
 
-  try {
-    const newMovie = await prisma.movie.create({
-      data: {
-        title,
-        genre,
-        description,
-      },
-    });
+  const newMovie = await prisma.movie.create({
+    data: {
+      title,
+      genre,
+      description,
+    },
+  });
 
-    res.status(201).json(newMovie);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to create movie." });
-  }
-};
+  res.status(201).json(newMovie);
+});
 
-export const updateMovie = async (req: Request, res: Response) => {
+export const updateMovie = tryCatch(async (req: Request, res: Response) => {
   const id = req.params.id;
   const { title, description, genre } = req.body;
 
@@ -56,20 +54,15 @@ export const updateMovie = async (req: Request, res: Response) => {
   });
 
   res.json(updatedMovie);
-};
+});
 
-export const deleteMovie = async (req: Request, res: Response) => {
+export const deleteMovie = tryCatch(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  try {
-    await prisma.movie.delete({
-      where: {
-        id,
-      },
-    });
-    res.sendStatus(204);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
-};
+  await prisma.movie.delete({
+    where: {
+      id,
+    },
+  });
+  res.sendStatus(204);
+});
