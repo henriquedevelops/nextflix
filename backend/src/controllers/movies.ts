@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "../../prisma/client";
+import {
+  BadRequestError,
+  NotFoundError,
+} from "../error-handling/appErrorClass";
 import tryCatch from "../error-handling/tryCatch";
 
 export const getMovies = tryCatch(
@@ -37,6 +41,18 @@ export const createMovie = tryCatch(async (req: Request, res: Response) => {
 
   res.status(201).json(newMovie);
 });
+
+export const getMovieById = tryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    const requestedMovie = await prisma.movie.findUnique({
+      where: { id },
+    });
+
+    res.json(requestedMovie);
+  }
+);
 
 export const updateMovie = tryCatch(async (req: Request, res: Response) => {
   const id = req.params.id;

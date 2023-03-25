@@ -1,22 +1,38 @@
-import { IExtendedError } from "./globalErrorHandler";
-
-/*
-
-Extended error class which includes additional
-data relevant for error handling middleware.
-
-*/
-
-export default class AppError extends Error implements IExtendedError {
-  public statusCode: number;
-  public status: string;
-  public isOperational: boolean;
-
-  constructor(message: string, statusCode: number) {
+export class CustomError extends Error {
+  constructor(message: string) {
     super(message);
-    this.statusCode = statusCode;
-    this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
-    this.isOperational = true;
+    this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
+  }
+
+  get statusCode(): number {
+    return 500;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      stack: this.stack,
+      statusCode: this.statusCode,
+    };
+  }
+}
+
+export class BadRequestError extends CustomError {
+  get statusCode(): number {
+    return 400;
+  }
+}
+
+export class NotFoundError extends CustomError {
+  get statusCode(): number {
+    return 404;
+  }
+}
+
+export class UnauthorizedError extends CustomError {
+  get statusCode(): number {
+    return 401;
   }
 }

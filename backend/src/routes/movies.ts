@@ -4,6 +4,7 @@ import {
   createMovie,
   updateMovie,
   deleteMovie,
+  getMovieById,
 } from "../controllers/movies";
 
 const router = Router();
@@ -11,6 +12,7 @@ const router = Router();
 router
   .get("/", getMovies)
   .post("/", createMovie)
+  .get("/:id", getMovieById) // new route for getting movie by id
   .patch("/:id", updateMovie)
   .delete("/:id", deleteMovie);
 
