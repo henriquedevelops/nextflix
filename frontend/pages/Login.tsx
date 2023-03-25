@@ -1,5 +1,6 @@
 import InputField from "@/components/InputField";
 import { FunctionComponent as FC } from "react";
+import TextField from "@mui/material/TextField";
 
 const Login: FC = () => {
   return (
@@ -13,8 +14,8 @@ const Login: FC = () => {
       </nav>
       <div className="flex justify-center">
         <div className="bg-neutral-200 px-8 py-8 self-center lg:w-2/5 lg:max-w-md rounded-md w-full ">
-          <h2 className="text-neutral-800 text-2xl mb-font-semibold">
-            Sign in
+          <h2 className="text-neutral-800 text-3xl mb-font-semibold mb-5 font-bold ">
+            Login
           </h2>
           <div className="flex flex-col gap-4">
             <InputField />

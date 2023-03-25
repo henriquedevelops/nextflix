@@ -1,9 +1,12 @@
-import express from "express";
-import config from "config";
+import express, { Request, Response } from "express";
 
-const port = config.get<number>("port");
 const app = express();
 
-app.listen(port, async () => {
+app.listen(80, async () => {
   console.log("Server is running 🚀");
+});
+
+app.get("/", (req: Request, res: Response) => {
+  req.body;
+  res.sendFile("eai suavissimo tudo certo", { root: "" });
 });
