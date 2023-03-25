@@ -9,7 +9,7 @@ datasource db {
 
 model Movie {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
+  title       String  @unique
   description String
   genre       String
   imageUrl    String?
