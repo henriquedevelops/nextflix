@@ -57,3 +57,19 @@ export const updateMovie = async (req: Request, res: Response) => {
 
   res.json(updatedMovie);
 };
+
+export const deleteMovie = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.movie.delete({
+      where: {
+        id,
+      },
+    });
+    res.sendStatus(204);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+};
