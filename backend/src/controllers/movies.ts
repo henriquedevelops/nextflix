@@ -39,3 +39,21 @@ export const createMovie = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Failed to create movie." });
   }
 };
+
+export const updateMovie = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const { title, description, genre } = req.body;
+
+  const updatedMovie = await prisma.movie.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      description,
+      genre,
+    },
+  });
+
+  res.json(updatedMovie);
+};
