@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import prisma from "../../prisma/client";
 import tryCatch from "../error-handling/tryCatch";
 
-export const getAllMovies = tryCatch(
+export const getMovies = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const { selectedGenre } = req.query;
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  getAllMovies,
+  getMovies,
   createMovie,
   updateMovie,
   deleteMovie,
@@ -9,7 +9,7 @@ import {
 const router = Router();
 
 router
-  .get("/", getAllMovies)
+  .get("/", getMovies)
   .post("/", createMovie)
   .patch("/:id", updateMovie)
   .delete("/:id", deleteMovie);
