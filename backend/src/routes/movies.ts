@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authenticate } from "../auth/jwtToken";
 import {
   getMovies,
   createMovie,
@@ -10,9 +11,9 @@ import {
 const router = Router();
 
 router
-  .get("/", getMovies)
+  .get("/", authenticate, getMovies)
   .post("/", createMovie)
-  .get("/:id", getMovieById) // new route for getting movie by id
+  .get("/:id", getMovieById)
   .patch("/:id", updateMovie)
   .delete("/:id", deleteMovie);
 
