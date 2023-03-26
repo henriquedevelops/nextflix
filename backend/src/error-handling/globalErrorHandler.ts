@@ -2,6 +2,10 @@ import { Prisma } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "./appErrorClass";
 
+/* Global error handling middleware verifies the error sorce and then 
+sends an appropriate HTTP response with an error message and status 
+code included. If the error is not recognized, it sends a 500 status 
+code with a generic error message.*/
 export default (
   err: Error | Prisma.PrismaClientKnownRequestError,
   req: Request,
