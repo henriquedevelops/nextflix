@@ -33,3 +33,9 @@ export class UnauthorizedError extends CustomError {
     return 401;
   }
 }
+
+export class ResourceConflictError extends CustomError {
+  get statusCode(): number {
+    return 409;
+  }
+}
