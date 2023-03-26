@@ -20,7 +20,7 @@ export const getMovies = tryCatch(
       moviesResponse = await prisma.movie.findMany();
     }
 
-    res.json(moviesResponse);
+    res.status(201).json(moviesResponse);
   }
 );
 
@@ -46,7 +46,7 @@ export const getMovieById = tryCatch(
       where: { id },
     });
 
-    res.json(requestedMovie);
+    res.status(201).json(requestedMovie);
   }
 );
 
@@ -65,7 +65,7 @@ export const updateMovie = tryCatch(async (req: Request, res: Response) => {
     },
   });
 
-  res.json(updatedMovie);
+  res.status(201).json(updatedMovie);
 });
 
 export const deleteMovie = tryCatch(async (req: Request, res: Response) => {
