@@ -10,8 +10,10 @@ import {
 
 const router = Router();
 
+router.use(authenticate);
+
 router
-  .get("/", authenticate, getMovies)
+  .get("/", getMovies)
   .post("/", createMovie)
   .get("/:id", getMovieById)
   .patch("/:id", updateMovie)
