@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import prisma from "../../prisma/client";
 import tryCatch from "../error-handling/tryCatch";
 import { hash, compare } from "bcrypt";
-import { sendToken } from "../auth/jwtToken";
+import { signToken } from "../auth/jwtToken";
 
 export const login = tryCatch(async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -24,7 +24,13 @@ export const login = tryCatch(async (req: Request, res: Response) => {
     return;
   }
 
-  sendToken(user, 200, res);
+  const token = signToken(user);
+
+  res.cookie("token", token, {
+    httpOnly: true,
+  });
+
+  res.redirect("/");
 });
 
 export const createUser = tryCatch(async (req: Request, res: Response) => {
@@ -42,7 +48,8 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
   });
   req.user = newUser;
 
-  sendToken(newUser, 201, res);
+  const token = signToken(newUser);
+  res.status(200).json({ newUser, token });
 });
 
 export const deleteUser = tryCatch(async (req: Request, res: Response) => {

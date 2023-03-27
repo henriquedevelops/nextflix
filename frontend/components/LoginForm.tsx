@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
-import axios from "axios";
+import axios from "../pages/api/axios";
 
 type LoginFormProps = {
   toggleSelectedForm: () => void;
@@ -40,17 +40,18 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
     }
 
     try {
-      await axios.post("http://localhost:80/users/auth", {
-        email,
-        password,
-      });
+      await axios.post(
+        "/users/auth",
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
+
       setLoading(false);
     } catch (error) {
       console.error(error);
-      setErrors((prevState) => ({
-        ...prevState,
-        authentication: "Email or password invalid.",
-      }));
       setLoading(false);
     }
   };
@@ -97,7 +98,6 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           type="submit"
           fullWidth
           variant="contained"
-          disabled={loading}
           style={{ backgroundColor: "red" }}
           sx={{
             mt: 3,
