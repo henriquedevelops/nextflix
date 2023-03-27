@@ -7,21 +7,24 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { FunctionComponent as FC } from "react";
+import { FunctionComponent as FC, useState } from "react";
+import axios from "axios";
 
 type LoginFormProps = {
   toggleSelectedForm: () => void;
 };
 
 const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
-  const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState(false);
 
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     const data = new FormData(event.currentTarget);
 
     const email = data.get("email");
@@ -34,6 +37,21 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
       }));
     } else {
       setErrors((prevState) => ({ ...prevState, email: "" }));
+    }
+
+    try {
+      await axios.post("http://localhost:80/users/auth", {
+        email,
+        password,
+      });
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setErrors((prevState) => ({
+        ...prevState,
+        authentication: "Email or password invalid.",
+      }));
+      setLoading(false);
     }
   };
 
@@ -59,6 +77,7 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           type="email"
           helperText={errors.email}
           error={Boolean(errors.email)}
+          disabled={loading}
         />
         <TextField
           margin="dense"
@@ -68,6 +87,7 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           type="password"
           name="password"
           size="small"
+          disabled={loading}
         />
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
@@ -77,6 +97,7 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           type="submit"
           fullWidth
           variant="contained"
+          disabled={loading}
           style={{ backgroundColor: "red" }}
           sx={{
             mt: 3,
