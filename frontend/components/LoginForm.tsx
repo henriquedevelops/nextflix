@@ -30,7 +30,7 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
     if (!email || !isValidEmail(email.toString())) {
       setErrors((prevState) => ({
         ...prevState,
-        email: "Please enter a valid email address.",
+        email: "Please enter a valid email address",
       }));
     } else {
       setErrors((prevState) => ({ ...prevState, email: "" }));

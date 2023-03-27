@@ -5,11 +5,13 @@ import cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 dotenv.config();
 import express, { Request, Response } from "express";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 app.use("/movies", moviesRouter);
 app.use("/users", usersRouter);
 app.use(globalErrorHandler);
