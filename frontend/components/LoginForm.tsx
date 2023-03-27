@@ -1,25 +1,21 @@
-import { FunctionComponent as FC } from "react";
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import * as React from "react";
+import { FunctionComponent as FC } from "react";
 
-const SignInForm: FC = () => {
+type LoginFormProps = {
+  toggleSelectedForm: () => void;
+};
+
+const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
   };
 
   return (
@@ -30,8 +26,9 @@ const SignInForm: FC = () => {
         align="left"
         marginTop={4}
         marginBottom={1}
+        onClick={toggleSelectedForm}
       >
-        Sign in
+        Login
       </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <TextField
@@ -42,7 +39,6 @@ const SignInForm: FC = () => {
           label="Email Address"
           name="email"
           autoComplete="email"
-          autoFocus
           size="small"
         />
         <TextField
@@ -75,14 +71,29 @@ const SignInForm: FC = () => {
         </Button>
         <Grid container>
           <Grid item xs>
-            <Link href="#" variant="body2">
-              Forgot password?
-            </Link>
+            <Typography
+              variant="body2"
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                color: "#87CEFA",
+              }}
+            >
+              Forgot your password?
+            </Typography>
           </Grid>
           <Grid item>
-            <Link href="#" variant="body2">
-              {"Don't have an account? Sign Up"}
-            </Link>
+            <Typography
+              variant="body2"
+              onClick={toggleSelectedForm}
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                color: "#87CEFA",
+              }}
+            >
+              Don't have an account? Sign Up
+            </Typography>
           </Grid>
         </Grid>
       </Box>
@@ -90,4 +101,4 @@ const SignInForm: FC = () => {
   );
 };
 
-export default SignInForm;
+export default LoginForm;
