@@ -16,6 +16,11 @@ type LoginFormProps = {
 const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log({
+      email: data.get("email"),
+      password: data.get("password"),
+    });
   };
 
   return (
@@ -26,7 +31,6 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
         align="left"
         marginTop={4}
         marginBottom={1}
-        onClick={toggleSelectedForm}
       >
         Login
       </Typography>
@@ -35,21 +39,18 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           margin="dense"
           required
           fullWidth
-          id="email"
           label="Email Address"
           name="email"
-          autoComplete="email"
           size="small"
+          type="email"
         />
         <TextField
           margin="dense"
           required
           fullWidth
-          name="password"
           label="Password"
           type="password"
-          id="password"
-          autoComplete="current-password"
+          name="password"
           size="small"
         />
         <FormControlLabel

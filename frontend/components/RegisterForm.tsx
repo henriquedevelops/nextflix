@@ -17,6 +17,13 @@ type RegisterFormProps = {
 const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const email = data.get("email");
+    const password = data.get("password");
+    const passwordConfirm = data.get("password-confirm");
+
+    console.log(password === passwordConfirm);
   };
 
   return (
@@ -27,7 +34,6 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
         align="left"
         marginTop={4}
         marginBottom={1}
-        onClick={toggleSelectedForm}
       >
         Register
       </Typography>
@@ -36,31 +42,28 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           margin="dense"
           required
           fullWidth
-          id="email"
           label="Email Address"
+          size="small"
           name="email"
-          autoComplete="email"
-          size="small"
+          type="email"
         />
         <TextField
           margin="dense"
           required
           fullWidth
-          id="password"
           label="Password"
-          name="password"
-          autoComplete="password"
+          type="password"
           size="small"
+          name="password"
         />
         <TextField
           margin="dense"
           required
           fullWidth
-          id="password"
           label="Confirm password"
-          name="password"
-          autoComplete="password"
+          type="password"
           size="small"
+          name="password-confirm"
         />
         <Button
           type="submit"
