@@ -15,6 +15,12 @@ type RegisterFormProps = {
 };
 
 const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
+  const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -22,6 +28,24 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
     const email = data.get("email");
     const password = data.get("password");
     const passwordConfirm = data.get("password-confirm");
+
+    if (!email || !isValidEmail(email.toString())) {
+      setErrors((prevState) => ({
+        ...prevState,
+        email: "Please enter a valid email address.",
+      }));
+    } else {
+      setErrors((prevState) => ({ ...prevState, email: "" }));
+    }
+
+    if (!password || !passwordConfirm || password !== passwordConfirm) {
+      setErrors((prevState) => ({
+        ...prevState,
+        passwordConfirm: "Passwords don't match.",
+      }));
+    } else {
+      setErrors((prevState) => ({ ...prevState, passwordConfirm: "" }));
+    }
 
     console.log(password === passwordConfirm);
   };
@@ -46,6 +70,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           size="small"
           name="email"
           type="email"
+          helperText={errors.email}
+          error={Boolean(errors.email)}
         />
         <TextField
           margin="dense"
@@ -55,6 +81,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           type="password"
           size="small"
           name="password"
+          error={Boolean(errors.passwordConfirm)}
         />
         <TextField
           margin="dense"
@@ -64,6 +91,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           type="password"
           size="small"
           name="password-confirm"
+          error={Boolean(errors.passwordConfirm)}
+          helperText={errors.passwordConfirm}
         />
         <Button
           type="submit"

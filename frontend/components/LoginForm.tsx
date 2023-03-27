@@ -14,13 +14,27 @@ type LoginFormProps = {
 };
 
 const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
+  const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    const email = data.get("email");
+    const password = data.get("password");
+
+    if (!email || !isValidEmail(email.toString())) {
+      setErrors((prevState) => ({
+        ...prevState,
+        email: "Please enter a valid email address.",
+      }));
+    } else {
+      setErrors((prevState) => ({ ...prevState, email: "" }));
+    }
   };
 
   return (
@@ -43,6 +57,8 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           name="email"
           size="small"
           type="email"
+          helperText={errors.email}
+          error={Boolean(errors.email)}
         />
         <TextField
           margin="dense"
