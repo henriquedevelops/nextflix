@@ -3,6 +3,8 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
 import axios from "../pages/api/axios";
@@ -14,6 +16,7 @@ type RegisterFormProps = {
 const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -47,11 +50,18 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
     }
 
     try {
-      axios.post("/users", {
+      await axios.post("/users", {
         email,
         password,
       });
+
+      await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
       setLoading(false);
+      router.push("/");
     } catch (error) {
       console.error(error);
       setLoading(false);

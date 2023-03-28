@@ -3,14 +3,12 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
-import axios from "../pages/api/axios";
 
 type LoginFormProps = {
   toggleSelectedForm: () => void;
@@ -44,12 +42,11 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
 
     try {
       await signIn("credentials", {
-        email: email,
-        password: password,
+        email,
+        password,
         redirect: false,
       });
       setLoading(false);
-
       router.push("/");
     } catch (error: any) {
       console.error(error.message);

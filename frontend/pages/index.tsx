@@ -1,7 +1,8 @@
-import { GetServerSidePropsContext, NextPageContext } from "next";
-import { FunctionComponent as FC } from "react";
-import { useEffect } from "react";
+import Main from "@/components/Main";
+import { NextPageContext } from "next";
 import { getSession, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { FunctionComponent as FC, useEffect } from "react";
 
 /* Server-side rendering */
 export async function getServerSideProps(context: NextPageContext) {
@@ -23,14 +24,15 @@ export async function getServerSideProps(context: NextPageContext) {
 
 const Home: FC = () => {
   const { data: session } = useSession();
+  const nextRouter = useRouter();
+
+  useEffect(() => {
+    if (!session?.user) nextRouter.push("/auth");
+  }, []);
 
   return (
     <>
-      {session?.user ? (
-        <h1 className="text2xl text-gray-200">Logadissimo</h1>
-      ) : (
-        <h1 className="text2xl text-gray-200">nao logado</h1>
-      )}
+      <Main />
     </>
   );
 };
