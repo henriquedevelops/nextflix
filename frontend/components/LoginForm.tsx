@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { signIn } from "next-auth/react";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
 import axios from "../pages/api/axios";
@@ -40,18 +41,15 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
     }
 
     try {
-      await axios.post(
-        "/users/auth",
-        {
-          email,
-          password,
-        },
-        { withCredentials: true }
-      );
-
+      signIn("credentials", {
+        email: email,
+        password: password,
+        redirect: true,
+        callbackUrl: "/",
+      });
       setLoading(false);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error(error.message);
       setLoading(false);
     }
   };

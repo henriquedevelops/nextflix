@@ -33,7 +33,9 @@ user object to the request object before calling the next middleware. */
 export const authenticate = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     if (!jwtSecret) throw new Error("JWT secret not detected");
+
     const token = req.cookies.token;
+
     if (!token) throw new UnauthorizedError("Please log in first");
 
     const { user } = jwt.verify(token, jwtSecret) as JwtPayload;

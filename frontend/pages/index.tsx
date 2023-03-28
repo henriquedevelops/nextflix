@@ -1,17 +1,18 @@
-import { GetServerSideProps } from "next";
+import { GetServerSidePropsContext } from "next";
 import { FunctionComponent as FC } from "react";
-
-interface DecodedToken {
-  user: {
-    id: string;
-    email: string;
-  };
-}
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 const Home: FC = () => {
+  const { data: session } = useSession();
+
   return (
     <>
-      <h1 className="text2xl text-gray-200">NEXTFLIX</h1>
+      {session?.user ? (
+        <h1 className="text2xl text-gray-200">Logadissimo</h1>
+      ) : (
+        <h1 className="text2xl text-gray-200">nao logado</h1>
+      )}
     </>
   );
 };

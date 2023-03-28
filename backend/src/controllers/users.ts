@@ -26,11 +26,13 @@ export const login = tryCatch(async (req: Request, res: Response) => {
 
   const token = signToken(user);
 
+  const { password: _, ...loggedUser } = user;
+
   res.cookie("token", token, {
     httpOnly: true,
   });
 
-  res.redirect("/");
+  res.status(200).json({ loggedUser });
 });
 
 export const createUser = tryCatch(async (req: Request, res: Response) => {
@@ -48,8 +50,8 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
   });
   req.user = newUser;
 
-  const token = signToken(newUser);
-  res.status(200).json({ newUser, token });
+  /*   const token = signToken(newUser); */
+  res.status(200).json({ newUser });
 });
 
 export const deleteUser = tryCatch(async (req: Request, res: Response) => {
