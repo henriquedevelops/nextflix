@@ -37,6 +37,8 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
         ...prevState,
         email: "Please enter a valid email address",
       }));
+
+      setLoading(false);
       return;
     }
     setErrors((prevState) => ({ ...prevState, email: "" }));
@@ -52,8 +54,12 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
       toast.error("Invalid email or password");
       return;
     }
+
+    setLoading(false);
     router.push("/");
   };
+
+  console.log(Boolean(errors.email));
 
   return (
     <>

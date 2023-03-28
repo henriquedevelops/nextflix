@@ -23,40 +23,40 @@ const Main: FC = () => {
         <Toolbar sx={{ bgcolor: "#000000", justifyContent: "center" }}>
           <CardMedia
             component="img"
-            sx={{ width: "300px" }}
+            sx={{ width: "300px", marginTop: "1px" }}
             image="/images/logo3.png"
           />
         </Toolbar>
       </AppBar>
       <Container>
-        <Grid container mt={15} spacing={4}>
+        <Grid container mt={4} spacing={4}>
           {cards.map((card) => (
             <Grid item key={card} xs={12} sm={6} md={4}>
-              <Card sx={{ maxWidth: 345 }}>
+              <Card>
                 <CardActionArea>
                   <CardMedia
                     component="img"
                     height="140"
                     image="/images/pigeon2.jpg"
-                    alt="green iguana"
+                    /* sx={{
+                      aspectRatio: "1 / 1", // Fixed aspect ratio
+                    }} */
                   />
                   <CardContent>
                     <Typography
                       gutterBottom
                       variant="h4"
                       component="div"
-                      sx={{ fontSize: "1.2rem" }}
+                      sx={{ fontSize: "1.0rem" }}
                     >
                       The Time-travelling Pigeon
                     </Typography>
                     <Typography
                       variant="body2"
                       color="text.secondary"
-                      sx={{ fontSize: "1.0rem" }}
+                      sx={{ fontSize: "0.9rem" }}
                     >
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica
+                      Drama
                     </Typography>
                   </CardContent>
                 </CardActionArea>
