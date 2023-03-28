@@ -9,6 +9,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 type LoginFormProps = {
   toggleSelectedForm: () => void;
@@ -36,22 +37,22 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
         ...prevState,
         email: "Please enter a valid email address",
       }));
-    } else {
-      setErrors((prevState) => ({ ...prevState, email: "" }));
+      return;
     }
+    setErrors((prevState) => ({ ...prevState, email: "" }));
 
-    try {
-      await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
+    const response = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (response?.error) {
       setLoading(false);
-      router.push("/");
-    } catch (error: any) {
-      console.error(error.message);
-      setLoading(false);
+      toast.error("Invalid email or password");
+      return;
     }
+    router.push("/");
   };
 
   return (
@@ -133,6 +134,7 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           </Grid>
         </Grid>
       </Box>
+      <Toaster />
     </>
   );
 };

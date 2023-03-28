@@ -2,6 +2,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -19,43 +20,46 @@ const Main: FC = () => {
     <>
       <CssBaseline />
       <AppBar position="fixed">
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Album layout
-          </Typography>
+        <Toolbar sx={{ bgcolor: "#000000", justifyContent: "center" }}>
+          <CardMedia
+            component="img"
+            sx={{ width: "300px" }}
+            image="/images/logo3.png"
+          />
         </Toolbar>
       </AppBar>
       <Container>
-        <Grid container mt={10} spacing={4}>
+        <Grid container mt={15} spacing={4}>
           {cards.map((card) => (
             <Grid item key={card} xs={12} sm={6} md={4}>
-              <Card
-                sx={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image="/images/pigeon2.jpg"
-                  alt="random"
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    Heading
-                  </Typography>
-                  <Typography>
-                    This is a media card. You can use this section to describe
-                    the content. card. You can use this section to describe the
-                    content. card. You can use this section to describe the
-                    content.
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">View</Button>
-                  <Button size="small">Edit</Button>
-                </CardActions>
+              <Card sx={{ maxWidth: 345 }}>
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image="/images/pigeon2.jpg"
+                    alt="green iguana"
+                  />
+                  <CardContent>
+                    <Typography
+                      gutterBottom
+                      variant="h4"
+                      component="div"
+                      sx={{ fontSize: "1.2rem" }}
+                    >
+                      The Time-travelling Pigeon
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ fontSize: "1.0rem" }}
+                    >
+                      Lizards are a widespread group of squamate reptiles, with
+                      over 6,000 species, ranging across all continents except
+                      Antarctica
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
               </Card>
             </Grid>
           ))}

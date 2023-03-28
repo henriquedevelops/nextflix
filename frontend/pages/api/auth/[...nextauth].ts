@@ -24,6 +24,7 @@ export const authOptions: NextAuthOptions = {
           return loggedUser;
         } catch (error) {
           console.log(error);
+          console.log("testando");
           return null;
         }
       },
