@@ -7,6 +7,7 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
 import axios from "../pages/api/axios";
@@ -18,6 +19,7 @@ type LoginFormProps = {
 const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -41,13 +43,14 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
     }
 
     try {
-      signIn("credentials", {
+      await signIn("credentials", {
         email: email,
         password: password,
-        redirect: true,
-        callbackUrl: "/",
+        redirect: false,
       });
       setLoading(false);
+
+      router.push("/");
     } catch (error: any) {
       console.error(error.message);
       setLoading(false);
@@ -58,12 +61,12 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
     <>
       <Typography
         component="h1"
-        variant="h5"
+        variant="h4"
         align="left"
         marginTop={4}
         marginBottom={1}
       >
-        Login
+        Welcome back
       </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <TextField

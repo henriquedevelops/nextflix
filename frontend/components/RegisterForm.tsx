@@ -62,12 +62,12 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
     <>
       <Typography
         component="h1"
-        variant="h5"
+        variant="h4"
         align="left"
         marginTop={4}
         marginBottom={1}
       >
-        Register
+        Create your account
       </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <TextField

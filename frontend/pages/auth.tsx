@@ -4,7 +4,26 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
+import { NextPageContext } from "next";
+import { getSession } from "next-auth/react";
 import { useCallback, useState } from "react";
+
+export async function getServerSideProps(context: NextPageContext) {
+  /* Extracting current session information from incoming request */
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
 
 const Auth = () => {
   const [selectedForm, setSelectedForm] = useState("login");

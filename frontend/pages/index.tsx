@@ -1,7 +1,25 @@
-import { GetServerSidePropsContext } from "next";
+import { GetServerSidePropsContext, NextPageContext } from "next";
 import { FunctionComponent as FC } from "react";
 import { useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
+
+/* Server-side rendering */
+export async function getServerSideProps(context: NextPageContext) {
+  /* Extracting current session information from incoming request */
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
 
 const Home: FC = () => {
   const { data: session } = useSession();
