@@ -36,6 +36,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
         ...prevState,
         email: "Please enter a valid email address.",
       }));
+      setLoading(false);
+      return;
     } else {
       setErrors((prevState) => ({ ...prevState, email: "" }));
     }
@@ -45,15 +47,22 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
         ...prevState,
         passwordConfirm: "Passwords don't match.",
       }));
+      setLoading(false);
+      return;
     } else {
       setErrors((prevState) => ({ ...prevState, passwordConfirm: "" }));
     }
 
     try {
-      await axios.post("/users", {
+      const response = await axios.post("/users", {
         email,
         password,
       });
+      console.log(response, "teste");
+      if (!response) {
+        setLoading(false);
+        return;
+      }
 
       await signIn("credentials", {
         email,
@@ -64,6 +73,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
       router.push("/");
     } catch (error) {
       console.error(error);
+      console.log("eie eieieie");
+
       setLoading(false);
     }
   };
