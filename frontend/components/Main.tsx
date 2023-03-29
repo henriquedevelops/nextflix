@@ -1,3 +1,4 @@
+import { IconButton } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,20 +13,36 @@ import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { FunctionComponent as FC } from "react";
+import MenuIcon from "@mui/icons-material/Menu";
+
+interface Props {
+  setSidebarIsOpen: (value: boolean) => void;
+}
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const Main: FC = () => {
+const Main: FC<Props> = ({ setSidebarIsOpen }) => {
   return (
     <>
       <CssBaseline />
       <AppBar position="fixed">
-        <Toolbar sx={{ bgcolor: "#000000", justifyContent: "center" }}>
-          <CardMedia
-            component="img"
-            sx={{ width: "300px", marginTop: "1px" }}
-            image="/images/logo3.png"
-          />
+        <Toolbar sx={{ bgcolor: "#000000" }}>
+          <IconButton
+            onClick={() => setSidebarIsOpen(true)}
+            size="large"
+            sx={{ marginLeft: "-12px" }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <div style={{ flex: 1 }} />
+          <div>
+            <CardMedia
+              component="img"
+              sx={{ width: "300px", marginTop: "1px" }}
+              image="/images/logo3.png"
+            />
+          </div>
+          <div style={{ flex: 1 }} />
         </Toolbar>
       </AppBar>
       <Container>
@@ -65,7 +82,7 @@ const Main: FC = () => {
           ))}
         </Grid>
       </Container>
-      <Box sx={{ p: 12 }} component="footer">
+      <Box sx={{ p: 20 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
           Nextflix
         </Typography>
@@ -75,9 +92,14 @@ const Main: FC = () => {
           color="text.secondary"
           component="p"
         >
-          Something here to give the footer a purpose!
+          Your next type of movie streaming platform.
         </Typography>
-        <Typography variant="body2" color="text.secondary" align="center">
+        <Typography
+          mt={1}
+          variant="body2"
+          color="text.secondary"
+          align="center"
+        >
           Copyright © Nextflix 2023
         </Typography>
       </Box>
