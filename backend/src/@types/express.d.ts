@@ -12,8 +12,7 @@ import { User } from "../entities/User";
 declare global {
   namespace Express {
     export interface Request {
-      user: User;
-      cookies: { [key: string]: string };
+      user: Partial<User>;
     }
   }
 }

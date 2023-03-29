@@ -6,12 +6,7 @@ import axios from "../axios";
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
-      // `credentials` is used to generate a form on the sign in page.
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         email: { label: "Email", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
@@ -20,8 +15,12 @@ export const authOptions: NextAuthOptions = {
         try {
           const response = await axios.post("/users/auth", credentials);
           const loggedUser = response.data.loggedUser;
-          if (!loggedUser) throw new Error("User not found.");
-          return loggedUser;
+          const accessToken = response.data.accessToken;
+          if (!loggedUser || !accessToken)
+            throw new Error(
+              "Invalid credentials. (At the [...nextauth].ts file) "
+            );
+          return { accessToken, ...loggedUser };
         } catch (error) {
           console.log(error);
           console.log("testando");
@@ -30,7 +29,16 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      return { ...token, ...user };
+    },
 
+    session: async ({ session, token }) => {
+      session.user = token;
+      return session;
+    },
+  },
   pages: {
     signIn: "/auth",
     signOut: "/",

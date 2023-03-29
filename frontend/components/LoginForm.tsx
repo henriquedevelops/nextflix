@@ -59,8 +59,6 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
     router.push("/");
   };
 
-  console.log(Boolean(errors.email));
-
   return (
     <>
       <Typography

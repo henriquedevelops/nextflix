@@ -58,7 +58,6 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
         email,
         password,
       });
-      console.log(response, "teste");
       if (!response) {
         setLoading(false);
         return;
@@ -73,7 +72,6 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
       router.push("/");
     } catch (error) {
       console.error(error);
-      console.log("eie eieieie");
 
       setLoading(false);
     }

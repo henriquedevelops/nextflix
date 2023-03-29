@@ -1,6 +1,7 @@
 import Main from "@/components/Main";
 import Sidebar from "@/components/Sidebar";
 import { NextPageContext } from "next";
+import { Session } from "next-auth";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FunctionComponent as FC, useEffect, useState } from "react";
@@ -19,18 +20,19 @@ export async function getServerSideProps(context: NextPageContext) {
   }
 
   return {
-    props: {},
+    props: { session },
   };
 }
 
-const Home: FC = () => {
-  const { data: session } = useSession();
+const Home: FC<{ session: Session }> = ({ session }) => {
   const nextRouter = useRouter();
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
 
   useEffect(() => {
     if (!session?.user) nextRouter.push("/auth");
   }, []);
+
+  console.log(session);
 
   return (
     <>

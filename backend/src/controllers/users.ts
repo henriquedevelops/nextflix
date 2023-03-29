@@ -24,15 +24,15 @@ export const login = tryCatch(async (req: Request, res: Response) => {
     return;
   }
 
-  const token = signToken(user);
+  const accessToken = signToken(user);
 
   const { password: _, ...loggedUser } = user;
 
-  res.cookie("token", token, {
+  res.cookie("accessToken", accessToken, {
     httpOnly: true,
   });
 
-  res.status(200).json({ loggedUser });
+  res.status(200).json({ loggedUser, accessToken });
 });
 
 export const createUser = tryCatch(async (req: Request, res: Response) => {
