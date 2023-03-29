@@ -19,7 +19,7 @@ interface Props {
   setSidebarIsOpen: (value: boolean) => void;
 }
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
 const Main: FC<Props> = ({ setSidebarIsOpen }) => {
   return (
@@ -48,7 +48,7 @@ const Main: FC<Props> = ({ setSidebarIsOpen }) => {
       <Container>
         <Grid container mt={4} spacing={4}>
           {cards.map((card) => (
-            <Grid item key={card} xs={12} sm={6} md={4}>
+            <Grid item key={card} xs={12} sm={6} md={4} lg={3}>
               <Card>
                 <CardActionArea>
                   <CardMedia

@@ -10,7 +10,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { signOut } from "next-auth/react";
 
 interface Props {
   sidebarIsOpen: boolean;
@@ -34,7 +35,7 @@ const Sidebar: FC<Props> = ({ sidebarIsOpen, setSidebarIsOpen }) => {
         >
           <List>
             {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-              <ListItem key={text} disablePadding>
+              <ListItem key={text} disablePadding sx={{ bottom: 0 }}>
                 <ListItemButton>
                   <ListItemText primary={text} />
                 </ListItemButton>
@@ -42,15 +43,16 @@ const Sidebar: FC<Props> = ({ sidebarIsOpen, setSidebarIsOpen }) => {
             ))}
           </List>
           <Divider />
-          <List>
-            {["All mail", "Trash", "Spam"].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+          <Box>
+            <ListItem disablePadding sx={{ position: "absolute", bottom: 0 }}>
+              <ListItemButton onClick={() => signOut()}>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary="Log out" />
+              </ListItemButton>
+            </ListItem>
+          </Box>
         </Box>
       </Drawer>
     </>
