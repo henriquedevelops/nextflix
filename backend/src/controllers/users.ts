@@ -3,31 +3,23 @@ import prisma from "../../prisma/client";
 import tryCatch from "../error-handling/tryCatch";
 import { hash, compare } from "bcrypt";
 import { signToken } from "../auth/jwtToken";
+import CustomError from "../error-handling/customError";
 
 export const login = tryCatch(async (req: Request, res: Response) => {
   const { email, password } = req.body;
+
   const user = await prisma.user.findUnique({
     where: {
       email,
     },
   });
+  if (!user) throw new CustomError("Invalid email address.", 401);
 
-  if (!user) {
-    res.status(401).json({ error: "Invalid email or password" });
-    return;
-  }
-
-  const passwordMatches = await compare(password, user.password);
-
-  if (!passwordMatches) {
-    res.status(401).json({ error: "Invalid email or password" });
-    return;
-  }
-
-  const accessToken = signToken(user);
-
+  const passwordIsCorrect = await compare(password, user.password);
+  if (!passwordIsCorrect) throw new CustomError("Wrong password.", 401);
   const { password: _, ...loggedUser } = user;
 
+  const accessToken = signToken(user);
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
   });
@@ -37,6 +29,13 @@ export const login = tryCatch(async (req: Request, res: Response) => {
 
 export const createUser = tryCatch(async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  const emailIsValid =
+    email && /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(email);
+
+  if (!emailIsValid) throw new CustomError("Invalid email address.", 401);
+  if (password.length < 8)
+    throw new CustomError("Password must have at least 8 characters.", 401);
+
   const hashedPassword = await hash(password, 10);
   const newUser = await prisma.user.create({
     data: {
@@ -50,7 +49,6 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
   });
   req.user = newUser;
 
-  /*   const token = signToken(newUser); */
   res.status(200).json({ newUser });
 });
 

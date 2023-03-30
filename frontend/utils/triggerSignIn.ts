@@ -14,7 +14,7 @@ export default async (
 
   if (responseFromSignIn?.error) {
     setLoading(false);
-    toast.error("Invalid email or password");
+    toast.error("Invalid email address or password");
     return;
   }
 

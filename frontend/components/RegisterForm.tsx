@@ -26,8 +26,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-    const data = new FormData(event.currentTarget);
 
+    const data = new FormData(event.currentTarget);
     const email = data.get("email")?.toString();
     const password = data.get("password")?.toString();
     const passwordConfirm = data.get("password-confirm")?.toString();
@@ -39,7 +39,6 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
       setPasswordError,
       setLoading
     );
-
     if (!emailIsValid || !passwordIsValid) return;
 
     const responseFromPostRequest = await axios.post("/users", {
@@ -49,7 +48,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
 
     if (!responseFromPostRequest?.data) {
       setLoading(false);
-      toast.error("Invalid email or password");
+      toast.error("Error creating new account.");
       return;
     }
 

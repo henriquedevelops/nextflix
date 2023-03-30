@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "./appErrorClass";
+import CustomError from "./customError";
 
 /* Global error handling middleware verifies the error sorce and then 
 sends an appropriate HTTP response with an error message and status 
@@ -32,7 +32,7 @@ export default (
   }
 
   if (err instanceof CustomError) {
-    res.status(err.statusCode).json(err.toJSON());
+    res.status(err.statusCode).json(err);
   }
 
   res.status(500).json({
