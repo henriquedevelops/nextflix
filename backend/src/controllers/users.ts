@@ -32,7 +32,7 @@ export const login = tryCatch(async (req: Request, res: Response) => {
     httpOnly: true,
   });
 
-  res.status(200).json({ loggedUser, accessToken });
+  res.status(200).json({ loggedUser });
 });
 
 export const createUser = tryCatch(async (req: Request, res: Response) => {

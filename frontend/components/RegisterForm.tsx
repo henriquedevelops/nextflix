@@ -1,3 +1,6 @@
+import triggerSignIn from "@/utils/triggerSignIn";
+import validateEmail from "@/utils/validateEmail";
+import validatePassword from "@/utils/validatePassword";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -7,6 +10,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
+import toast from "react-hot-toast";
 import axios from "../pages/api/axios";
 
 type RegisterFormProps = {
@@ -14,67 +18,44 @@ type RegisterFormProps = {
 };
 
 const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [emailError, setEmailError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(event.currentTarget);
 
-    const email = data.get("email");
-    const password = data.get("password");
-    const passwordConfirm = data.get("password-confirm");
+    const email = data.get("email")?.toString();
+    const password = data.get("password")?.toString();
+    const passwordConfirm = data.get("password-confirm")?.toString();
 
-    if (!email || !isValidEmail(email.toString())) {
-      setErrors((prevState) => ({
-        ...prevState,
-        email: "Please enter a valid email address.",
-      }));
+    const emailIsValid = validateEmail(email, setEmailError, setLoading);
+    const passwordIsValid = validatePassword(
+      password,
+      passwordConfirm,
+      setPasswordError,
+      setLoading
+    );
+
+    if (!emailIsValid || !passwordIsValid) return;
+
+    const responseFromPostRequest = await axios.post("/users", {
+      email,
+      password,
+    });
+
+    if (!responseFromPostRequest?.data) {
       setLoading(false);
+      toast.error("Invalid email or password");
       return;
-    } else {
-      setErrors((prevState) => ({ ...prevState, email: "" }));
     }
 
-    if (!password || !passwordConfirm || password !== passwordConfirm) {
-      setErrors((prevState) => ({
-        ...prevState,
-        passwordConfirm: "Passwords don't match.",
-      }));
-      setLoading(false);
-      return;
-    } else {
-      setErrors((prevState) => ({ ...prevState, passwordConfirm: "" }));
-    }
+    await triggerSignIn(email, password, setLoading);
 
-    try {
-      const response = await axios.post("/users", {
-        email,
-        password,
-      });
-      if (!response) {
-        setLoading(false);
-        return;
-      }
-
-      await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-      setLoading(false);
-      router.push("/");
-    } catch (error) {
-      console.error(error);
-
-      setLoading(false);
-    }
+    router.push("/");
   };
 
   return (
@@ -97,8 +78,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           size="small"
           name="email"
           type="email"
-          helperText={errors.email}
-          error={Boolean(errors.email)}
+          helperText={emailError}
+          error={Boolean(emailError)}
           disabled={loading}
         />
         <TextField
@@ -109,7 +90,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           type="password"
           size="small"
           name="password"
-          error={Boolean(errors.passwordConfirm)}
+          error={Boolean(passwordError)}
           disabled={loading}
         />
         <TextField
@@ -120,8 +101,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           type="password"
           size="small"
           name="password-confirm"
-          error={Boolean(errors.passwordConfirm)}
-          helperText={errors.passwordConfirm}
+          error={Boolean(passwordError)}
+          helperText={passwordError}
           disabled={loading}
         />
         <Button

@@ -32,8 +32,6 @@ const Home: FC<{ session: Session }> = ({ session }) => {
     if (!session?.user) nextRouter.push("/auth");
   }, []);
 
-  console.log(session);
-
   return (
     <>
       <Sidebar

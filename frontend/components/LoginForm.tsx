@@ -1,3 +1,5 @@
+import triggerSignIn from "@/utils/triggerSignIn";
+import validateEmail from "@/utils/validateEmail";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -16,46 +18,24 @@ type LoginFormProps = {
 };
 
 const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [emailError, setEmailError] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(event.currentTarget);
 
-    const email = data.get("email");
-    const password = data.get("password");
+    const email = data.get("email")?.toString();
+    const password = data.get("password")?.toString() as string;
 
-    if (!email || !isValidEmail(email.toString())) {
-      setErrors((prevState) => ({
-        ...prevState,
-        email: "Please enter a valid email address",
-      }));
+    const emailIsValid = validateEmail(email, setEmailError, setLoading);
 
-      setLoading(false);
-      return;
-    }
-    setErrors((prevState) => ({ ...prevState, email: "" }));
+    if (!emailIsValid) return;
 
-    const response = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    await triggerSignIn(email, password, setLoading);
 
-    if (response?.error) {
-      setLoading(false);
-      toast.error("Invalid email or password");
-      return;
-    }
-
-    setLoading(false);
     router.push("/");
   };
 
@@ -79,8 +59,8 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           name="email"
           size="small"
           type="email"
-          helperText={errors.email}
-          error={Boolean(errors.email)}
+          helperText={emailError}
+          error={Boolean(emailError)}
           disabled={loading}
         />
         <TextField

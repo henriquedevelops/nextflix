@@ -15,30 +15,29 @@ export const authOptions: NextAuthOptions = {
         try {
           const response = await axios.post("/users/auth", credentials);
           const loggedUser = response.data.loggedUser;
-          const accessToken = response.data.accessToken;
-          if (!loggedUser || !accessToken)
+          if (!loggedUser)
             throw new Error(
               "Invalid credentials. (At the [...nextauth].ts file) "
             );
-          return { accessToken, ...loggedUser };
+          return loggedUser;
         } catch (error) {
-          console.log(error);
-          console.log("testando");
+          console.log(error, "erro do authOptions");
           return null;
         }
       },
     }),
   ],
+
   callbacks: {
     jwt: async ({ token, user }) => {
       return { ...token, ...user };
     },
-
     session: async ({ session, token }) => {
-      session.user = token;
+      session.user = token as any;
       return session;
     },
   },
+
   pages: {
     signIn: "/auth",
     signOut: "/",

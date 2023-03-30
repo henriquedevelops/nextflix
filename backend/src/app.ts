@@ -25,8 +25,8 @@ app.use(
     origin: "http://localhost:3000",
   })
 );
-app.use("/movies", moviesRouter);
-app.use("/users", usersRouter);
+app.use("/api/v1/movies", moviesRouter);
+app.use("/api/v1/users", usersRouter);
 app.use(globalErrorHandler);
 app.get("/", (req: Request, res: Response) => {
   res.send("Choose an endpoint: /movies /users");
