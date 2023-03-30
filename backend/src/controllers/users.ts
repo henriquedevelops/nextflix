@@ -32,9 +32,9 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
   const emailIsValid =
     email && /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(email);
 
-  if (!emailIsValid) throw new CustomError("Invalid email address.", 401);
+  if (!emailIsValid) throw new CustomError("Invalid email address.", 400);
   if (password.length < 8)
-    throw new CustomError("Password must have at least 8 characters.", 401);
+    throw new CustomError("Password must have at least 8 characters.", 400);
 
   const hashedPassword = await hash(password, 10);
   const newUser = await prisma.user.create({
@@ -49,7 +49,7 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
   });
   req.user = newUser;
 
-  res.status(200).json({ newUser });
+  res.status(200);
 });
 
 export const deleteUser = tryCatch(async (req: Request, res: Response) => {

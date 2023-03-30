@@ -46,7 +46,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
       password,
     });
 
-    if (!responseFromPostRequest?.data) {
+    if (responseFromPostRequest.status !== 200) {
       setLoading(false);
       toast.error("Error creating new account.");
       return;

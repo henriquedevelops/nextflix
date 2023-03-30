@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "../axios";
@@ -13,7 +13,10 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         try {
-          const response = await axios.post("/users/auth", credentials);
+          const response = await axios.post<{ loggedUser: User }>(
+            "/users/auth",
+            credentials
+          );
           const loggedUser = response.data.loggedUser;
           if (!loggedUser)
             throw new Error(

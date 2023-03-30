@@ -37,6 +37,7 @@ const Home: FC<{ session: Session }> = ({ session }) => {
       <Sidebar
         sidebarIsOpen={sidebarIsOpen}
         setSidebarIsOpen={setSidebarIsOpen}
+        userIsAdmin={session.user.isAdmin}
       />
       <Main setSidebarIsOpen={setSidebarIsOpen} />
     </>

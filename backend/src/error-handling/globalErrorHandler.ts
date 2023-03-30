@@ -7,7 +7,7 @@ sends an appropriate HTTP response with an error message and status
 code included. If the error is not recognized, it sends a 500 status 
 code with a generic error message.*/
 export default (
-  err: Error | Prisma.PrismaClientKnownRequestError,
+  err: CustomError | Prisma.PrismaClientKnownRequestError,
   req: Request,
   res: Response,
   next: NextFunction

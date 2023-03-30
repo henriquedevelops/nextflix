@@ -1,13 +1,20 @@
-import NextAuth from "next-auth";
+import { User } from "next-auth";
+
+interface CustomUser {
+  id: string;
+  accessToken: string;
+  email: string;
+  isAdmin: boolean;
+  exp: number;
+  iat: number;
+}
+
+declare module "next-auth" {
+  interface User extends CustomUser {}
+}
 
 declare module "next-auth" {
   interface Session {
-    user: {
-      id: string;
-      accessToken: string;
-      email: string;
-      exp: number;
-      iat: number;
-    };
+    user: User;
   }
 }

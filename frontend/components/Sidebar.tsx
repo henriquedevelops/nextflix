@@ -12,13 +12,19 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "next-auth/react";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 interface Props {
   sidebarIsOpen: boolean;
   setSidebarIsOpen: (value: boolean) => void;
+  userIsAdmin: boolean;
 }
 
-const Sidebar: FC<Props> = ({ sidebarIsOpen, setSidebarIsOpen }) => {
+const Sidebar: FC<Props> = ({
+  sidebarIsOpen,
+  setSidebarIsOpen,
+  userIsAdmin,
+}) => {
   return (
     <>
       <Drawer
@@ -27,12 +33,7 @@ const Sidebar: FC<Props> = ({ sidebarIsOpen, setSidebarIsOpen }) => {
         onClose={() => setSidebarIsOpen(false)}
         variant="temporary"
       >
-        <Box
-          sx={{ width: 250 }}
-          role="presentation"
-          /*  onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)} */
-        >
+        <Box sx={{ width: 250 }} role="presentation">
           <List>
             {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
               <ListItem key={text} disablePadding sx={{ bottom: 0 }}>
@@ -43,8 +44,19 @@ const Sidebar: FC<Props> = ({ sidebarIsOpen, setSidebarIsOpen }) => {
             ))}
           </List>
           <Divider />
-          <Box>
-            <ListItem disablePadding sx={{ position: "absolute", bottom: 0 }}>
+          <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+            <ListItem
+              disablePadding
+              sx={{ display: userIsAdmin ? "block" : "none" }}
+            >
+              <ListItemButton onClick={() => signOut()}>
+                <ListItemIcon>
+                  <AdminPanelSettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Admin panel" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
               <ListItemButton onClick={() => signOut()}>
                 <ListItemIcon>
                   <LogoutIcon />
