@@ -1,5 +1,5 @@
 import Drawer from "@mui/material/Drawer";
-import { FunctionComponent as FC } from "react";
+import { FunctionComponent as FC, useState } from "react";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -13,6 +13,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "next-auth/react";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import AdminPanel from "./AdminPanel";
 
 interface Props {
   sidebarIsOpen: boolean;
@@ -25,6 +26,10 @@ const Sidebar: FC<Props> = ({
   setSidebarIsOpen,
   userIsAdmin,
 }) => {
+  const [adminModalIsOpen, setAdminModalIsOpen] = useState<boolean>(false);
+  const handleOpenCloseAdminModal = (): void =>
+    setAdminModalIsOpen(!adminModalIsOpen);
+
   return (
     <>
       <Drawer
@@ -49,13 +54,18 @@ const Sidebar: FC<Props> = ({
               disablePadding
               sx={{ display: userIsAdmin ? "block" : "none" }}
             >
-              <ListItemButton onClick={() => signOut()}>
+              <ListItemButton onClick={handleOpenCloseAdminModal}>
                 <ListItemIcon>
                   <AdminPanelSettingsIcon />
                 </ListItemIcon>
                 <ListItemText primary="Admin panel" />
               </ListItemButton>
             </ListItem>
+            <AdminPanel
+              adminModalIsOpen={adminModalIsOpen}
+              setAdminModalIsOpen={setAdminModalIsOpen}
+              handleOpenCloseAdminModal={handleOpenCloseAdminModal}
+            />
             <ListItem disablePadding>
               <ListItemButton onClick={() => signOut()}>
                 <ListItemIcon>
