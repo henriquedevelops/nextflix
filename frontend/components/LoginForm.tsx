@@ -18,7 +18,7 @@ type LoginFormProps = {
 };
 
 const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
-  const [emailError, setEmailError] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -30,11 +30,10 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
     const email = data.get("email")?.toString();
     const password = data.get("password")?.toString() as string;
 
-    const emailIsValid = validateEmail(email, setEmailError, setLoading);
-
+    const emailIsValid = validateEmail(email, setError, setLoading);
     if (!emailIsValid) return;
 
-    await triggerSignIn(email, password, setLoading);
+    await triggerSignIn(email, password, setError, setLoading);
 
     router.push("/");
   };
@@ -59,8 +58,10 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           name="email"
           size="small"
           type="email"
-          helperText={emailError}
-          error={Boolean(emailError)}
+          helperText={error === "Invalid email address" && error}
+          error={
+            error === "Invalid email address" || error === "Invalid credentials"
+          }
           disabled={loading}
         />
         <TextField
@@ -71,6 +72,8 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           type="password"
           name="password"
           size="small"
+          helperText={error === "Invalid credentials" && error}
+          error={error === "Invalid credentials"}
           disabled={loading}
         />
         <FormControlLabel
@@ -90,25 +93,12 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
         >
           Sign In
         </Button>
-        <Grid container>
-          <Grid item xs>
-            <Typography
-              variant="body2"
-              style={{
-                textDecoration: "underline",
-                cursor: "pointer",
-                color: "#87CEFA",
-              }}
-            >
-              Forgot your password?
-            </Typography>
-          </Grid>
+        <Grid container justifyContent="flex-end">
           <Grid item>
             <Typography
               variant="body2"
               onClick={toggleSelectedForm}
               style={{
-                textDecoration: "underline",
                 cursor: "pointer",
                 color: "#87CEFA",
               }}

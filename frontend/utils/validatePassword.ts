@@ -1,21 +1,29 @@
 export default (
   password: string | undefined,
   passwordConfirm: string | undefined,
-  setPasswordError: (message: string) => void,
+  setError: (message: string) => void,
   setLoading: (loading: boolean) => void
 ): boolean => {
-  if (!password || !passwordConfirm || password !== passwordConfirm) {
-    setPasswordError("Passwords don't match.");
+  if (!password || password?.length < 8) {
+    setError("Password must be at least 8 characters");
     setLoading(false);
     return false;
-  } else {
-    if (password?.length < 8) {
-      setPasswordError("Password must be at least 8 characters.");
-      setLoading(false);
-      return false;
-    } else {
-      setPasswordError("");
-      return true;
-    }
   }
+
+  if (!password || !passwordConfirm || password !== passwordConfirm) {
+    setError("Passwords don't match");
+    setLoading(false);
+    return false;
+  }
+
+  setError("");
+  return true;
+};
+
+export const passwordErrorToBoolean = (error: string): boolean => {
+  return (
+    error === "Passwords don't match" ||
+    error === "Invalid credentials" ||
+    error === "Password must be at least 8 characters"
+  );
 };

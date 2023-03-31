@@ -1,11 +1,14 @@
 import triggerSignIn from "@/utils/triggerSignIn";
-import validateEmail from "@/utils/validateEmail";
-import validatePassword from "@/utils/validatePassword";
+import validateEmail, { emailErrorToBoolean } from "@/utils/validateEmail";
+import validatePassword, {
+  passwordErrorToBoolean,
+} from "@/utils/validatePassword";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { AxiosError } from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
@@ -18,8 +21,7 @@ type RegisterFormProps = {
 };
 
 const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
-  const [emailError, setEmailError] = useState<string>("");
-  const [passwordError, setPasswordError] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -32,27 +34,34 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
     const password = data.get("password")?.toString();
     const passwordConfirm = data.get("password-confirm")?.toString();
 
-    const emailIsValid = validateEmail(email, setEmailError, setLoading);
+    const emailIsValid = validateEmail(email, setError, setLoading);
+    if (!emailIsValid) return;
     const passwordIsValid = validatePassword(
       password,
       passwordConfirm,
-      setPasswordError,
+      setError,
       setLoading
     );
-    if (!emailIsValid || !passwordIsValid) return;
+    if (!passwordIsValid) return;
 
-    const responseFromPostRequest = await axios.post("/users", {
-      email,
-      password,
-    });
-
-    if (responseFromPostRequest.status !== 200) {
+    try {
+      await axios.post("/users", {
+        email,
+        password,
+      });
+    } catch (error: any) {
+      if (error.response.data.statusCode === 409) {
+        setError("Email address unavailable");
+        setLoading(false);
+        return;
+      }
+      console.log(error);
+      setError("Invalid credentials");
       setLoading(false);
-      toast.error("Error creating new account.");
       return;
     }
 
-    await triggerSignIn(email, password, setLoading);
+    await triggerSignIn(email, password, setError, setLoading);
 
     router.push("/");
   };
@@ -77,8 +86,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           size="small"
           name="email"
           type="email"
-          helperText={emailError}
-          error={Boolean(emailError)}
+          helperText={emailErrorToBoolean(error) && error}
+          error={emailErrorToBoolean(error) || error === "Invalid credentials"}
           disabled={loading}
         />
         <TextField
@@ -89,7 +98,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           type="password"
           size="small"
           name="password"
-          error={Boolean(passwordError)}
+          error={passwordErrorToBoolean(error)}
           disabled={loading}
         />
         <TextField
@@ -100,8 +109,8 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           type="password"
           size="small"
           name="password-confirm"
-          error={Boolean(passwordError)}
-          helperText={passwordError}
+          error={passwordErrorToBoolean(error)}
+          helperText={passwordErrorToBoolean(error) && error}
           disabled={loading}
         />
         <Button
@@ -123,7 +132,6 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
               variant="body2"
               onClick={toggleSelectedForm}
               style={{
-                textDecoration: "underline",
                 cursor: "pointer",
                 color: "#87CEFA",
               }}

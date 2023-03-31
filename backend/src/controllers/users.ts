@@ -49,7 +49,7 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
   });
   req.user = newUser;
 
-  res.status(200);
+  res.sendStatus(200);
 });
 
 export const deleteUser = tryCatch(async (req: Request, res: Response) => {
