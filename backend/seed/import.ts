@@ -19,6 +19,7 @@ const importMockData = async () => {
 const deleteData = async () => {
   try {
     await prisma.movie.deleteMany();
+    await prisma.user.deleteMany();
     console.log("Data successfully deleted! ✔");
   } catch (err) {
     console.log(err);
