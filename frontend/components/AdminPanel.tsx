@@ -44,15 +44,18 @@ const AdminPanel: FC<Props> = ({
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 700,
-            height: 500,
+            width: { xs: "100%", sm: "100%", md: 700 },
+            height: { xs: "100%", sm: "100%", md: 500 },
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
           }}
         >
           <Drawer anchor="left" variant="permanent">
-            <Box sx={{ width: 250 }} role="presentation">
+            <Box
+              sx={{ width: { xs: 200, sm: 200, md: 250 } }}
+              role="presentation"
+            >
               <List>
                 <ListItem disablePadding sx={{ bottom: 0 }}>
                   <ListItemButton>
@@ -81,7 +84,12 @@ const AdminPanel: FC<Props> = ({
               </List>
             </Box>
           </Drawer>
-          <Box marginLeft={31} component="form" onSubmit={() => {}} noValidate>
+          <Box
+            marginLeft={{ xs: 25, sm: 25, md: 31 }}
+            component="form"
+            onSubmit={() => {}}
+            noValidate
+          >
             <TextField
               required
               margin="dense"
