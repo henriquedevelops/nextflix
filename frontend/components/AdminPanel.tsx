@@ -4,6 +4,8 @@ import { FunctionComponent as FC, useState } from "react";
 import { TabList, TabContext } from "@mui/lab";
 import { Tab } from "@mui/material";
 import TabPanel from "@mui/lab/TabPanel";
+import CreateMovieForm from "./CreateMovieForm";
+import DeleteMovieForm from "./DeleteMovieForm";
 
 interface Props {
   adminModalIsOpen: boolean;
@@ -35,10 +37,9 @@ const AdminPanel: FC<Props> = ({
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: { xs: "100%", sm: "100%", md: 500 },
-            height: { xs: "100%", sm: "100%", md: 500 },
+            height: 472,
             boxShadow: 24,
-
-            bgcolor: "background.paper",
+            bgcolor: "#202020",
           }}
         >
           <Box sx={{ width: "100%" }}>
@@ -48,60 +49,16 @@ const AdminPanel: FC<Props> = ({
                   aria-label="Tabs example"
                   onChange={handleChangeSelectedAction}
                 >
-                  <Tab label="Create" value="1" />
-                  <Tab label="Update" value="2" />
-                  <Tab label="delete" value="3" />
+                  <Tab label="Create" value="Create" />
+                  <Tab label="Delete" value="Delete" />
                 </TabList>
               </Box>
-              <TabPanel value="1">Panel one</TabPanel>
-              <TabPanel value="2">Panel two</TabPanel>
-              <TabPanel value="3">Panel three</TabPanel>
-            </TabContext>
+            </TabContext>{" "}
+            <Box padding={3}>
+              {selectedAction === "Create" && <CreateMovieForm />}
+              {selectedAction === "Delete" && <DeleteMovieForm />}
+            </Box>
           </Box>
-          {/*           <Box component="form" onSubmit={() => {}} noValidate padding={4}>
-            <TextField
-              required
-              margin="dense"
-              id="basic-required"
-              fullWidth
-              label="Title"
-              type="text"
-              size="small"
-              name="title"
-            />
-            <TextField
-              required
-              margin="dense"
-              id="outlined-required"
-              fullWidth
-              label="Title"
-              type="text"
-              size="small"
-              name="title"
-            />
-            <TextField
-              required
-              margin="dense"
-              id="outlined-required"
-              fullWidth
-              label="Title"
-              type="text"
-              size="small"
-              name="title"
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              style={{ backgroundColor: "red" }}
-              sx={{
-                mt: 2,
-                mb: 2,
-                color: "#FFFFFF",
-              }}
-            >
-              Create movie
-            </Button>
-          </Box> */}
         </Box>
       </Modal>
     </>

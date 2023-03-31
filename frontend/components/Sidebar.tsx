@@ -37,7 +37,14 @@ const Sidebar: FC<Props> = ({
       >
         <Box sx={{ width: 250 }} role="presentation">
           <List>
-            {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+            {[
+              "Action",
+              "Comedy",
+              "Documentary",
+              "Science-fiction",
+              "Horror",
+              "Drama",
+            ].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton>
                   <ListItemText primary={text} />

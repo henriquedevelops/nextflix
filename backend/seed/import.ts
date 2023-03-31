@@ -4,16 +4,16 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const importMockData = async () => {
-  for (const movie of mockData) {
+  /* for (const movie of mockData) {
     await prisma.movie.create({
       data: {
-        title: movie.title,
         description: movie.description,
         genre: movie.genre,
+        movieTitle: movie.title
       },
     });
   }
-  console.log("Data successfully imported! ✔");
+  console.log("Data successfully imported! ✔"); */
 };
 
 const deleteData = async () => {
