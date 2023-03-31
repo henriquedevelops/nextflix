@@ -1,23 +1,9 @@
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Drawer from "@mui/material/Drawer";
-import FormControl from "@mui/material/FormControl";
-import Grid from "@mui/material/Grid";
-import InputLabel from "@mui/material/InputLabel";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import MenuItem from "@mui/material/MenuItem";
 import Modal from "@mui/material/Modal";
-import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import { FunctionComponent as FC } from "react";
-import NoteAddOutlinedIcon from "@mui/icons-material/NoteAddOutlined";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import UpdateIcon from "@mui/icons-material/Update";
-import ClearIcon from "@mui/icons-material/Clear";
+import { FunctionComponent as FC, useState } from "react";
+import { TabList, TabContext } from "@mui/lab";
+import { Tab } from "@mui/material";
+import TabPanel from "@mui/lab/TabPanel";
 
 interface Props {
   adminModalIsOpen: boolean;
@@ -30,66 +16,49 @@ const AdminPanel: FC<Props> = ({
   setAdminModalIsOpen,
   handleOpenCloseAdminModal,
 }) => {
+  const [selectedAction, setSelectedAction] = useState<string>("Create");
+
+  const handleChangeSelectedAction = (
+    event: React.SyntheticEvent,
+    newValue: string
+  ) => {
+    setSelectedAction(newValue);
+  };
+
   return (
     <>
-      <Modal
-        open={adminModalIsOpen}
-        onClose={handleOpenCloseAdminModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={adminModalIsOpen} onClose={handleOpenCloseAdminModal}>
         <Box
           sx={{
             position: "absolute" as "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: { xs: "100%", sm: "100%", md: 700 },
+            width: { xs: "100%", sm: "100%", md: 500 },
             height: { xs: "100%", sm: "100%", md: 500 },
-            bgcolor: "background.paper",
             boxShadow: 24,
-            p: 4,
+
+            bgcolor: "background.paper",
           }}
         >
-          <Drawer anchor="left" variant="permanent">
-            <Box
-              sx={{ width: { xs: 200, sm: 200, md: 250 } }}
-              role="presentation"
-            >
-              <List>
-                <ListItem disablePadding sx={{ bottom: 0 }}>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <NoteAddOutlinedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Create" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding sx={{ bottom: 0 }}>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <UpdateIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Update" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding sx={{ bottom: 0 }}>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <ClearIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Delete" />
-                  </ListItemButton>
-                </ListItem>
-              </List>
-            </Box>
-          </Drawer>
-          <Box
-            marginLeft={{ xs: 25, sm: 25, md: 31 }}
-            component="form"
-            onSubmit={() => {}}
-            noValidate
-          >
+          <Box sx={{ width: "100%" }}>
+            <TabContext value={selectedAction}>
+              <Box>
+                <TabList
+                  aria-label="Tabs example"
+                  onChange={handleChangeSelectedAction}
+                >
+                  <Tab label="Create" value="1" />
+                  <Tab label="Update" value="2" />
+                  <Tab label="delete" value="3" />
+                </TabList>
+              </Box>
+              <TabPanel value="1">Panel one</TabPanel>
+              <TabPanel value="2">Panel two</TabPanel>
+              <TabPanel value="3">Panel three</TabPanel>
+            </TabContext>
+          </Box>
+          {/*           <Box component="form" onSubmit={() => {}} noValidate padding={4}>
             <TextField
               required
               margin="dense"
@@ -132,10 +101,7 @@ const AdminPanel: FC<Props> = ({
             >
               Create movie
             </Button>
-            <Grid container>
-              <Grid item></Grid>
-            </Grid>
-          </Box>
+          </Box> */}
         </Box>
       </Modal>
     </>

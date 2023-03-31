@@ -1,18 +1,15 @@
-import Drawer from "@mui/material/Drawer";
-import { FunctionComponent as FC, useState } from "react";
-import * as React from "react";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import LogoutIcon from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "next-auth/react";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import { FunctionComponent as FC, useState } from "react";
 import AdminPanel from "./AdminPanel";
 
 interface Props {
@@ -41,7 +38,7 @@ const Sidebar: FC<Props> = ({
         <Box sx={{ width: 250 }} role="presentation">
           <List>
             {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-              <ListItem key={text} disablePadding sx={{ bottom: 0 }}>
+              <ListItem key={text} disablePadding>
                 <ListItemButton>
                   <ListItemText primary={text} />
                 </ListItemButton>

@@ -1,10 +1,9 @@
+import MenuIcon from "@mui/icons-material/Menu";
 import { IconButton } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Container from "@mui/material/Container";
@@ -13,7 +12,6 @@ import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { FunctionComponent as FC } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
 
 interface Props {
   setSidebarIsOpen: (value: boolean) => void;
@@ -35,13 +33,13 @@ const Main: FC<Props> = ({ setSidebarIsOpen }) => {
             <MenuIcon />
           </IconButton>
           <div style={{ flex: 1 }} />
-          <div>
-            <CardMedia
-              component="img"
-              sx={{ width: "300px", marginTop: "1px" }}
-              image="/images/logo3.png"
-            />
-          </div>
+
+          <CardMedia
+            component="img"
+            sx={{ width: "300px", marginTop: "1px" }}
+            image="/images/logo3.png"
+          />
+
           <div style={{ flex: 1 }} />
         </Toolbar>
       </AppBar>
@@ -51,14 +49,7 @@ const Main: FC<Props> = ({ setSidebarIsOpen }) => {
             <Grid item key={card} xs={12} sm={6} md={4} lg={3}>
               <Card>
                 <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image="/images/pigeon2.jpg"
-                    /* sx={{
-                      aspectRatio: "1 / 1", // Fixed aspect ratio
-                    }} */
-                  />
+                  <CardMedia component="img" image="/images/pigeon2.jpg" />
                   <CardContent>
                     <Typography
                       gutterBottom

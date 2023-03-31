@@ -43,9 +43,16 @@ const Auth = () => {
         }}
       >
         <img
-          className="w-64 h-64 mx-auto mt-1 mb-20"
           src="/images/Logo1.png"
           alt="Logo"
+          style={{
+            marginTop: "4px",
+            marginBottom: "80px",
+            marginRight: "auto",
+            marginLeft: "auto",
+            height: "256px",
+            width: "256px",
+          }}
         />
         {selectedForm === "login" ? (
           <LoginForm toggleSelectedForm={toggleSelectedForm} />
