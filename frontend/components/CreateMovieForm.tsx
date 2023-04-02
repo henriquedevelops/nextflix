@@ -5,11 +5,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const CreateMovieForm: FC = () => {
   const [genre, setGenre] = useState("");
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState<File | null>(null);
+  const [uploadedImage, setImage] = useState<File | null>(null);
 
   const handleChangeGenre = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGenre(event.target.value);
@@ -17,23 +18,31 @@ const CreateMovieForm: FC = () => {
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setImage(event.target.files[0]);
+      const file = event.target.files[0];
+      if (file.size > 1024 * 1024 || file.type !== "image/jpeg") {
+        console.log("erro");
+
+        toast.error("Image must be jpeg only and 1 MB max");
+        return;
+      }
+      setImage(file);
     }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (image) data.append("image", image);
+    if (uploadedImage) data.append("image", uploadedImage);
     const title = data.get("title")?.toString();
     const url = data.get("url")?.toString();
     const description = data.get("description")?.toString();
-    const imageRec = data.get("image");
-    console.log(title, imageRec);
+    const image = data.get("image");
+    console.log(title, image);
   };
 
   return (
     <>
+      <Toaster />
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Stack spacing={2}>
           <TextField required label="Title" size="small" name="title" />
@@ -60,7 +69,11 @@ const CreateMovieForm: FC = () => {
             id="outlined-multiline-static"
             rows={3}
           />
-          {image && <Typography>Image selected: {image.name}</Typography>}
+          {uploadedImage && (
+            <Typography color={"primary"}>
+              Image uploaded: {uploadedImage.name}
+            </Typography>
+          )}
           <Button variant="outlined" component="label">
             Upload image
             <input
