@@ -9,7 +9,7 @@ datasource db {
 
 model Movie {
   id          String              @id @default(auto()) @map("_id") @db.ObjectId
-  movieTitle  String              @unique
+  title       String              @unique
   description String
   genre       String
   image       String
@@ -30,6 +30,6 @@ model MovieFromUserList {
   user       User   @relation(fields: [userId], references: [id])
   id         String @id @default(auto()) @map("_id") @db.ObjectId
   movieId    String @db.ObjectId
-  movieTitle String @map("movieTitle")
+  movieTitle String @map("title")
   userId     String @db.ObjectId
 }
