@@ -1,55 +1,81 @@
-import { PhotoCamera } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import FormControl from "@mui/material/FormControl";
-import IconButton from "@mui/material/IconButton";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
 
 const CreateMovieForm: FC = () => {
   const [genre, setGenre] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
 
-  const handleChangeGenre = (event: SelectChangeEvent) => {
-    setGenre(event.target.value as string);
+  const handleChangeGenre = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGenre(event.target.value);
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setImage(event.target.files[0]);
+    }
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    if (image) data.append("image", image);
+    const title = data.get("title")?.toString();
+    const url = data.get("url")?.toString();
+    const description = data.get("description")?.toString();
+    const imageRec = data.get("image");
+    console.log(title, imageRec);
   };
 
   return (
     <>
-      <Stack spacing={2}>
-        <TextField label="Title" required size="small" />
-        <TextField label="URL" required size="small" />
-        <FormControl fullWidth>
-          <InputLabel size="small" sx={{ marginBottom: 1 }} required>
-            Genre
-          </InputLabel>
-          <Select
-            label="Genre"
+      <Box component="form" onSubmit={handleSubmit} noValidate>
+        <Stack spacing={2}>
+          <TextField required label="Title" size="small" name="title" />
+          <TextField required label="URL" size="small" name="url" />
+
+          <TextField
             required
+            select
+            label="Genre"
             size="small"
             value={genre}
             onChange={handleChangeGenre}
           >
-            <MenuItem>Ten</MenuItem>
-            <MenuItem>Twenty</MenuItem>
-            <MenuItem>Thirty</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField
-          id="outlined-multiline-static"
-          label="Description"
-          required
-          multiline
-          rows={3}
-        />
-        <Button variant="outlined">Upload image</Button>
+            <MenuItem value="Action">Action</MenuItem>
+            <MenuItem value="Comedy">Comedy</MenuItem>
+            <MenuItem value="Drama">Drama</MenuItem>
+          </TextField>
 
-        <Button variant="contained">Create movie</Button>
-      </Stack>
+          <TextField
+            required
+            multiline
+            label="Description"
+            name="description"
+            id="outlined-multiline-static"
+            rows={3}
+          />
+          {image && <Typography>Image selected: {image.name}</Typography>}
+          <Button variant="outlined" component="label">
+            Upload image
+            <input
+              hidden
+              accept="image/*"
+              type="file"
+              onChange={handleImageChange}
+            />
+          </Button>
+
+          <Button variant="contained" type="submit">
+            Create movie
+          </Button>
+        </Stack>
+      </Box>
     </>
   );
 };

@@ -15,12 +15,7 @@ const DeleteMovieForm: FC = () => {
   return (
     <>
       <Stack spacing={2}>
-        <TextField
-          label="ID"
-          required
-          size="small"
-          sx={{ marginBottom: 35.4 }}
-        />
+        <TextField label="ID" required size="small" />
 
         <Button variant="contained">Delete movie</Button>
       </Stack>

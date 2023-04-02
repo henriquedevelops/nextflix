@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { FunctionComponent as FC, useState } from "react";
 import { TabList, TabContext } from "@mui/lab";
-import { Tab } from "@mui/material";
+import { Dialog, Tab } from "@mui/material";
 import TabPanel from "@mui/lab/TabPanel";
 import CreateMovieForm from "./CreateMovieForm";
 import DeleteMovieForm from "./DeleteMovieForm";
@@ -29,26 +29,27 @@ const AdminPanel: FC<Props> = ({
 
   return (
     <>
-      <Modal open={adminModalIsOpen} onClose={handleOpenCloseAdminModal}>
+      <Modal
+        open={adminModalIsOpen}
+        onClose={handleOpenCloseAdminModal}
+        onBackdropClick={handleOpenCloseAdminModal}
+      >
         <Box
-          sx={{
-            position: "absolute" as "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: { xs: "100%", sm: "100%", md: 500 },
-            height: 472,
-            boxShadow: 24,
-            bgcolor: "#202020",
-          }}
+          display="flex"
+          justifyContent="center"
+          alignItems="flex-start"
+          position="relative"
         >
-          <Box sx={{ width: "100%" }}>
+          <Box
+            position="absolute"
+            top="20vh"
+            width="500px"
+            bgcolor="#202020"
+            borderRadius={1.2}
+          >
             <TabContext value={selectedAction}>
               <Box>
-                <TabList
-                  aria-label="Tabs example"
-                  onChange={handleChangeSelectedAction}
-                >
+                <TabList onChange={handleChangeSelectedAction}>
                   <Tab label="Create" value="Create" />
                   <Tab label="Delete" value="Delete" />
                 </TabList>
