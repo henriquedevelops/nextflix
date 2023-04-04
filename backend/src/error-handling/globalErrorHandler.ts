@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 import CustomError from "./customError";
+import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
 /* Global error handling middleware verifies the error sorce and then 
 sends an appropriate HTTP response with an error message and status 
@@ -32,7 +33,25 @@ export default (
   }
 
   if (err instanceof CustomError) {
-    res.status(err.statusCode).json(err);
+    res.status(err.statusCode).json({
+      status: err.status,
+      message: err.message, // Include the error message here
+      isOperational: err.isOperational,
+    });
+  }
+
+  if (err instanceof JsonWebTokenError) {
+    res.status(401).json({
+      message: "Invalid token",
+      statusCode: 401,
+    });
+  }
+
+  if (err instanceof TokenExpiredError) {
+    res.status(401).json({
+      message: "Token has expired",
+      statusCode: 401,
+    });
   }
 
   res.status(500).json({

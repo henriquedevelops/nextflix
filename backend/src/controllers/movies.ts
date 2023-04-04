@@ -50,7 +50,7 @@ export const createMovie = tryCatch(async (req: Request, res: Response) => {
     },
   });
 
-  res.status(201).json(newMovie);
+  res.sendStatus(201);
 });
 
 /* This function retrieves a single movie from the database based on the 

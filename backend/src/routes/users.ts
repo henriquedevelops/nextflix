@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { authenticate } from "../auth/jwtToken";
-import { createUser, deleteUser, login } from "../controllers/users";
+import { createUser, deleteUser } from "../controllers/users";
+import { requireLogin, login } from "../controllers/auth";
 
 const router = Router();
 
 router.post("/auth", login);
-router.post("/", createUser).delete("/:id", authenticate, deleteUser);
+router.post("/", createUser).delete("/:id", requireLogin, deleteUser);
 
 export default router;

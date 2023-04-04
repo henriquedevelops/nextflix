@@ -2,30 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import prisma from "../../prisma/client";
 import tryCatch from "../error-handling/tryCatch";
 import { hash, compare } from "bcrypt";
-import { signToken } from "../auth/jwtToken";
 import CustomError from "../error-handling/customError";
-
-export const login = tryCatch(async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
-  if (!user) throw new CustomError("Invalid email address.", 401);
-
-  const passwordIsCorrect = await compare(password, user.password);
-  if (!passwordIsCorrect) throw new CustomError("Wrong password.", 401);
-  const { password: _, ...loggedUser } = user;
-
-  const accessToken = signToken(user);
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-  });
-
-  res.status(200).json({ loggedUser });
-});
 
 export const createUser = tryCatch(async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -47,7 +24,6 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
       email: true,
     },
   });
-  req.user = newUser;
 
   res.sendStatus(200);
 });

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { authenticate } from "../auth/jwtToken";
 import {
   getMovies,
   createMovie,
@@ -8,8 +7,11 @@ import {
   getMovieById,
 } from "../controllers/movies";
 import upload from "../utils/multer";
+import { requireLogin } from "../controllers/auth";
 
 const router = Router();
+
+router.use(requireLogin);
 
 router
   .get("/", getMovies)
