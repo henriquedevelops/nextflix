@@ -32,24 +32,33 @@ const CreateMovieForm: FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     const formData = new FormData(event.currentTarget);
     const title = formData.get("title")?.toString();
     const url = formData.get("url")?.toString();
     const description = formData.get("description")?.toString();
 
-    if (!title || !url || !genre || !description || !uploadedImage) {
-      throw new Error("errou");
+    if (!title || !url || !genre || !description) {
+      toast.error("All fields are required");
+      setLoading(false);
+      return;
+    }
+
+    if (!uploadedImage) {
+      toast.error("A movie must have an image cover");
+      setLoading(false);
+      return;
     }
 
     formData.append("genre", genre);
     formData.append("image", uploadedImage);
 
-    console.log(formData);
-
     try {
       await axios.post("/movies", formData);
       toast.success("New movie created");
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error("Error creating movie");
     }
   };
@@ -59,8 +68,20 @@ const CreateMovieForm: FC = () => {
       <Toaster />
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Stack spacing={2}>
-          <TextField required label="Title" size="small" name="title" />
-          <TextField required label="URL" size="small" name="url" />
+          <TextField
+            required
+            label="Title"
+            size="small"
+            name="title"
+            disabled={loading}
+          />
+          <TextField
+            required
+            label="URL"
+            size="small"
+            name="url"
+            disabled={loading}
+          />
 
           <TextField
             required
@@ -69,6 +90,7 @@ const CreateMovieForm: FC = () => {
             size="small"
             value={genre}
             onChange={handleChangeGenre}
+            disabled={loading}
           >
             <MenuItem value="Action">Action</MenuItem>
             <MenuItem value="Comedy">Comedy</MenuItem>
@@ -82,6 +104,7 @@ const CreateMovieForm: FC = () => {
             name="description"
             id="outlined-multiline-static"
             rows={3}
+            disabled={loading}
           />
           {uploadedImage && (
             <Typography color={"primary"}>
@@ -95,6 +118,7 @@ const CreateMovieForm: FC = () => {
               accept="image/*"
               type="file"
               onChange={handleImageChange}
+              disabled={loading}
             />
           </Button>
 
