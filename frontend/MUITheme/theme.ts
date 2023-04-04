@@ -6,17 +6,16 @@ export default createTheme({
     primary: {
       main: "#ededed",
     },
+    secondary: {
+      main: "#202020",
+    },
     background: {
       default: "black",
     },
   },
   components: {
     MuiDrawer: {
-      styleOverrides: {
-        paper: {
-          backgroundColor: "black",
-        },
-      },
+      styleOverrides: { paper: { backgroundColor: "black" } },
     },
   },
 });

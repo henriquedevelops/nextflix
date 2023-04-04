@@ -13,7 +13,7 @@ model Movie {
   description String
   genre       String
   image       String
-  videoUrl    String
+  url         String
   users       MovieFromUserList[]
 }
 

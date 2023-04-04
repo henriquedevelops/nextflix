@@ -1,3 +1,4 @@
+import axios from "@/pages/api/axios";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -29,15 +30,28 @@ const CreateMovieForm: FC = () => {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if (uploadedImage) data.append("image", uploadedImage);
-    const title = data.get("title")?.toString();
-    const url = data.get("url")?.toString();
-    const description = data.get("description")?.toString();
-    const image = data.get("image");
-    console.log(title, image);
+    const formData = new FormData(event.currentTarget);
+    const title = formData.get("title")?.toString();
+    const url = formData.get("url")?.toString();
+    const description = formData.get("description")?.toString();
+
+    if (!title || !url || !genre || !description || !uploadedImage) {
+      throw new Error("errou");
+    }
+
+    formData.append("genre", genre);
+    formData.append("image", uploadedImage);
+
+    console.log(formData);
+
+    try {
+      await axios.post("/movies", formData);
+      toast.success("New movie created");
+    } catch (error) {
+      toast.error("Error creating movie");
+    }
   };
 
   return (

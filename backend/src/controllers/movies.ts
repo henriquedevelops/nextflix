@@ -34,16 +34,19 @@ export const getMovies = tryCatch(
 request body as arguments. Once the movie is created, it responds with a 
 201 HTTP status code and the JSON representation of the newly created movie. */
 export const createMovie = tryCatch(async (req: Request, res: Response) => {
-  const { title, genre, description, image, videoUrl }: CreateMovieRequestData =
-    req.body;
+  const { title, url, description, genre }: CreateMovieRequestData = req.body;
+
+  if (!title || !url || !genre || !description || !req.file) {
+    throw new Error("errou");
+  }
 
   const newMovie = await prisma.movie.create({
     data: {
       title,
       genre,
       description,
-      image,
-      videoUrl,
+      image: req.file.path,
+      url,
     },
   });
 

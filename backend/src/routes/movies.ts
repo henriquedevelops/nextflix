@@ -7,14 +7,13 @@ import {
   deleteMovie,
   getMovieById,
 } from "../controllers/movies";
+import upload from "../utils/multer";
 
 const router = Router();
 
-router.use(authenticate);
-
 router
   .get("/", getMovies)
-  .post("/", createMovie)
+  .post("/", upload.single("image"), createMovie)
   .get("/:id", getMovieById)
   .patch("/:id", updateMovie)
   .delete("/:id", deleteMovie);

@@ -34,50 +34,56 @@ const Sidebar: FC<Props> = ({
         open={sidebarIsOpen}
         onClose={() => setSidebarIsOpen(false)}
         variant="temporary"
+        PaperProps={{
+          sx: {
+            backgroundColor: "black",
+          },
+        }}
       >
-        <Box sx={{ width: 250 }} role="presentation">
-          <List>
-            {[
-              "Action",
-              "Comedy",
-              "Documentary",
-              "Science-fiction",
-              "Horror",
-              "Drama",
-            ].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemText primary={text} />
+        <Box>
+          <Box sx={{ width: 250 }} role="presentation">
+            <List>
+              {[
+                "Action",
+                "Comedy",
+                "Documentary",
+                "Science-fiction",
+                "Horror",
+                "Drama",
+              ].map((text, index) => (
+                <ListItem key={text} disablePadding>
+                  <ListItemButton>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+            <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+              <ListItem
+                disablePadding
+                sx={{ display: userIsAdmin ? "block" : "none" }}
+              >
+                <ListItemButton onClick={handleOpenCloseAdminModal}>
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Admin panel" />
                 </ListItemButton>
               </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
-            <ListItem
-              disablePadding
-              sx={{ display: userIsAdmin ? "block" : "none" }}
-            >
-              <ListItemButton onClick={handleOpenCloseAdminModal}>
-                <ListItemIcon>
-                  <AdminPanelSettingsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Admin panel" />
-              </ListItemButton>
-            </ListItem>
-            <AdminPanel
-              adminModalIsOpen={adminModalIsOpen}
-              setAdminModalIsOpen={setAdminModalIsOpen}
-              handleOpenCloseAdminModal={handleOpenCloseAdminModal}
-            />
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => signOut()}>
-                <ListItemIcon>
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText primary="Log out" />
-              </ListItemButton>
-            </ListItem>
+              <AdminPanel
+                adminModalIsOpen={adminModalIsOpen}
+                setAdminModalIsOpen={setAdminModalIsOpen}
+                handleOpenCloseAdminModal={handleOpenCloseAdminModal}
+              />
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => signOut()}>
+                  <ListItemIcon>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Log out" />
+                </ListItemButton>
+              </ListItem>
+            </Box>
           </Box>
         </Box>
       </Drawer>

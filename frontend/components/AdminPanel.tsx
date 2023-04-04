@@ -44,7 +44,7 @@ const AdminPanel: FC<Props> = ({
             position="absolute"
             top="20vh"
             width="500px"
-            bgcolor="#202020"
+            bgcolor="#262626"
             borderRadius={1.2}
           >
             <TabContext value={selectedAction}>
