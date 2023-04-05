@@ -20,20 +20,22 @@ const DeleteMovieForm: FC = () => {
   };
 
   const handleShowConfirmation = async () => {
+    if (!selectedMovieId) {
+      toast.error("Please enter a movie ID");
+      return;
+    }
     setLoading(true);
     try {
       const { data: movieFound } = await axios.get<Movie>(
         `/movies/${selectedMovieId}`
       );
       setSelectedMovieTitle(movieFound.title);
+      setShowConfirmation(true);
       setLoading(false);
     } catch (error) {
       setLoading(false);
       toast.error("Invalid movie ID");
     }
-
-    setLoading(false);
-    setShowConfirmation(true);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
