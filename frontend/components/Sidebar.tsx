@@ -12,18 +12,15 @@ import { FunctionComponent as FC, useState } from "react";
 import AdminPanel from "./AdminPanel";
 import { useRouter } from "next/router";
 import axios from "@/utils/axios";
+import { useLoggedUser } from "@/utils/loggedUserContext";
 
 interface Props {
   sidebarIsOpen: boolean;
   setSidebarIsOpen: (value: boolean) => void;
-  userIsAdmin: boolean;
 }
 
-const Sidebar: FC<Props> = ({
-  sidebarIsOpen,
-  setSidebarIsOpen,
-  userIsAdmin,
-}) => {
+const Sidebar: FC<Props> = ({ sidebarIsOpen, setSidebarIsOpen }) => {
+  const { loggedUser } = useLoggedUser();
   const [adminModalIsOpen, setAdminModalIsOpen] = useState<boolean>(false);
   const nextRouter = useRouter();
 
@@ -53,7 +50,7 @@ const Sidebar: FC<Props> = ({
         }}
       >
         <Box>
-          <Box sx={{ width: 250 }} role="presentation">
+          <Box sx={{ width: 275 }} role="presentation">
             <List>
               {[
                 "Action",
@@ -73,7 +70,7 @@ const Sidebar: FC<Props> = ({
             <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
               <ListItem
                 disablePadding
-                sx={{ display: userIsAdmin ? "block" : "none" }}
+                sx={{ display: loggedUser.isAdmin ? "block" : "none" }}
               >
                 <ListItemButton onClick={handleOpenCloseAdminModal}>
                   <ListItemIcon>
@@ -82,6 +79,7 @@ const Sidebar: FC<Props> = ({
                   <ListItemText primary="Admin panel" />
                 </ListItemButton>
               </ListItem>
+
               <AdminPanel
                 adminModalIsOpen={adminModalIsOpen}
                 setAdminModalIsOpen={setAdminModalIsOpen}

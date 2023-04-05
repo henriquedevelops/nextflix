@@ -1,12 +1,11 @@
 import Main from "@/components/Main";
-import Sidebar from "@/components/Sidebar";
+import { LoggedUserContext } from "@/utils/loggedUserContext";
+import { User } from "@/utils/types";
+import jwtDecode from "jwt-decode";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
-import { FunctionComponent as FC, useEffect, useState } from "react";
 import { parseCookies } from "nookies";
-import jwtDecode from "jwt-decode";
-import { User } from "@/utils/types";
-import { log } from "console";
+import { FunctionComponent as FC, useEffect } from "react";
 
 export async function getServerSideProps(context: NextPageContext) {
   const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
@@ -27,8 +26,6 @@ export async function getServerSideProps(context: NextPageContext) {
 
 const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
   const nextRouter = useRouter();
-  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
-  console.log(loggedUser.isAdmin);
 
   useEffect(() => {
     if (!loggedUser) nextRouter.push("/auth");
@@ -36,12 +33,9 @@ const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
 
   return (
     <>
-      <Sidebar
-        sidebarIsOpen={sidebarIsOpen}
-        setSidebarIsOpen={setSidebarIsOpen}
-        userIsAdmin={loggedUser.isAdmin}
-      />
-      <Main setSidebarIsOpen={setSidebarIsOpen} />
+      <LoggedUserContext.Provider value={{ loggedUser }}>
+        <Main />
+      </LoggedUserContext.Provider>
     </>
   );
 };

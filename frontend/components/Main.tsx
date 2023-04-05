@@ -11,18 +11,21 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { FunctionComponent as FC } from "react";
-
-interface Props {
-  setSidebarIsOpen: (value: boolean) => void;
-}
+import { FunctionComponent as FC, useState } from "react";
+import Sidebar from "./Sidebar";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
-const Main: FC<Props> = ({ setSidebarIsOpen }) => {
+const Main: FC = () => {
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+
   return (
     <>
       <CssBaseline />
+      <Sidebar
+        sidebarIsOpen={sidebarIsOpen}
+        setSidebarIsOpen={setSidebarIsOpen}
+      />
       <AppBar position="fixed">
         <Toolbar sx={{ bgcolor: "#000000" }}>
           <IconButton

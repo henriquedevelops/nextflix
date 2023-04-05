@@ -19,3 +19,7 @@ export interface formValues {
   description: string;
   image: File | undefined;
 }
+
+export interface LoggedUserContextType {
+  loggedUser: User;
+}
