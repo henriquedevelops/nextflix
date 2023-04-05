@@ -12,21 +12,25 @@ export const getMovies = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const { selectedGenre } = req.query;
 
-    let moviesResponse;
-
-    if (selectedGenre) {
-      moviesResponse = await prisma.movie.findMany({
-        where: {
-          genre: {
-            equals: selectedGenre.toString(),
-          },
+    const moviesFound = await prisma.movie.findMany({
+      where: {
+        genre: {
+          equals: selectedGenre?.toString(),
         },
-      });
-    } else {
-      moviesResponse = await prisma.movie.findMany();
-    }
+      },
+    });
 
-    res.status(201).json(moviesResponse);
+    /* Removing the image path and inserting the complete image url 
+    in each movie found */
+    const moviesWithImageUrl = moviesFound.map((movie) => {
+      const { image, ...movieWithoutImagePath } = movie;
+      return {
+        ...movieWithoutImagePath,
+        imageUrl: `${req.protocol}://${req.get("host")}${movie.image}`,
+      };
+    });
+
+    res.status(201).json(moviesWithImageUrl);
   }
 );
 

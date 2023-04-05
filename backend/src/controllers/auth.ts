@@ -6,6 +6,7 @@ import CustomError from "../error-handling/customError";
 import { log } from "console";
 import prisma from "../../prisma/client";
 import { compare } from "bcrypt";
+import { decodedToken } from "../utils/types";
 dotenv.config();
 
 const jwtSecret = process.env.JWT_SECRET;
@@ -44,10 +45,13 @@ export const requireLogin = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     if (!jwtSecret) throw new CustomError("JWT secret not found.", 500);
 
-    const token = req.cookies["accessToken-Nextflix"];
-    if (!token) throw new CustomError("Unauthorized", 401);
+    const tokenReceived = req.cookies["accessToken-Nextflix"];
+    if (!tokenReceived) throw new CustomError("Unauthorized", 401);
 
-    const { email, id, isAdmin } = jwt.verify(token, jwtSecret) as any;
+    const { email, id, isAdmin } = jwt.verify(
+      tokenReceived,
+      jwtSecret
+    ) as decodedToken;
 
     if (!email || !id) throw new CustomError("Unauthorized", 401);
 
