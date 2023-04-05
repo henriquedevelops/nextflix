@@ -9,15 +9,14 @@ import { FunctionComponent as FC, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 const CreateMovieForm: FC = () => {
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
   const [genre, setGenre] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [description, setDescription] = useState("");
   const [uploadedImage, setImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleChangeGenre = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGenre(event.target.value);
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       if (file.size > 1024 * 1024 || file.type !== "image/jpeg") {
@@ -33,10 +32,6 @@ const CreateMovieForm: FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-    const formData = new FormData(event.currentTarget);
-    const title = formData.get("title")?.toString();
-    const url = formData.get("url")?.toString();
-    const description = formData.get("description")?.toString();
 
     if (!title || !url || !genre || !description) {
       toast.error("All fields are required");
@@ -50,11 +45,20 @@ const CreateMovieForm: FC = () => {
       return;
     }
 
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("url", url);
     formData.append("genre", genre);
+    formData.append("description", description);
     formData.append("image", uploadedImage);
 
     try {
       await axios.post("/movies", formData);
+      setTitle("");
+      setUrl("");
+      setGenre("");
+      setDescription("");
+      setImage(null);
       setLoading(false);
       toast.success("New movie created");
     } catch (error) {
@@ -73,12 +77,20 @@ const CreateMovieForm: FC = () => {
           size="small"
           name="title"
           disabled={loading}
+          value={title}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setTitle(event.target.value);
+          }}
         />
         <TextField
           required
           label="URL"
           size="small"
           name="url"
+          value={url}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setUrl(event.target.value);
+          }}
           disabled={loading}
         />
 
@@ -88,11 +100,16 @@ const CreateMovieForm: FC = () => {
           label="Genre"
           size="small"
           value={genre}
-          onChange={handleChangeGenre}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setGenre(event.target.value);
+          }}
           disabled={loading}
         >
           <MenuItem value="Action">Action</MenuItem>
           <MenuItem value="Comedy">Comedy</MenuItem>
+          <MenuItem value="Documentary">Documentary</MenuItem>
+          <MenuItem value="Science-fiction">Science-fiction</MenuItem>
+          <MenuItem value="Horror">Horror</MenuItem>
           <MenuItem value="Drama">Drama</MenuItem>
         </TextField>
 
@@ -103,6 +120,10 @@ const CreateMovieForm: FC = () => {
           name="description"
           id="outlined-multiline-static"
           rows={3}
+          value={description}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setDescription(event.target.value);
+          }}
           disabled={loading}
         />
         {uploadedImage && (
@@ -116,7 +137,7 @@ const CreateMovieForm: FC = () => {
             hidden
             accept="image/*"
             type="file"
-            onChange={handleImageChange}
+            onChange={handleImageUpload}
             disabled={loading}
           />
         </Button>

@@ -56,6 +56,14 @@ export const requireLogin = tryCatch(
   }
 );
 
+export const restricToAdmin = tryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.userIsAdmin) throw new CustomError("Unauthorized", 401);
+
+    next();
+  }
+);
+
 export const logout = (req: Request, res: Response) => {
   res.clearCookie("accessToken-Nextflix");
 

@@ -11,3 +11,11 @@ export interface Movie {
   description: string;
   image: string;
 }
+
+export interface formValues {
+  title: string;
+  url: string;
+  genre: string;
+  description: string;
+  image: File | undefined;
+}

@@ -13,7 +13,7 @@ const DeleteMovieForm: FC = () => {
   const [selectedMovieId, setSelectedMovieId] = useState("");
   const [selectedMovieTitle, setSelectedMovieTitle] = useState("");
 
-  const handleChangeselectedMovieId = (
+  const handleChangeSelectedMovieId = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSelectedMovieId(event.target.value);
@@ -70,7 +70,7 @@ const DeleteMovieForm: FC = () => {
           required
           size="small"
           value={selectedMovieId}
-          onChange={handleChangeselectedMovieId}
+          onChange={handleChangeSelectedMovieId}
           disabled={loading}
         />
 
