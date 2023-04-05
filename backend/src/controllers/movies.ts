@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "../../prisma/client";
-import { CreateMovieRequestData } from "../@types/controllers";
 import tryCatch from "../error-handling/tryCatch";
+import { CreateMovieRequestData } from "../utils/types";
 
 /* This function retrieves movies from the database based on the 
 optional query parameter "selectedGenre". If it is provided, it 
@@ -20,17 +20,7 @@ export const getMovies = tryCatch(
       },
     });
 
-    /* Removing the image path and inserting the complete image url 
-    in each movie found */
-    const moviesWithImageUrl = moviesFound.map((movie) => {
-      const { image, ...movieWithoutImagePath } = movie;
-      return {
-        ...movieWithoutImagePath,
-        imageUrl: `${req.protocol}://${req.get("host")}${movie.image}`,
-      };
-    });
-
-    res.status(201).json(moviesWithImageUrl);
+    res.status(201).json(moviesFound);
   }
 );
 

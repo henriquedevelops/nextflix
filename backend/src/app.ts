@@ -26,6 +26,7 @@ app.use(
     origin: "http://localhost:3000",
   })
 );
+app.use("/images", express.static("images"));
 app.use("/api/v1/movies", moviesRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/auth", authRouter);

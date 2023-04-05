@@ -11,13 +11,32 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { FunctionComponent as FC, useState } from "react";
+import { FunctionComponent as FC, useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
+import axios from "@/utils/axios";
+import { Movie } from "@/utils/types";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
 const Main: FC = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+  const [selectedGenre, setSelectedGenre] = useState("");
+  const [moviesList, setMoviesList] = useState<Movie[]>([]);
+
+  const fetchMovies = async () => {
+    try {
+      const { data: moviesFromResponse } = await axios.get(`/movies`);
+      console.log(moviesFromResponse);
+
+      setMoviesList(moviesFromResponse);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMovies();
+  }, []);
 
   return (
     <>
@@ -48,11 +67,14 @@ const Main: FC = () => {
       </AppBar>
       <Container>
         <Grid container mt={4} spacing={4}>
-          {cards.map((card) => (
-            <Grid item key={card} xs={12} sm={6} md={4} lg={3}>
+          {moviesList.map((movie) => (
+            <Grid item key={movie.id} xs={12} sm={6} md={4} lg={3}>
               <Card>
                 <CardActionArea>
-                  <CardMedia component="img" image="/images/pigeon2.jpg" />
+                  <CardMedia
+                    component="img"
+                    image={`http://localhost:80/${movie.image}`}
+                  />
                   <CardContent>
                     <Typography
                       gutterBottom
@@ -60,14 +82,14 @@ const Main: FC = () => {
                       component="div"
                       sx={{ fontSize: "1.0rem" }}
                     >
-                      The Time-travelling Pigeon
+                      {movie.title}
                     </Typography>
                     <Typography
                       variant="body2"
                       color="text.secondary"
                       sx={{ fontSize: "0.9rem" }}
                     >
-                      Drama
+                      {movie.genre}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

@@ -5,6 +5,7 @@ export interface User {
 }
 
 export interface Movie {
+  id: string;
   title: string;
   url: string;
   genre: string;
