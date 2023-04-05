@@ -1,4 +1,3 @@
-import triggerSignIn from "@/utils/triggerSignIn";
 import validateEmail, { emailErrorToBoolean } from "@/utils/validateEmail";
 import validatePassword, {
   passwordErrorToBoolean,
@@ -9,12 +8,12 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { AxiosError } from "axios";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
 import toast from "react-hot-toast";
-import axios from "../pages/api/axios";
+import axios from "../utils/axios";
+import { User } from "@/utils/types";
 
 type RegisterFormProps = {
   toggleSelectedForm: () => void;
@@ -23,7 +22,7 @@ type RegisterFormProps = {
 const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const nextRouter = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,6 +35,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
 
     const emailIsValid = validateEmail(email, setError, setLoading);
     if (!emailIsValid) return;
+
     const passwordIsValid = validatePassword(
       password,
       passwordConfirm,
@@ -46,6 +46,11 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
 
     try {
       await axios.post("/users", {
+        email,
+        password,
+      });
+
+      await axios.post<User>("/auth", {
         email,
         password,
       });
@@ -61,9 +66,9 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
       return;
     }
 
-    await triggerSignIn(email, password, setError, setLoading);
-
-    router.push("/");
+    setLoading(false);
+    setError("");
+    nextRouter.push("/");
   };
 
   return (

@@ -1,16 +1,17 @@
 import Main from "@/components/Main";
 import Sidebar from "@/components/Sidebar";
 import { NextPageContext } from "next";
-import { Session } from "next-auth";
-import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FunctionComponent as FC, useEffect, useState } from "react";
+import { parseCookies } from "nookies";
+import jwtDecode from "jwt-decode";
+import { User } from "@/utils/types";
+import { log } from "console";
 
-/* Server-side rendering */
 export async function getServerSideProps(context: NextPageContext) {
-  /* Extracting current session information from incoming request */
-  const session = await getSession(context);
-  if (!session) {
+  const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
+
+  if (!accessToken) {
     return {
       redirect: {
         destination: "/auth",
@@ -19,17 +20,18 @@ export async function getServerSideProps(context: NextPageContext) {
     };
   }
 
-  return {
-    props: { session },
-  };
+  const loggedUser: User = jwtDecode(accessToken);
+
+  return { props: { loggedUser } };
 }
 
-const Home: FC<{ session: Session }> = ({ session }) => {
+const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
   const nextRouter = useRouter();
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+  console.log(loggedUser.isAdmin);
 
   useEffect(() => {
-    if (!session?.user) nextRouter.push("/auth");
+    if (!loggedUser) nextRouter.push("/auth");
   }, []);
 
   return (
@@ -37,7 +39,7 @@ const Home: FC<{ session: Session }> = ({ session }) => {
       <Sidebar
         sidebarIsOpen={sidebarIsOpen}
         setSidebarIsOpen={setSidebarIsOpen}
-        userIsAdmin={session.user.isAdmin}
+        userIsAdmin={false}
       />
       <Main setSidebarIsOpen={setSidebarIsOpen} />
     </>

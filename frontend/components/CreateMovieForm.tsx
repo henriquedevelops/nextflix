@@ -1,4 +1,4 @@
-import axios from "@/pages/api/axios";
+import axios from "@/utils/axios";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -55,8 +55,8 @@ const CreateMovieForm: FC = () => {
 
     try {
       await axios.post("/movies", formData);
-      toast.success("New movie created");
       setLoading(false);
+      toast.success("New movie created");
     } catch (error) {
       setLoading(false);
       toast.error("Error creating movie");

@@ -8,9 +8,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { signOut } from "next-auth/react";
 import { FunctionComponent as FC, useState } from "react";
 import AdminPanel from "./AdminPanel";
+import { useRouter } from "next/router";
+import axios from "@/utils/axios";
 
 interface Props {
   sidebarIsOpen: boolean;
@@ -24,9 +25,20 @@ const Sidebar: FC<Props> = ({
   userIsAdmin,
 }) => {
   const [adminModalIsOpen, setAdminModalIsOpen] = useState<boolean>(false);
+  const nextRouter = useRouter();
+
   const handleOpenCloseAdminModal = (): void =>
     setAdminModalIsOpen(!adminModalIsOpen);
 
+  const handleSignOut = async () => {
+    try {
+      await axios.delete("/auth");
+    } catch (err) {
+      console.error(err);
+    }
+
+    nextRouter.push("/auth");
+  };
   return (
     <>
       <Drawer
@@ -76,7 +88,7 @@ const Sidebar: FC<Props> = ({
                 handleOpenCloseAdminModal={handleOpenCloseAdminModal}
               />
               <ListItem disablePadding>
-                <ListItemButton onClick={() => signOut()}>
+                <ListItemButton onClick={handleSignOut}>
                   <ListItemIcon>
                     <LogoutIcon />
                   </ListItemIcon>

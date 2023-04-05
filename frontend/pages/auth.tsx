@@ -5,13 +5,13 @@ import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import { NextPageContext } from "next";
-import { getSession } from "next-auth/react";
+import { parseCookies } from "nookies";
 import { useCallback, useState } from "react";
 
 export async function getServerSideProps(context: NextPageContext) {
-  /* Extracting current session information from incoming request */
-  const session = await getSession(context);
-  if (session) {
+  const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
+
+  if (accessToken) {
     return {
       redirect: {
         destination: "/",
@@ -20,9 +20,7 @@ export async function getServerSideProps(context: NextPageContext) {
     };
   }
 
-  return {
-    props: {},
-  };
+  return { props: { userIsLoggedIn: true } };
 }
 
 const Auth = () => {

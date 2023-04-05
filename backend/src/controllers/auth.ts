@@ -11,28 +11,30 @@ dotenv.config();
 const jwtSecret = process.env.JWT_SECRET;
 
 export const login = tryCatch(async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-
-  const user = await prisma.user.findUnique({
+  const userFound = await prisma.user.findUnique({
     where: {
-      email,
+      email: req.body.email,
     },
   });
-  if (!user) throw new CustomError("Invalid email address.", 401);
+  if (!userFound) throw new CustomError("Invalid email address.", 401);
 
-  const passwordIsCorrect = await compare(password, user.password);
+  const passwordIsCorrect = await compare(
+    req.body.password,
+    userFound.password
+  );
   if (!passwordIsCorrect) throw new CustomError("Wrong password.", 401);
-  const { password: _, ...loggedUser } = user;
+
+  const { password: _, email, id, isAdmin } = userFound;
 
   if (!jwtSecret) throw new CustomError("JWT secret not found", 500);
-  const accessToken = jwt.sign({ user }, jwtSecret, {
+  const accessToken = jwt.sign({ email, id, isAdmin }, jwtSecret, {
     expiresIn: "1h",
   });
-  res.cookie("accessToken", accessToken, {
+  res.cookie("accessToken-Nextflix", accessToken, {
     httpOnly: true,
   });
 
-  res.status(200).json({ loggedUser });
+  res.sendStatus(200);
 });
 
 /* This function authenticates a user by extracting the JWT token 
@@ -42,15 +44,20 @@ export const requireLogin = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     if (!jwtSecret) throw new CustomError("JWT secret not found.", 500);
 
-    const token =
-      req.cookies.accessToken || req.cookies["next-auth.session-token"];
-    console.log(token);
-    if (!token) throw new CustomError("Please log in first", 401);
+    const token = req.cookies["accessToken-Nextflix"];
+    if (!token) throw new CustomError("Unauthorized", 401);
 
-    console.log("2");
-    const { user } = jwt.verify(token, jwtSecret) as any;
-    console.log("3", user);
-    if (!user) throw new CustomError("Please log in first", 401);
+    const { email, id, isAdmin } = jwt.verify(token, jwtSecret) as any;
+
+    if (!email || !id) throw new CustomError("Unauthorized", 401);
+
+    req.userIsAdmin = isAdmin;
     next();
   }
 );
+
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie("accessToken-Nextflix");
+
+  res.sendStatus(200);
+};

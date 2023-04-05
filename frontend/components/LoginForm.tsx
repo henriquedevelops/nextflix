@@ -1,4 +1,5 @@
-import triggerSignIn from "@/utils/triggerSignIn";
+import axios from "@/utils/axios";
+import { User } from "@/utils/types";
 import validateEmail from "@/utils/validateEmail";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,7 +8,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
@@ -20,7 +20,7 @@ type LoginFormProps = {
 const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const nextRouter = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -33,9 +33,21 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
     const emailIsValid = validateEmail(email, setError, setLoading);
     if (!emailIsValid) return;
 
-    await triggerSignIn(email, password, setError, setLoading);
+    try {
+      await axios.post("/auth", {
+        email,
+        password,
+      });
+    } catch (error) {
+      console.log(error, "Invalid credentials");
+      setLoading(false);
+      setError("Invalid credentials");
+      return;
+    }
 
-    router.push("/");
+    setLoading(false);
+    setError("");
+    nextRouter.push("/");
   };
 
   return (
