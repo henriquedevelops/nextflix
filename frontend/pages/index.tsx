@@ -39,7 +39,7 @@ const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
       <Sidebar
         sidebarIsOpen={sidebarIsOpen}
         setSidebarIsOpen={setSidebarIsOpen}
-        userIsAdmin={false}
+        userIsAdmin={loggedUser.isAdmin}
       />
       <Main setSidebarIsOpen={setSidebarIsOpen} />
     </>

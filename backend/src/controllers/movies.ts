@@ -40,7 +40,7 @@ export const createMovie = tryCatch(async (req: Request, res: Response) => {
     throw new Error("errou");
   }
 
-  const newMovie = await prisma.movie.create({
+  await prisma.movie.create({
     data: {
       title,
       genre,
@@ -60,11 +60,11 @@ export const getMovieById = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
-    const requestedMovie = await prisma.movie.findUnique({
+    const movieFound = await prisma.movie.findUnique({
       where: { id },
     });
 
-    res.status(201).json(requestedMovie);
+    res.status(201).json(movieFound);
   }
 );
 

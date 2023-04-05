@@ -66,67 +66,65 @@ const CreateMovieForm: FC = () => {
   return (
     <>
       <Toaster />
-      <Box component="form" onSubmit={handleSubmit} noValidate>
-        <Stack spacing={2}>
-          <TextField
-            required
-            label="Title"
-            size="small"
-            name="title"
+      <Stack spacing={2} component="form" onSubmit={handleSubmit} noValidate>
+        <TextField
+          required
+          label="Title"
+          size="small"
+          name="title"
+          disabled={loading}
+        />
+        <TextField
+          required
+          label="URL"
+          size="small"
+          name="url"
+          disabled={loading}
+        />
+
+        <TextField
+          required
+          select
+          label="Genre"
+          size="small"
+          value={genre}
+          onChange={handleChangeGenre}
+          disabled={loading}
+        >
+          <MenuItem value="Action">Action</MenuItem>
+          <MenuItem value="Comedy">Comedy</MenuItem>
+          <MenuItem value="Drama">Drama</MenuItem>
+        </TextField>
+
+        <TextField
+          required
+          multiline
+          label="Description"
+          name="description"
+          id="outlined-multiline-static"
+          rows={3}
+          disabled={loading}
+        />
+        {uploadedImage && (
+          <Typography color={"primary"}>
+            Image uploaded: {uploadedImage.name}
+          </Typography>
+        )}
+        <Button variant="outlined" component="label">
+          Upload image
+          <input
+            hidden
+            accept="image/*"
+            type="file"
+            onChange={handleImageChange}
             disabled={loading}
           />
-          <TextField
-            required
-            label="URL"
-            size="small"
-            name="url"
-            disabled={loading}
-          />
+        </Button>
 
-          <TextField
-            required
-            select
-            label="Genre"
-            size="small"
-            value={genre}
-            onChange={handleChangeGenre}
-            disabled={loading}
-          >
-            <MenuItem value="Action">Action</MenuItem>
-            <MenuItem value="Comedy">Comedy</MenuItem>
-            <MenuItem value="Drama">Drama</MenuItem>
-          </TextField>
-
-          <TextField
-            required
-            multiline
-            label="Description"
-            name="description"
-            id="outlined-multiline-static"
-            rows={3}
-            disabled={loading}
-          />
-          {uploadedImage && (
-            <Typography color={"primary"}>
-              Image uploaded: {uploadedImage.name}
-            </Typography>
-          )}
-          <Button variant="outlined" component="label">
-            Upload image
-            <input
-              hidden
-              accept="image/*"
-              type="file"
-              onChange={handleImageChange}
-              disabled={loading}
-            />
-          </Button>
-
-          <Button variant="contained" type="submit">
-            Create movie
-          </Button>
-        </Stack>
-      </Box>
+        <Button variant="contained" type="submit">
+          Create movie
+        </Button>
+      </Stack>
     </>
   );
 };
