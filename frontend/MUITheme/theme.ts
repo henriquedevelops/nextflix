@@ -4,7 +4,7 @@ export default createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#ededed",
+      main: "#CFCFCF",
     },
     secondary: {
       main: "#202020",

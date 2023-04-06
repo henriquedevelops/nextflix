@@ -1,34 +1,32 @@
 import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
-import Grid from "@mui/material/Grid";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { FunctionComponent as FC, useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
 import axios from "@/utils/axios";
 import { Movie } from "@/utils/types";
+import Sidebar from "./Sidebar";
+import CardMedia from "@mui/material/CardMedia";
+import MoviesList from "./MoviesList";
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-
-const Main: FC = () => {
-  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+const newMain: FC = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [moviesList, setMoviesList] = useState<Movie[]>([]);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    fetchMovies();
+  }, [selectedGenre]);
 
   const fetchMovies = async () => {
     try {
       const { data: moviesFromResponse } = await axios.get(
         `/movies?genre=${selectedGenre}`
       );
-      console.log(moviesFromResponse);
 
       setMoviesList(moviesFromResponse);
     } catch (error) {
@@ -36,95 +34,94 @@ const Main: FC = () => {
     }
   };
 
-  useEffect(() => {
-    fetchMovies();
-  }, [selectedGenre]);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawerWidth = 270;
 
   return (
-    <>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Sidebar
-        setSelectedGenre={setSelectedGenre}
-        selectedGenre={selectedGenre}
-        sidebarIsOpen={sidebarIsOpen}
-        setSidebarIsOpen={setSidebarIsOpen}
-      />
-      <AppBar position="fixed">
-        <Toolbar sx={{ bgcolor: "#000000" }}>
+      <AppBar
+        color="transparent"
+        position="fixed"
+        sx={{
+          backgroundColor: "black",
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+        }}
+      >
+        <Toolbar sx={{ display: { sm: "none" } }}>
           <IconButton
-            onClick={() => setSidebarIsOpen(true)}
-            size="large"
-            sx={{ marginLeft: "-12px" }}
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
-          <div style={{ flex: 1 }} />
-
           <CardMedia
             component="img"
-            sx={{ width: "300px", marginTop: "1px" }}
+            sx={{ width: "200px", marginTop: "1px" }}
             image="/images/logo3.png"
           />
-
-          <div style={{ flex: 1 }} />
         </Toolbar>
       </AppBar>
-      <Container>
-        <Grid container mt={4} spacing={4}>
-          {moviesList.map((movie) => (
-            <Grid item key={movie.id} xs={12} sm={6} md={4} lg={3}>
-              <Card>
-                <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    image={`http://localhost:80/${movie.image}`}
-                  />
-                  <CardContent>
-                    <Typography
-                      gutterBottom
-                      variant="h4"
-                      component="div"
-                      sx={{ fontSize: "1.0rem" }}
-                    >
-                      {movie.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ fontSize: "0.9rem" }}
-                    >
-                      {movie.genre}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-      <Box sx={{ p: 20 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Nextflix
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        aria-label="mailbox folders"
+      >
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
         >
-          Your next type of movie streaming platform.
-        </Typography>
-        <Typography
-          mt={1}
-          variant="body2"
-          color="text.secondary"
-          align="center"
+          <Sidebar
+            setSelectedGenre={setSelectedGenre}
+            selectedGenre={selectedGenre}
+          />
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+          open
         >
-          Copyright © Nextflix 2023
-        </Typography>
+          <Sidebar
+            setSelectedGenre={setSelectedGenre}
+            selectedGenre={selectedGenre}
+          />
+        </Drawer>
       </Box>
-    </>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
+      >
+        <MoviesList moviesList={moviesList} />
+      </Box>
+    </Box>
   );
 };
 
-export default Main;
+export default newMain;

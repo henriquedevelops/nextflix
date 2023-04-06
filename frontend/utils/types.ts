@@ -24,3 +24,7 @@ export interface formValues {
 export interface LoggedUserContextType {
   loggedUser: User;
 }
+
+export interface MoviesListProps {
+  moviesList: Movie[];
+}

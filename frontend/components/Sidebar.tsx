@@ -13,20 +13,15 @@ import AdminPanel from "./AdminPanel";
 import { useRouter } from "next/router";
 import axios from "@/utils/axios";
 import { useLoggedUser } from "@/utils/loggedUserContext";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
 
 interface Props {
-  setSidebarIsOpen: (value: boolean) => void;
-  sidebarIsOpen: boolean;
   setSelectedGenre: (value: string) => void;
   selectedGenre: string | null;
 }
 
-const Sidebar: FC<Props> = ({
-  sidebarIsOpen,
-  setSidebarIsOpen,
-  setSelectedGenre,
-  selectedGenre,
-}) => {
+const Sidebar: FC<Props> = ({ setSelectedGenre, selectedGenre }) => {
   const { loggedUser } = useLoggedUser();
   const [adminModalIsOpen, setAdminModalIsOpen] = useState<boolean>(false);
   const nextRouter = useRouter();
@@ -51,66 +46,71 @@ const Sidebar: FC<Props> = ({
   };
   return (
     <>
-      <Drawer
-        anchor="left"
-        open={sidebarIsOpen}
-        onClose={() => setSidebarIsOpen(false)}
-        variant="temporary"
-        PaperProps={{
-          sx: {
-            backgroundColor: "black",
-          },
-        }}
-      >
-        <Box>
-          <Box sx={{ width: 275 }} role="presentation">
-            <List>
-              {[
-                "All movies",
-                "Action",
-                "Comedy",
-                "Documentary",
-                "Science-fiction",
-                "Horror",
-                "Drama",
-              ].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton onClick={() => selectNewGenre(text)}>
-                    <ListItemText primary={text} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-            <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
-              <ListItem
-                disablePadding
-                sx={{ display: loggedUser.isAdmin ? "block" : "none" }}
-              >
-                <ListItemButton onClick={handleOpenCloseAdminModal}>
-                  <ListItemIcon>
-                    <AdminPanelSettingsIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Admin panel" />
-                </ListItemButton>
-              </ListItem>
+      <Box>
+        <Box role="presentation">
+          <CardMedia
+            component="img"
+            sx={{
+              width: "233px",
+              margin: "18px",
+              display: { xs: "none", sm: "block" },
+            }}
+            image="/images/logo3.png"
+          />
 
-              <AdminPanel
-                adminModalIsOpen={adminModalIsOpen}
-                setAdminModalIsOpen={setAdminModalIsOpen}
-                handleOpenCloseAdminModal={handleOpenCloseAdminModal}
-              />
-              <ListItem disablePadding>
-                <ListItemButton onClick={handleSignOut}>
-                  <ListItemIcon>
-                    <LogoutIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Log out" />
+          <List>
+            {[
+              "All movies",
+              "Action",
+              "Comedy",
+              "Documentary",
+              "Science-fiction",
+              "Horror",
+              "Drama",
+            ].map((text, index) => (
+              <ListItem sx={{ color: "#CFCFCF" }} key={text} disablePadding>
+                <ListItemButton
+                  sx={{ paddingLeft: 2.4 }}
+                  selected={text === selectedGenre}
+                  onClick={() => selectNewGenre(text)}
+                >
+                  <ListItemText primary={text} />
                 </ListItemButton>
               </ListItem>
-            </Box>
+            ))}
+          </List>
+          <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+            <ListItem
+              disablePadding
+              sx={{
+                display: loggedUser.isAdmin ? "block" : "none",
+                color: "#CFCFCF",
+              }}
+            >
+              <ListItemButton onClick={handleOpenCloseAdminModal}>
+                <ListItemIcon>
+                  <AdminPanelSettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Admin panel" />
+              </ListItemButton>
+            </ListItem>
+
+            <AdminPanel
+              adminModalIsOpen={adminModalIsOpen}
+              setAdminModalIsOpen={setAdminModalIsOpen}
+              handleOpenCloseAdminModal={handleOpenCloseAdminModal}
+            />
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleSignOut}>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary="Log out" />
+              </ListItemButton>
+            </ListItem>
           </Box>
         </Box>
-      </Drawer>
+      </Box>
     </>
   );
 };
