@@ -19,3 +19,11 @@ export interface CreateMovieRequestData {
   image: string;
   url: string;
 }
+
+export interface GetMoviesRequest extends Request {
+  query: {
+    page: string;
+    perPage: string;
+    genre?: string;
+  };
+}

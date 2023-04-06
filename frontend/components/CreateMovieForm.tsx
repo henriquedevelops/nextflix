@@ -22,7 +22,7 @@ const CreateMovieForm: FC = () => {
       if (file.size > 1024 * 1024 || file.type !== "image/jpeg") {
         console.log("erro");
 
-        toast.error("Image must be jpeg only and 1 MB max");
+        toast.error("Image must be jpeg format and 1 MB max");
         return;
       }
       setImage(file);

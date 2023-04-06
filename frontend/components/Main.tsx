@@ -20,12 +20,14 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
 const Main: FC = () => {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
-  const [selectedGenre, setSelectedGenre] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [moviesList, setMoviesList] = useState<Movie[]>([]);
 
   const fetchMovies = async () => {
     try {
-      const { data: moviesFromResponse } = await axios.get(`/movies`);
+      const { data: moviesFromResponse } = await axios.get(
+        `/movies?genre=${selectedGenre}`
+      );
       console.log(moviesFromResponse);
 
       setMoviesList(moviesFromResponse);
@@ -36,12 +38,14 @@ const Main: FC = () => {
 
   useEffect(() => {
     fetchMovies();
-  }, []);
+  }, [selectedGenre]);
 
   return (
     <>
       <CssBaseline />
       <Sidebar
+        setSelectedGenre={setSelectedGenre}
+        selectedGenre={selectedGenre}
         sidebarIsOpen={sidebarIsOpen}
         setSidebarIsOpen={setSidebarIsOpen}
       />

@@ -10,14 +10,14 @@ returns all the movies in the database. The result is sent back
 as a JSON response with HTTP status code 201. */
 export const getMovies = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { selectedGenre } = req.query;
+    const genre = req.query.genre?.toString();
 
     const moviesFound = await prisma.movie.findMany({
-      where: {
-        genre: {
-          equals: selectedGenre?.toString(),
-        },
-      },
+      where: genre
+        ? {
+            genre,
+          }
+        : undefined,
     });
 
     res.status(201).json(moviesFound);

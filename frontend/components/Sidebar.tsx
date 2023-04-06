@@ -15,14 +15,27 @@ import axios from "@/utils/axios";
 import { useLoggedUser } from "@/utils/loggedUserContext";
 
 interface Props {
-  sidebarIsOpen: boolean;
   setSidebarIsOpen: (value: boolean) => void;
+  sidebarIsOpen: boolean;
+  setSelectedGenre: (value: string) => void;
+  selectedGenre: string | null;
 }
 
-const Sidebar: FC<Props> = ({ sidebarIsOpen, setSidebarIsOpen }) => {
+const Sidebar: FC<Props> = ({
+  sidebarIsOpen,
+  setSidebarIsOpen,
+  setSelectedGenre,
+  selectedGenre,
+}) => {
   const { loggedUser } = useLoggedUser();
   const [adminModalIsOpen, setAdminModalIsOpen] = useState<boolean>(false);
   const nextRouter = useRouter();
+
+  const selectNewGenre = (newGenre: string) => {
+    newGenre === "All movies"
+      ? setSelectedGenre("")
+      : setSelectedGenre(newGenre);
+  };
 
   const handleOpenCloseAdminModal = (): void =>
     setAdminModalIsOpen(!adminModalIsOpen);
@@ -53,6 +66,7 @@ const Sidebar: FC<Props> = ({ sidebarIsOpen, setSidebarIsOpen }) => {
           <Box sx={{ width: 275 }} role="presentation">
             <List>
               {[
+                "All movies",
                 "Action",
                 "Comedy",
                 "Documentary",
@@ -61,7 +75,7 @@ const Sidebar: FC<Props> = ({ sidebarIsOpen, setSidebarIsOpen }) => {
                 "Drama",
               ].map((text, index) => (
                 <ListItem key={text} disablePadding>
-                  <ListItemButton>
+                  <ListItemButton onClick={() => selectNewGenre(text)}>
                     <ListItemText primary={text} />
                   </ListItemButton>
                 </ListItem>
