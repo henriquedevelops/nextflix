@@ -8,15 +8,16 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { FunctionComponent as FC, useEffect, useState } from "react";
 import axios from "@/utils/axios";
-import { Movie } from "@/utils/types";
+import { Movie, ResponseFromGetMovies } from "@/utils/types";
 import Sidebar from "./Sidebar";
 import CardMedia from "@mui/material/CardMedia";
 import MoviesList from "./MoviesList";
 
-const newMain: FC = () => {
+const Main: FC = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [moviesList, setMoviesList] = useState<Movie[]>([]);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1);
 
   useEffect(() => {
     fetchMovies();
@@ -24,11 +25,14 @@ const newMain: FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const { data: moviesFromResponse } = await axios.get(
-        `/movies?genre=${selectedGenre}`
+      const response = await axios.get<ResponseFromGetMovies>(
+        `/movies?genre=${selectedGenre}&skip=${moviesList.length}`
       );
+      const moviesFromResponse = response.data.moviesFound;
+      const amountOfMoviesFound = response.data.amountOfMoviesFound;
 
-      setMoviesList(moviesFromResponse);
+      setMoviesList([...moviesList, ...moviesFromResponse]);
+      setTotalAmountOfMovies(amountOfMoviesFound);
     } catch (error) {
       console.error(error);
     }
@@ -91,6 +95,9 @@ const newMain: FC = () => {
           <Sidebar
             setSelectedGenre={setSelectedGenre}
             selectedGenre={selectedGenre}
+            fetchMovies={fetchMovies}
+            setMoviesList={setMoviesList}
+            moviesList={moviesList}
           />
         </Drawer>
         <Drawer
@@ -108,13 +115,21 @@ const newMain: FC = () => {
           <Sidebar
             setSelectedGenre={setSelectedGenre}
             selectedGenre={selectedGenre}
+            fetchMovies={fetchMovies}
+            setMoviesList={setMoviesList}
+            moviesList={moviesList}
           />
         </Drawer>
       </Box>
 
-      <MoviesList moviesList={moviesList} drawerWidth={drawerWidth} />
+      <MoviesList
+        moviesList={moviesList}
+        drawerWidth={drawerWidth}
+        totalAmountOfMovies={totalAmountOfMovies}
+        fetchMovies={fetchMovies}
+      />
     </Box>
   );
 };
 
-export default newMain;
+export default Main;

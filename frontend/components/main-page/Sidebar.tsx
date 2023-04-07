@@ -15,18 +15,30 @@ import axios from "@/utils/axios";
 import { useLoggedUser } from "@/utils/loggedUserContext";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import { Movie } from "@/utils/types";
 
 interface Props {
   setSelectedGenre: (value: string) => void;
   selectedGenre: string | null;
+  fetchMovies: () => Promise<void>;
+  setMoviesList: (previousMovies: Movie[]) => void;
+  moviesList: Movie[];
 }
 
-const Sidebar: FC<Props> = ({ setSelectedGenre, selectedGenre }) => {
+const Sidebar: FC<Props> = ({
+  setSelectedGenre,
+  selectedGenre,
+  fetchMovies,
+  setMoviesList,
+  moviesList,
+}) => {
   const { loggedUser } = useLoggedUser();
   const [adminModalIsOpen, setAdminModalIsOpen] = useState<boolean>(false);
   const nextRouter = useRouter();
 
-  const selectNewGenre = (newGenre: string) => {
+  const selectNewGenre = async (newGenre: string) => {
+    setMoviesList([]);
+
     newGenre === "All movies"
       ? setSelectedGenre("")
       : setSelectedGenre(newGenre);

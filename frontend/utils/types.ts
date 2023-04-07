@@ -13,7 +13,7 @@ export interface Movie {
   image: string;
 }
 
-export interface formValues {
+export interface FormValues {
   title: string;
   url: string;
   genre: string;
@@ -28,4 +28,11 @@ export interface LoggedUserContextType {
 export interface MoviesListProps {
   moviesList: Movie[];
   drawerWidth: number;
+  totalAmountOfMovies: number;
+  fetchMovies: () => Promise<void>;
+}
+
+export interface ResponseFromGetMovies {
+  moviesFound: Movie[];
+  amountOfMoviesFound: number;
 }
