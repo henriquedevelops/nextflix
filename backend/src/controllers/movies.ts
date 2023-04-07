@@ -11,26 +11,29 @@ as a JSON response with HTTP status code 201. */
 export const getMovies = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const genre = req.query.genre?.toString();
+    const title = req.query.title?.toString();
     const skip = req.query.skip
       ? parseInt(req.query.skip?.toString())
       : undefined;
 
     const moviesFound = await prisma.movie.findMany({
-      where: genre
-        ? {
-            genre,
-          }
-        : undefined,
+      where: {
+        AND: [
+          genre ? { genre } : {},
+          title ? { title: { contains: title, mode: "insensitive" } } : {},
+        ],
+      },
       skip,
       take: 18,
     });
 
     const amountOfMoviesFound = await prisma.movie.count({
-      where: genre
-        ? {
-            genre,
-          }
-        : undefined,
+      where: {
+        AND: [
+          genre ? { genre } : {},
+          title ? { title: { contains: title, mode: "insensitive" } } : {},
+        ],
+      },
     });
 
     res.status(201).json({ moviesFound, amountOfMoviesFound });

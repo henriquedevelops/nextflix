@@ -41,6 +41,8 @@ export interface SidebarProps {
   setSelectedGenre: (value: string) => void;
   selectedGenre: string | null;
   setMoviesList: (previousMovies: Movie[]) => void;
+  searchTitle: string;
+  setSearchTitle: (newSearchTitle: string) => void;
 }
 
 export interface AdminPanelProps {

@@ -19,15 +19,16 @@ const Main: FC = () => {
   const [moviesList, setMoviesList] = useState<Movie[]>([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1);
+  const [searchTitle, setSearchTitle] = useState<string>("");
 
   useEffect(() => {
     fetchMovies();
-  }, [selectedGenre]);
+  }, [selectedGenre, searchTitle]);
 
   const fetchMovies = async () => {
     try {
       const response = await axios.get<ResponseFromGetMovies>(
-        `/movies?genre=${selectedGenre}&skip=${moviesList.length}`
+        `/movies?genre=${selectedGenre}&skip=${moviesList.length}&title=${searchTitle}`
       );
       const moviesFromResponse = response.data.moviesFound;
       const amountOfMoviesFound = response.data.amountOfMoviesFound;
@@ -97,6 +98,8 @@ const Main: FC = () => {
             setSelectedGenre={setSelectedGenre}
             selectedGenre={selectedGenre}
             setMoviesList={setMoviesList}
+            searchTitle={searchTitle}
+            setSearchTitle={setSearchTitle}
           />
         </Drawer>
         <Drawer
@@ -115,6 +118,8 @@ const Main: FC = () => {
             setSelectedGenre={setSelectedGenre}
             selectedGenre={selectedGenre}
             setMoviesList={setMoviesList}
+            searchTitle={searchTitle}
+            setSearchTitle={setSearchTitle}
           />
         </Drawer>
       </Box>
