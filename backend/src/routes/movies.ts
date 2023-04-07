@@ -19,7 +19,7 @@ router.use(restricToAdmin);
 
 router
   .post("/", upload.single("image"), createMovie)
-  .patch("/:id", updateMovie)
+  .patch("/:id", upload.single("image"), updateMovie)
   .delete("/:id", deleteMovie);
 
 export default router;

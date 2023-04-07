@@ -8,6 +8,7 @@ import CreateMovieForm from "./CreateMovieForm";
 import DeleteMovieForm from "./DeleteMovieForm";
 import CloseIcon from "@mui/icons-material/Close";
 import { AdminPanelProps } from "@/utils/types";
+import UpdateMovieForm from "./UpdateMovieForm";
 
 const AdminPanel: FC<AdminPanelProps> = ({
   adminModalIsOpen,
@@ -37,8 +38,8 @@ const AdminPanel: FC<AdminPanelProps> = ({
         >
           <Box
             position="absolute"
-            top={{ xs: 0, sm: "20vh" }}
-            width={{ xs: "100%", sm: "500px" }}
+            top={{ xs: 0, sm: "18vh" }}
+            width={{ xs: "100%", sm: "600px" }}
             height={{ xs: "100vh", sm: "fit-content" }}
             bgcolor="#262626"
             borderRadius={1.2}
@@ -53,6 +54,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
               <TabContext value={selectedAction}>
                 <TabList onChange={handleChangeSelectedAction}>
                   <Tab label="Create" value="Create" />
+                  <Tab label="Update" value="Update" />
                   <Tab label="Delete" value="Delete" />
                 </TabList>
               </TabContext>
@@ -64,6 +66,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
             </Box>
             <Box padding={3} flexGrow={1}>
               {selectedAction === "Create" && <CreateMovieForm />}
+              {selectedAction === "Update" && <UpdateMovieForm />}
               {selectedAction === "Delete" && <DeleteMovieForm />}
             </Box>
           </Box>

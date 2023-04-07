@@ -20,6 +20,14 @@ export interface CreateMovieRequestData {
   url: string;
 }
 
+export interface UpdateMovieRequestData {
+  title: string | undefined;
+  genre: string | undefined;
+  description: string | undefined;
+  image: string | undefined;
+  url: string | undefined;
+}
+
 export interface GetMoviesRequest extends Request {
   query: {
     page: string;

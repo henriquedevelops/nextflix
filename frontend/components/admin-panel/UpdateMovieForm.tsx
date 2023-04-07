@@ -1,4 +1,6 @@
+import appendToFormData from "@/utils/appendToFormData";
 import axios from "@/utils/axios";
+import validateImage from "@/utils/validateImage";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,10 +9,9 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import validateImage from "@/utils/validateImage";
-import appendToFormData from "@/utils/appendToFormData";
 
-const CreateMovieForm: FC = () => {
+const UpdateMovieForm: FC = () => {
+  const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [genre, setGenre] = useState("");
@@ -24,19 +25,12 @@ const CreateMovieForm: FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!id) {
+      toast.error("Please enter a movie ID");
+      return;
+    }
+
     setLoading(true);
-
-    if (!title || !url || !genre || !description) {
-      toast.error("All fields are required");
-      setLoading(false);
-      return;
-    }
-
-    if (!uploadedImage) {
-      toast.error("A movie must have an image cover");
-      setLoading(false);
-      return;
-    }
 
     const formData = appendToFormData(
       title,
@@ -47,17 +41,18 @@ const CreateMovieForm: FC = () => {
     );
 
     try {
-      await axios.post("/movies", formData);
+      await axios.patch(`/movies/${id}`, formData);
       setTitle("");
       setUrl("");
       setGenre("");
       setDescription("");
+      setId("");
       setImage(null);
       setLoading(false);
-      toast.success("New movie created");
+      toast.success("Movie succesfully updated");
     } catch (error) {
       setLoading(false);
-      toast.error("Error creating movie");
+      toast.error("Error updating movie");
     }
   };
 
@@ -66,7 +61,17 @@ const CreateMovieForm: FC = () => {
       <Toaster />
       <Stack spacing={2} component="form" onSubmit={handleSubmit} noValidate>
         <TextField
+          label="ID"
           required
+          size="small"
+          value={id}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setId(event.target.value);
+          }}
+          disabled={loading}
+        />
+
+        <TextField
           label="Title"
           size="small"
           name="title"
@@ -77,7 +82,6 @@ const CreateMovieForm: FC = () => {
           }}
         />
         <TextField
-          required
           label="URL"
           size="small"
           name="url"
@@ -89,7 +93,6 @@ const CreateMovieForm: FC = () => {
         />
 
         <TextField
-          required
           select
           label="Genre"
           size="small"
@@ -108,7 +111,6 @@ const CreateMovieForm: FC = () => {
         </TextField>
 
         <TextField
-          required
           multiline
           label="Description"
           name="description"
@@ -146,11 +148,11 @@ const CreateMovieForm: FC = () => {
             left: { xs: 24, sm: "auto" },
           }}
         >
-          Create movie
+          Update movie
         </Button>
       </Stack>
     </>
   );
 };
 
-export default CreateMovieForm;
+export default UpdateMovieForm;

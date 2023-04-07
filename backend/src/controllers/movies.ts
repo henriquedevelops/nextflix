@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "../../prisma/client";
 import tryCatch from "../error-handling/tryCatch";
-import { CreateMovieRequestData } from "../utils/types";
+import { CreateMovieRequestData, UpdateMovieRequestData } from "../utils/types";
 
 /* This function retrieves movies from the database based on the 
 optional query parameter "selectedGenre". If it is provided, it 
@@ -42,8 +42,9 @@ request body as arguments. Once the movie is created, it responds with a
 201 HTTP status code and the JSON representation of the newly created movie. */
 export const createMovie = tryCatch(async (req: Request, res: Response) => {
   const { title, url, description, genre }: CreateMovieRequestData = req.body;
+  const image = req.file?.path;
 
-  if (!title || !url || !genre || !description || !req.file) {
+  if (!title || !url || !genre || !description || !image) {
     throw new Error("errou");
   }
 
@@ -52,12 +53,37 @@ export const createMovie = tryCatch(async (req: Request, res: Response) => {
       title,
       genre,
       description,
-      image: req.file.path,
+      image,
       url,
     },
   });
 
   res.sendStatus(201);
+});
+
+/* This function receives the movie id in the request parameters and the 
+updated movie data in the request body. It uses the Prisma update method 
+to update the movie in the database and returns the updated movie in the 
+response. */
+export const updateMovie = tryCatch(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const { title, url, genre, description }: UpdateMovieRequestData = req.body;
+  const image = req.file?.path;
+
+  const updatedMovie = await prisma.movie.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      url,
+      genre,
+      description,
+      image,
+    },
+  });
+
+  res.status(201).json(updatedMovie);
 });
 
 /* This function retrieves a single movie from the database based on the 
@@ -74,28 +100,6 @@ export const getMovieById = tryCatch(
     res.status(201).json(movieFound);
   }
 );
-
-/* This function receives the movie id in the request parameters and the 
-updated movie data in the request body. It uses the Prisma update method 
-to update the movie in the database and returns the updated movie in the 
-response. */
-export const updateMovie = tryCatch(async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const { title, description, genre } = req.body;
-
-  const updatedMovie = await prisma.movie.update({
-    where: {
-      id,
-    },
-    data: {
-      title,
-      description,
-      genre,
-    },
-  });
-
-  res.status(201).json(updatedMovie);
-});
 
 /* This function receives the movie id in the request parameters and uses the 
 Prisma delete method to delete the movie from the database. It returns a 204 
