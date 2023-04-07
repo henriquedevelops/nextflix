@@ -64,7 +64,7 @@ const newMain: FC = () => {
           <CardMedia
             component="img"
             sx={{ width: "200px", marginTop: "1px" }}
-            image="/images/logo3.png"
+            image="/images/logo2.png"
           />
         </Toolbar>
       </AppBar>
@@ -111,15 +111,8 @@ const newMain: FC = () => {
           />
         </Drawer>
       </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <MoviesList moviesList={moviesList} />
-      </Box>
+
+      <MoviesList moviesList={moviesList} drawerWidth={drawerWidth} />
     </Box>
   );
 };

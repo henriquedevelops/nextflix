@@ -9,7 +9,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { FunctionComponent as FC, useState } from "react";
-import AdminPanel from "./AdminPanel";
+import AdminPanel from "../admin-panel/AdminPanel";
 import { useRouter } from "next/router";
 import axios from "@/utils/axios";
 import { useLoggedUser } from "@/utils/loggedUserContext";
@@ -57,7 +57,7 @@ const Sidebar: FC<Props> = ({ setSelectedGenre, selectedGenre }) => {
               marginBottom: "50px",
               display: { xs: "none", sm: "block" },
             }}
-            image="/images/logo3.png"
+            image="/images/logo2.png"
           />
 
           <List>

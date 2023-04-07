@@ -1,4 +1,4 @@
-import Main from "@/components/Main";
+import Main from "@/components/main-page/Main";
 import { LoggedUserContext } from "@/utils/loggedUserContext";
 import { User } from "@/utils/types";
 import jwtDecode from "jwt-decode";

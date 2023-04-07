@@ -27,4 +27,5 @@ export interface LoggedUserContextType {
 
 export interface MoviesListProps {
   moviesList: Movie[];
+  drawerWidth: number;
 }

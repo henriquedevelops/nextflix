@@ -1,5 +1,5 @@
-import LoginForm from "@/components/LoginForm";
-import RegisterForm from "@/components/RegisterForm";
+import LoginForm from "@/components/auth-page/LoginForm";
+import RegisterForm from "@/components/auth-page/RegisterForm";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";

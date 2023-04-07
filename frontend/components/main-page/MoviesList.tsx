@@ -10,15 +10,18 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { FunctionComponent as FC } from "react";
 
-const MoviesList: FC<MoviesListProps> = ({ moviesList }) => {
+const MoviesList: FC<MoviesListProps> = ({ moviesList, drawerWidth }) => {
   return (
     <>
       <CssBaseline />
+
       <Container
         maxWidth={false}
         sx={{
           marginTop: { xs: 6.2, sm: 0 },
           padding: { xs: 0 },
+          flexGrow: 1,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
         <Grid container spacing={{ xs: 4, sm: 1 }}>
