@@ -22,7 +22,6 @@ const MoviesList: FC<MoviesListProps> = ({
   return (
     <>
       <CssBaseline />
-
       <Container
         maxWidth={false}
         sx={{
@@ -36,7 +35,19 @@ const MoviesList: FC<MoviesListProps> = ({
           dataLength={moviesList.length}
           next={async () => await fetchMovies()}
           hasMore={totalAmountOfMovies > moviesList.length}
-          loader={false}
+          loader={
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "350px",
+                width: "100%",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          }
         >
           <Grid container spacing={{ xs: 4, sm: 1 }}>
             {moviesList.map((movie) => (

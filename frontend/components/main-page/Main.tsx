@@ -19,15 +19,12 @@ const Main: FC = () => {
   const [moviesList, setMoviesList] = useState<Movie[]>([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchMovies();
   }, [selectedGenre]);
 
   const fetchMovies = async () => {
-    setIsLoading(true);
-
     try {
       const response = await axios.get<ResponseFromGetMovies>(
         `/movies?genre=${selectedGenre}&skip=${moviesList.length}`
@@ -37,10 +34,8 @@ const Main: FC = () => {
 
       setMoviesList([...moviesList, ...moviesFromResponse]);
       setTotalAmountOfMovies(amountOfMoviesFound);
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
-      setIsLoading(false);
     }
   };
 
@@ -48,7 +43,7 @@ const Main: FC = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const drawerWidth = 300;
+  const drawerWidth = 270;
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -123,26 +118,13 @@ const Main: FC = () => {
           />
         </Drawer>
       </Box>
-      {isLoading ? (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100vh",
-            width: "100vw",
-          }}
-        >
-          <CircularProgress size={75} />
-        </Box>
-      ) : (
-        <MoviesList
-          moviesList={moviesList}
-          drawerWidth={drawerWidth}
-          totalAmountOfMovies={totalAmountOfMovies}
-          fetchMovies={fetchMovies}
-        />
-      )}
+
+      <MoviesList
+        moviesList={moviesList}
+        drawerWidth={drawerWidth}
+        totalAmountOfMovies={totalAmountOfMovies}
+        fetchMovies={fetchMovies}
+      />
     </Box>
   );
 };

@@ -56,9 +56,9 @@ const Sidebar: FC<SidebarProps> = ({
           <CardMedia
             component="img"
             sx={{
-              width: "282px",
-              marginLeft: "8px",
-              marginTop: "10px",
+              width: "230px",
+              marginLeft: "20px",
+              marginTop: "20px",
               marginBottom: "50px",
               display: { xs: "none", sm: "block" },
             }}
