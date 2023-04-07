@@ -14,8 +14,14 @@ const MoviesList: FC<MoviesListProps> = ({ moviesList }) => {
   return (
     <>
       <CssBaseline />
-      <Container maxWidth={false} sx={{ marginTop: { xs: 4, sm: 1 } }}>
-        <Grid container spacing={4}>
+      <Container
+        maxWidth={false}
+        sx={{
+          marginTop: { xs: 6.2, sm: 0 },
+          padding: { xs: 0 },
+        }}
+      >
+        <Grid container spacing={{ xs: 4, sm: 1 }}>
           {moviesList.map((movie) => (
             <Grid item key={movie.id} xs={16} sm={12} md={6} lg={4} xl={3}>
               <Card>

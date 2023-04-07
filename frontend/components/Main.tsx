@@ -38,7 +38,7 @@ const newMain: FC = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const drawerWidth = 270;
+  const drawerWidth = 300;
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -100,6 +100,7 @@ const newMain: FC = () => {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              borderRight: "none",
             },
           }}
           open
@@ -114,7 +115,6 @@ const newMain: FC = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >

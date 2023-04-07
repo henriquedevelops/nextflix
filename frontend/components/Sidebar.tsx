@@ -51,8 +51,10 @@ const Sidebar: FC<Props> = ({ setSelectedGenre, selectedGenre }) => {
           <CardMedia
             component="img"
             sx={{
-              width: "233px",
-              margin: "18px",
+              width: "282px",
+              marginLeft: "8px",
+              marginTop: "10px",
+              marginBottom: "50px",
               display: { xs: "none", sm: "block" },
             }}
             image="/images/logo3.png"
