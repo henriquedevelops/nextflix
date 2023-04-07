@@ -4,6 +4,7 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -35,7 +36,7 @@ const MoviesList: FC<MoviesListProps> = ({
           dataLength={moviesList.length}
           next={async () => await fetchMovies()}
           hasMore={totalAmountOfMovies > moviesList.length}
-          loader={<h4>Loading...</h4>}
+          loader={false}
         >
           <Grid container spacing={{ xs: 4, sm: 1 }}>
             {moviesList.map((movie) => (
