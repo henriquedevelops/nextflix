@@ -15,17 +15,9 @@ import axios from "@/utils/axios";
 import { useLoggedUser } from "@/utils/loggedUserContext";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Movie } from "@/utils/types";
+import { Movie, SidebarProps } from "@/utils/types";
 
-interface Props {
-  setSelectedGenre: (value: string) => void;
-  selectedGenre: string | null;
-  fetchMovies: () => Promise<void>;
-  setMoviesList: (previousMovies: Movie[]) => void;
-  moviesList: Movie[];
-}
-
-const Sidebar: FC<Props> = ({
+const Sidebar: FC<SidebarProps> = ({
   setSelectedGenre,
   selectedGenre,
   fetchMovies,
@@ -37,6 +29,8 @@ const Sidebar: FC<Props> = ({
   const nextRouter = useRouter();
 
   const selectNewGenre = async (newGenre: string) => {
+    if (newGenre === "All movies" && selectedGenre === "") return;
+
     setMoviesList([]);
 
     newGenre === "All movies"

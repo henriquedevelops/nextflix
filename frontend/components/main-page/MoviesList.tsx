@@ -34,12 +34,21 @@ const MoviesList: FC<MoviesListProps> = ({
         <InfiniteScroll
           dataLength={moviesList.length}
           next={async () => await fetchMovies()}
-          hasMore={true}
+          hasMore={totalAmountOfMovies > moviesList.length}
           loader={<h4>Loading...</h4>}
         >
           <Grid container spacing={{ xs: 4, sm: 1 }}>
             {moviesList.map((movie) => (
-              <Grid item key={movie.id} xs={16} sm={12} md={6} lg={4} xl={3}>
+              <Grid
+                item
+                key={movie.id}
+                xs={16}
+                sm={12}
+                md={6}
+                lg={4}
+                xl={3}
+                xxl={2}
+              >
                 <Card>
                   <CardActionArea>
                     <CardMedia

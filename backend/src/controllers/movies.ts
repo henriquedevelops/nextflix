@@ -22,7 +22,7 @@ export const getMovies = tryCatch(
           }
         : undefined,
       skip,
-      take: 8,
+      take: 18,
     });
 
     const amountOfMoviesFound = await prisma.movie.count({
