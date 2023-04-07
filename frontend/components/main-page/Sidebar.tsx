@@ -1,35 +1,34 @@
+import axios from "@/utils/axios";
+import { useLoggedUser } from "@/utils/loggedUserContext";
+import { SidebarProps } from "@/utils/types";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
+import CardMedia from "@mui/material/CardMedia";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import { useRouter } from "next/router";
 import { FunctionComponent as FC, useState } from "react";
 import AdminPanel from "../admin-panel/AdminPanel";
-import { useRouter } from "next/router";
-import axios from "@/utils/axios";
-import { useLoggedUser } from "@/utils/loggedUserContext";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { Movie, SidebarProps } from "@/utils/types";
 
 const Sidebar: FC<SidebarProps> = ({
   setSelectedGenre,
   selectedGenre,
-  fetchMovies,
   setMoviesList,
-  moviesList,
 }) => {
   const { loggedUser } = useLoggedUser();
   const [adminModalIsOpen, setAdminModalIsOpen] = useState<boolean>(false);
   const nextRouter = useRouter();
 
   const selectNewGenre = async (newGenre: string) => {
-    if (newGenre === "All movies" && selectedGenre === "") return;
+    if (
+      (newGenre === "All movies" && selectedGenre === "") ||
+      newGenre === selectedGenre
+    )
+      return;
 
     setMoviesList([]);
 
@@ -105,7 +104,6 @@ const Sidebar: FC<SidebarProps> = ({
 
             <AdminPanel
               adminModalIsOpen={adminModalIsOpen}
-              setAdminModalIsOpen={setAdminModalIsOpen}
               handleOpenCloseAdminModal={handleOpenCloseAdminModal}
             />
             <ListItem disablePadding>

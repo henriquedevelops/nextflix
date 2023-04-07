@@ -7,16 +7,10 @@ import TabPanel from "@mui/lab/TabPanel";
 import CreateMovieForm from "./CreateMovieForm";
 import DeleteMovieForm from "./DeleteMovieForm";
 import CloseIcon from "@mui/icons-material/Close";
+import { AdminPanelProps } from "@/utils/types";
 
-interface Props {
-  adminModalIsOpen: boolean;
-  setAdminModalIsOpen: (value: boolean) => void;
-  handleOpenCloseAdminModal: () => void;
-}
-
-const AdminPanel: FC<Props> = ({
+const AdminPanel: FC<AdminPanelProps> = ({
   adminModalIsOpen,
-  setAdminModalIsOpen,
   handleOpenCloseAdminModal,
 }) => {
   const [selectedAction, setSelectedAction] = useState<string>("Create");

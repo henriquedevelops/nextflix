@@ -95,9 +95,7 @@ const Main: FC = () => {
           <Sidebar
             setSelectedGenre={setSelectedGenre}
             selectedGenre={selectedGenre}
-            fetchMovies={fetchMovies}
             setMoviesList={setMoviesList}
-            moviesList={moviesList}
           />
         </Drawer>
         <Drawer
@@ -115,9 +113,7 @@ const Main: FC = () => {
           <Sidebar
             setSelectedGenre={setSelectedGenre}
             selectedGenre={selectedGenre}
-            fetchMovies={fetchMovies}
             setMoviesList={setMoviesList}
-            moviesList={moviesList}
           />
         </Drawer>
       </Box>

@@ -40,7 +40,10 @@ export interface ResponseFromGetMovies {
 export interface SidebarProps {
   setSelectedGenre: (value: string) => void;
   selectedGenre: string | null;
-  fetchMovies: () => Promise<void>;
   setMoviesList: (previousMovies: Movie[]) => void;
-  moviesList: Movie[];
+}
+
+export interface AdminPanelProps {
+  adminModalIsOpen: boolean;
+  handleOpenCloseAdminModal: () => void;
 }
