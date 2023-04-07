@@ -89,6 +89,12 @@ const DeleteMovieForm: FC = () => {
             variant="contained"
             disabled={loading}
             onClick={handleShowConfirmation}
+            sx={{
+              position: { xs: "fixed", sm: "static" },
+              bottom: { xs: 20, sm: "auto" },
+              right: { xs: 24, sm: "auto" },
+              left: { xs: 24, sm: "auto" },
+            }}
           >
             Delete movie
           </Button>

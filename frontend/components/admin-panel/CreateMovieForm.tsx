@@ -140,7 +140,16 @@ const CreateMovieForm: FC = () => {
           />
         </Button>
 
-        <Button variant="contained" type="submit">
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{
+            position: { xs: "fixed", sm: "static" },
+            bottom: { xs: 20, sm: "auto" },
+            right: { xs: 24, sm: "auto" },
+            left: { xs: 24, sm: "auto" },
+          }}
+        >
           Create movie
         </Button>
       </Stack>

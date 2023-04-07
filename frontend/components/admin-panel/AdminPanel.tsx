@@ -43,8 +43,9 @@ const AdminPanel: FC<Props> = ({
         >
           <Box
             position="absolute"
-            top="20vh"
-            width="500px"
+            top={{ xs: 0, sm: "20vh" }}
+            width={{ xs: "100%", sm: "500px" }}
+            height={{ xs: "100vh", sm: "fit-content" }}
             bgcolor="#262626"
             borderRadius={1.2}
             display="flex"
