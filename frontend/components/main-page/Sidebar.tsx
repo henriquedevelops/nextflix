@@ -100,7 +100,7 @@ const Sidebar: FC<SidebarProps> = ({
               </ListItem>
             ))}
             <FormControl
-              sx={{ ml: 1.9, mt: 1, width: "235px" }}
+              sx={{ ml: 1.8, mt: 0, width: "237px" }}
               variant={"standard"}
             >
               <InputLabel>Search</InputLabel>
@@ -112,10 +112,6 @@ const Sidebar: FC<SidebarProps> = ({
                     <SearchIcon color="primary" />
                   </InputAdornment>
                 }
-                aria-describedby="standard-weight-helper-text"
-                inputProps={{
-                  "aria-label": "weight",
-                }}
               />
             </FormControl>
           </List>

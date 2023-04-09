@@ -49,3 +49,8 @@ export interface AdminPanelProps {
   adminModalIsOpen: boolean;
   handleOpenCloseAdminModal: () => void;
 }
+
+export interface SelectedMovieModalProps {
+  selectedMovie: Movie | undefined;
+  setSelectedMovie: (value: Movie | undefined) => void;
+}

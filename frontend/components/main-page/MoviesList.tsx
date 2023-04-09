@@ -1,4 +1,4 @@
-import { MoviesListProps } from "@/utils/types";
+import { Movie, MoviesListProps } from "@/utils/types";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
@@ -9,9 +9,10 @@ import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { FunctionComponent as FC } from "react";
+import { FunctionComponent as FC, useState } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
+import SelectedMovieModal from "./SelectedMovieModal";
 
 const MoviesList: FC<MoviesListProps> = ({
   moviesList,
@@ -19,9 +20,17 @@ const MoviesList: FC<MoviesListProps> = ({
   totalAmountOfMovies,
   fetchMovies,
 }) => {
+  const [selectedMovie, setSelectedMovie] = useState<Movie | undefined>(
+    undefined
+  );
+
   return (
     <>
       <CssBaseline />
+      <SelectedMovieModal
+        selectedMovie={selectedMovie}
+        setSelectedMovie={setSelectedMovie}
+      />
       <Container
         maxWidth={false}
         sx={{
@@ -62,7 +71,10 @@ const MoviesList: FC<MoviesListProps> = ({
                 xxl={2}
               >
                 <Card>
-                  <CardActionArea>
+                  <CardActionArea
+                    disableTouchRipple
+                    onClick={() => setSelectedMovie(movie)}
+                  >
                     <CardMedia
                       component="img"
                       image={`http://localhost:80/${movie.image}`}

@@ -29,6 +29,9 @@ const AdminPanel: FC<AdminPanelProps> = ({
         open={adminModalIsOpen}
         onClose={handleOpenCloseAdminModal}
         onBackdropClick={handleOpenCloseAdminModal}
+        sx={{
+          backdropFilter: "blur(6px)",
+        }}
       >
         <Box
           display="flex"

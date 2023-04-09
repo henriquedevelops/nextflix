@@ -13,6 +13,7 @@ import Sidebar from "./Sidebar";
 import CardMedia from "@mui/material/CardMedia";
 import MoviesList from "./MoviesList";
 import CircularProgress from "@mui/material/CircularProgress";
+import SelectedMovieModal from "./SelectedMovieModal";
 
 const Main: FC = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>("");
