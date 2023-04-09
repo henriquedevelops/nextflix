@@ -3,16 +3,20 @@ import { AdminPanelProps } from "@/utils/types";
 import CloseIcon from "@mui/icons-material/Close";
 import { TabContext, TabList } from "@mui/lab";
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
   DialogTitle,
   IconButton,
+  Snackbar,
   Tab,
+  ThemeProvider,
   useMediaQuery,
+  createTheme,
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import { FunctionComponent as FC, useState } from "react";
+import { FunctionComponent as FC, useState, useEffect } from "react";
 import CreateMovieForm from "./CreateMovieForm";
 import DeleteMovieForm from "./DeleteMovieForm";
 import UpdateMovieForm from "./UpdateMovieForm";
@@ -22,6 +26,13 @@ const AdminPanel: FC<AdminPanelProps> = ({
   handleOpenCloseAdminModal,
 }) => {
   const [selectedAction, setSelectedAction] = useState<string>("Create");
+  const [messageAlert, setMessageAlert] = useState<string>("");
+  const [messageAlertIsOpen, setMessageAlertIsOpen] = useState(false);
+
+  useEffect(() => {
+    messageAlert && setMessageAlertIsOpen(true);
+  }, [messageAlert]);
+
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleChangeSelectedAction = (
@@ -41,10 +52,28 @@ const AdminPanel: FC<AdminPanelProps> = ({
         PaperProps={{
           sx: {
             position: "absolute",
-            top: { xs: 0, sm: "16vh" },
+            top: { xs: 0, sm: "15vh" },
+            paddingBottom: 1,
           },
         }}
       >
+        <ThemeProvider theme={createTheme()}>
+          <Snackbar
+            open={messageAlertIsOpen}
+            autoHideDuration={2500}
+            anchorOrigin={{ horizontal: "center", vertical: "top" }}
+            onClose={() => setMessageAlertIsOpen(false)}
+            TransitionProps={{ onExited: () => setMessageAlert("") }}
+          >
+            <Alert
+              severity={messageAlert.includes("success") ? "success" : "error"}
+              sx={{ width: "100%" }}
+              variant="filled"
+            >
+              {messageAlert}
+            </Alert>
+          </Snackbar>
+        </ThemeProvider>
         <DialogTitle sx={{ padding: 0 }}>
           <Box
             display="flex"
@@ -59,7 +88,12 @@ const AdminPanel: FC<AdminPanelProps> = ({
               </TabList>
             </TabContext>
 
-            <Box display="flex" justifyContent="flex-end" pt={1} pr={1}>
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              paddingTop={1}
+              paddingRight={1}
+            >
               <IconButton onClick={handleOpenCloseAdminModal}>
                 <CloseIcon />
               </IconButton>
@@ -67,9 +101,15 @@ const AdminPanel: FC<AdminPanelProps> = ({
           </Box>
         </DialogTitle>
 
-        {selectedAction === "Create" && <CreateMovieForm />}
-        {selectedAction === "Update" && <UpdateMovieForm />}
-        {selectedAction === "Delete" && <DeleteMovieForm />}
+        {selectedAction === "Create" && (
+          <CreateMovieForm setMessageAlert={setMessageAlert} />
+        )}
+        {selectedAction === "Update" && (
+          <UpdateMovieForm setMessageAlert={setMessageAlert} />
+        )}
+        {selectedAction === "Delete" && (
+          <DeleteMovieForm setMessageAlert={setMessageAlert} />
+        )}
       </Dialog>
     </>
   );

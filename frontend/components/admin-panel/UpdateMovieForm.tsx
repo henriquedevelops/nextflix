@@ -1,5 +1,6 @@
 import appendToFormData from "@/utils/appendToFormData";
 import axios from "@/utils/axios";
+import { AdminPanelFormProps } from "@/utils/types";
 import validateImage from "@/utils/validateImage";
 import { DialogActions, DialogContent, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -8,9 +9,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 
-const UpdateMovieForm: FC = () => {
+const UpdateMovieForm: FC<AdminPanelFormProps> = ({ setMessageAlert }) => {
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -20,13 +20,12 @@ const UpdateMovieForm: FC = () => {
   const [loading, setLoading] = useState(false);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    validateImage(event, setImage);
+    validateImage(event, setImage, setMessageAlert);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     if (!id) {
-      toast.error("Please enter a movie ID");
+      setMessageAlert("Please enter a movie ID");
       return;
     }
 
@@ -41,31 +40,35 @@ const UpdateMovieForm: FC = () => {
     );
 
     try {
-      await axios.patch(`/movies/${id}`, formData);
-      setTitle("");
+      const { data: updatedMovieTitle } = await axios.patch<string>(
+        `/movies/${id}`,
+        formData
+      );
+      setMessageAlert(`Movie "${updatedMovieTitle}" successfully updated`);
       setUrl("");
       setGenre("");
       setDescription("");
       setId("");
+      setTitle("");
       setImage(null);
       setLoading(false);
-      toast.success("Movie succesfully updated");
     } catch (error) {
       setLoading(false);
-      toast.error("Error updating movie");
+      setMessageAlert(
+        "Error updating movie, please check your internet connection"
+      );
     }
   };
 
   return (
     <>
-      <Toaster />
       <DialogContent
         sx={{
           width: { xs: "100%", sm: "535px" },
           paddingBottom: 0,
         }}
       >
-        <Stack spacing={2} component="form" onSubmit={handleSubmit} noValidate>
+        <Stack spacing={2} paddingTop={3}>
           <TextField
             label="ID"
             required
@@ -146,7 +149,12 @@ const UpdateMovieForm: FC = () => {
         </Stack>
       </DialogContent>
       <DialogActions sx={{ paddingX: 3, paddingY: 2 }}>
-        <Button variant="contained" type="submit" fullWidth>
+        <Button
+          disabled={loading}
+          variant="contained"
+          fullWidth
+          onClick={handleSubmit}
+        >
           Update movie
         </Button>
       </DialogActions>

@@ -29,7 +29,7 @@ export const login = tryCatch(async (req: Request, res: Response) => {
 
   if (!jwtSecret) throw new CustomError("JWT secret not found", 500);
   const accessToken = jwt.sign({ email, id, isAdmin }, jwtSecret, {
-    expiresIn: "1h",
+    expiresIn: "12h",
   });
   res.cookie("accessToken-Nextflix", accessToken, {
     httpOnly: true,

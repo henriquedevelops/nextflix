@@ -5,12 +5,12 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import { FunctionComponent as FC, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { FunctionComponent as FC, MouseEventHandler, useState } from "react";
 import validateImage from "@/utils/validateImage";
 import appendToFormData from "@/utils/appendToFormData";
+import { AdminPanelFormProps } from "@/utils/types";
 
-const CreateMovieForm: FC = () => {
+const CreateMovieForm: FC<AdminPanelFormProps> = ({ setMessageAlert }) => {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [genre, setGenre] = useState("");
@@ -19,21 +19,20 @@ const CreateMovieForm: FC = () => {
   const [loading, setLoading] = useState(false);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    validateImage(event, setImage);
+    validateImage(event, setImage, setMessageAlert);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
 
     if (!title || !url || !genre || !description) {
-      toast.error("All fields are required");
+      setMessageAlert("All fields are required");
       setLoading(false);
       return;
     }
 
     if (!uploadedImage) {
-      toast.error("A movie must have an image cover");
+      setMessageAlert("An image is required");
       setLoading(false);
       return;
     }
@@ -48,26 +47,30 @@ const CreateMovieForm: FC = () => {
 
     try {
       await axios.post("/movies", formData);
+      setMessageAlert(`Movie "${title}" successfully created`);
       setTitle("");
       setUrl("");
       setGenre("");
       setDescription("");
       setImage(null);
       setLoading(false);
-      toast.success("New movie created");
     } catch (error) {
+      setMessageAlert(
+        `Error creating movie, please check your internet connection`
+      );
       setLoading(false);
-      toast.error("Error creating movie");
     }
   };
 
   return (
     <>
-      <Toaster />
       <DialogContent
-        sx={{ width: { xs: "100%", sm: "535px" }, paddingBottom: 0 }}
+        sx={{
+          width: { xs: "100%", sm: "535px" },
+          paddingBottom: 0,
+        }}
       >
-        <Stack spacing={2} component="form" onSubmit={handleSubmit} noValidate>
+        <Stack spacing={2} paddingTop={3}>
           <TextField
             required
             label="Title"
@@ -124,7 +127,7 @@ const CreateMovieForm: FC = () => {
             disabled={loading}
           />
 
-          <Button variant="outlined" component="label">
+          <Button variant="outlined" component="label" disabled={loading}>
             Upload image
             <input
               hidden
@@ -143,7 +146,12 @@ const CreateMovieForm: FC = () => {
       </DialogContent>
 
       <DialogActions sx={{ paddingX: 3, paddingY: 2 }}>
-        <Button fullWidth variant="contained" type="submit">
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
           Create movie
         </Button>
       </DialogActions>

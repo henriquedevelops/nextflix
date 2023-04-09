@@ -11,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 
 type LoginFormProps = {
   toggleSelectedForm: () => void;
@@ -120,7 +119,6 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           </Grid>
         </Grid>
       </Box>
-      <Toaster />
     </>
   );
 };

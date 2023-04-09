@@ -54,3 +54,7 @@ export interface SelectedMovieModalProps {
   selectedMovie: Movie | undefined;
   setSelectedMovie: (value: Movie | undefined) => void;
 }
+
+export interface AdminPanelFormProps {
+  setMessageAlert: (newMessageAlert: string) => void;
+}

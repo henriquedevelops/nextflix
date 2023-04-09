@@ -86,7 +86,7 @@ export const updateMovie = tryCatch(async (req: Request, res: Response) => {
     },
   });
 
-  res.status(201).json(updatedMovie);
+  res.status(201).json(updatedMovie.title);
 });
 
 /* This function retrieves a single movie from the database based on the 

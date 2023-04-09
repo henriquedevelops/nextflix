@@ -1,5 +1,5 @@
 import axios from "@/utils/axios";
-import { Movie } from "@/utils/types";
+import { AdminPanelFormProps, Movie } from "@/utils/types";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -8,11 +8,10 @@ import DialogContent from "@mui/material/DialogContent";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 
-const DeleteMovieForm: FC = () => {
+const DeleteMovieForm: FC<AdminPanelFormProps> = ({ setMessageAlert }) => {
   const [loading, setLoading] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationIsOpen, setShowConfirmation] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState("");
   const [selectedMovieTitle, setSelectedMovieTitle] = useState("");
 
@@ -22,9 +21,9 @@ const DeleteMovieForm: FC = () => {
     setSelectedMovieId(event.target.value);
   };
 
-  const handleShowConfirmation = async () => {
+  const handleOpenConfirmation = async () => {
     if (!selectedMovieId) {
-      toast.error("Please enter a movie ID");
+      setMessageAlert("Please enter a movie ID");
       return;
     }
     setLoading(true);
@@ -37,40 +36,34 @@ const DeleteMovieForm: FC = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error("Invalid movie ID");
+      setMessageAlert("Invalid movie ID");
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleDeleteMovie = async () => {
     setLoading(true);
     setShowConfirmation(false);
 
-    if (!selectedMovieId) {
-      setLoading(false);
-      toast.error("Please enter a movie id");
-      return;
-    }
-
     try {
       await axios.delete(`/movies/${selectedMovieId}`);
+      setMessageAlert(`Movie "${selectedMovieTitle}" successfully deleted!`);
       setLoading(false);
       setSelectedMovieId("");
       setSelectedMovieTitle("");
-      toast.success("Movie successfully deleted!");
     } catch (error) {
       setLoading(false);
-      toast.error("Error deleting movie");
+      setMessageAlert(
+        "Error deleting movie, please check your internet connection"
+      );
     }
   };
 
   return (
     <>
-      <Toaster />
       <DialogContent
         sx={{ width: { xs: "100%", sm: "535px" }, paddingBottom: 0 }}
       >
-        <Stack spacing={2} component="form" onSubmit={handleSubmit} noValidate>
+        <Stack paddingTop={3}>
           <TextField
             label="ID"
             required
@@ -79,29 +72,35 @@ const DeleteMovieForm: FC = () => {
             onChange={handleChangeSelectedMovieId}
             disabled={loading}
           />
-
-          {showConfirmation && (
-            <>
-              <Alert variant="outlined" severity="warning">
-                Are you sure you want to delete movie "{selectedMovieTitle}"?
-                This action can't be undone!
-              </Alert>
-              <Button variant="contained" type="submit" disabled={loading}>
-                Confirm
-              </Button>
-            </>
-          )}
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ paddingX: 3, paddingY: 2 }}>
-        <Button
-          variant="contained"
-          disabled={loading}
-          onClick={handleShowConfirmation}
-          fullWidth
-        >
-          Delete movie
-        </Button>
+
+      <DialogActions
+        sx={{
+          width: { xs: "100%", sm: "535px" },
+          paddingX: 3,
+          paddingBottom: 2,
+          paddingTop: 0,
+        }}
+      >
+        <Stack spacing={2} paddingTop={2} width={"100%"}>
+          {confirmationIsOpen && (
+            <Alert variant="outlined" severity="warning">
+              Are you sure you want to delete movie "{selectedMovieTitle}"? This
+              action can't be undone!
+            </Alert>
+          )}
+          <Button
+            variant="contained"
+            disabled={loading}
+            onClick={
+              !confirmationIsOpen ? handleOpenConfirmation : handleDeleteMovie
+            }
+            fullWidth
+          >
+            {confirmationIsOpen ? "Confirm" : "Delete movie"}
+          </Button>
+        </Stack>
       </DialogActions>
     </>
   );

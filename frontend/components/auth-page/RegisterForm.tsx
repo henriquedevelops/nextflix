@@ -11,7 +11,6 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
-import toast from "react-hot-toast";
 import axios from "../../utils/axios";
 import { User } from "@/utils/types";
 
