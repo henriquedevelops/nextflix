@@ -1,11 +1,15 @@
 import { SelectedMovieModalProps } from "@/utils/types";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
-import Modal from "@mui/material/Modal";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { FunctionComponent as FC } from "react";
-import { alpha } from "@mui/material/styles";
+declare var webkit: any;
 
 const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   selectedMovie,
@@ -14,38 +18,44 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   return (
     <>
       {selectedMovie && (
-        <Modal
+        <Dialog
           open={Boolean(selectedMovie)}
           onClose={() => setSelectedMovie(undefined)}
-          onBackdropClick={() => setSelectedMovie(undefined)}
-          sx={{
-            backdropFilter: "blur(6px)",
-          }}
+          maxWidth={false}
         >
           <Box
-            display="flex"
-            width={{ xs: "100%", sm: "600px", md: "900px" }}
-            height={{ xs: "100%", sm: "400px", md: "700px" }}
-            bgcolor="#262626"
-            borderRadius={1.2}
+            sx={{
+              backgroundColor: "black",
+              width: { sm: "600px", md: "900px" },
+            }}
           >
-            <Stack direction={{ xs: "column", sm: "row" }}>
+            <Stack direction="row" color="primary">
               <CardMedia
                 component="img"
                 image={`http://localhost:80/${selectedMovie.image}`}
-                sx={{ maxHeight: "100%", maxWidth: "100%" }}
+                sx={{ height: { sm: "400px", md: "650px" } }}
               />
-              <Stack direction={"column"} padding={4} spacing={1}>
-                <Typography gutterBottom variant="h5" component="div">
-                  {selectedMovie.title}
-                </Typography>
-                <Typography variant="body2">
-                  {selectedMovie.description}
-                </Typography>
+              <Stack spacing={1} padding={4}>
+                <DialogContent sx={{ padding: 1 }}>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {selectedMovie.title}
+                  </Typography>
+                  <Typography paddingBottom={1} color={"primary"}>
+                    {selectedMovie.genre}
+                  </Typography>
+                  <Typography color={"primary"}>
+                    {selectedMovie.description}
+                  </Typography>
+                </DialogContent>
+                <DialogActions sx={{ padding: 0 }}>
+                  <Button fullWidth variant="contained" color="secondary">
+                    play
+                  </Button>
+                </DialogActions>
               </Stack>
             </Stack>
           </Box>
-        </Modal>
+        </Dialog>
       )}
     </>
   );

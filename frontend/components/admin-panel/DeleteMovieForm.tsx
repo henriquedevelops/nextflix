@@ -1,7 +1,10 @@
 import axios from "@/utils/axios";
 import { Movie } from "@/utils/types";
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
@@ -64,42 +67,42 @@ const DeleteMovieForm: FC = () => {
   return (
     <>
       <Toaster />
-      <Stack spacing={2} component="form" onSubmit={handleSubmit} noValidate>
-        <TextField
-          label="ID"
-          required
-          size="small"
-          value={selectedMovieId}
-          onChange={handleChangeSelectedMovieId}
-          disabled={loading}
-        />
-
-        {showConfirmation ? (
-          <>
-            <Alert variant="outlined" severity="warning">
-              Are you sure you want to delete movie "{selectedMovieTitle}"? This
-              action can't be undone!
-            </Alert>
-            <Button variant="contained" type="submit" disabled={loading}>
-              Confirm
-            </Button>
-          </>
-        ) : (
-          <Button
-            variant="contained"
+      <DialogContent
+        sx={{ width: { xs: "100%", sm: "535px" }, paddingBottom: 0 }}
+      >
+        <Stack spacing={2} component="form" onSubmit={handleSubmit} noValidate>
+          <TextField
+            label="ID"
+            required
+            size="small"
+            value={selectedMovieId}
+            onChange={handleChangeSelectedMovieId}
             disabled={loading}
-            onClick={handleShowConfirmation}
-            sx={{
-              position: { xs: "fixed", sm: "relative" },
-              bottom: { xs: 20, sm: "auto" },
-              right: { xs: 24, sm: "auto" },
-              left: { xs: 24, sm: "auto" },
-            }}
-          >
-            Delete movie
-          </Button>
-        )}
-      </Stack>
+          />
+
+          {showConfirmation && (
+            <>
+              <Alert variant="outlined" severity="warning">
+                Are you sure you want to delete movie "{selectedMovieTitle}"?
+                This action can't be undone!
+              </Alert>
+              <Button variant="contained" type="submit" disabled={loading}>
+                Confirm
+              </Button>
+            </>
+          )}
+        </Stack>
+      </DialogContent>
+      <DialogActions sx={{ paddingX: 3, paddingY: 2 }}>
+        <Button
+          variant="contained"
+          disabled={loading}
+          onClick={handleShowConfirmation}
+          fullWidth
+        >
+          Delete movie
+        </Button>
+      </DialogActions>
     </>
   );
 };

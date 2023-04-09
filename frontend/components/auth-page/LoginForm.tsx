@@ -96,12 +96,12 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           type="submit"
           fullWidth
           variant="contained"
-          style={{ backgroundColor: "red" }}
           sx={{
             mt: 3,
             mb: 2,
-            color: "#ffffff",
           }}
+          color="secondary"
+          disabled={loading}
         >
           Sign In
         </Button>

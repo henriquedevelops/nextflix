@@ -1,12 +1,8 @@
 import { createTheme } from "@mui/material/";
+import { red } from "@mui/material/colors";
 
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {
-    xs: true;
-    sm: true;
-    md: true;
-    lg: true;
-    xl: true;
     xxl: true;
   }
 }
@@ -15,10 +11,11 @@ export default createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#CFCFCF",
+      main: "#D0D0D0",
     },
     secondary: {
-      main: "#202020",
+      main: red.A700,
+      light: red[500],
     },
     background: {
       default: "black",
@@ -28,7 +25,29 @@ export default createTheme({
     MuiDrawer: {
       styleOverrides: { paper: { backgroundColor: "black" } },
     },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(0, 0, 0, 0.8)", // Change the value here to the desired color
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#080808",
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#080808",
+        },
+      },
+    },
   },
+
   breakpoints: {
     values: {
       xs: 0,

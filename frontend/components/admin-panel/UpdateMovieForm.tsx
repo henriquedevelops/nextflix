@@ -1,7 +1,7 @@
 import appendToFormData from "@/utils/appendToFormData";
 import axios from "@/utils/axios";
 import validateImage from "@/utils/validateImage";
-import { Typography } from "@mui/material";
+import { DialogActions, DialogContent, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
@@ -59,98 +59,97 @@ const UpdateMovieForm: FC = () => {
   return (
     <>
       <Toaster />
-      <Stack spacing={2} component="form" onSubmit={handleSubmit} noValidate>
-        <TextField
-          label="ID"
-          required
-          size="small"
-          value={id}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setId(event.target.value);
-          }}
-          disabled={loading}
-        />
-
-        <TextField
-          label="Title"
-          size="small"
-          name="title"
-          disabled={loading}
-          value={title}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setTitle(event.target.value);
-          }}
-        />
-        <TextField
-          label="URL"
-          size="small"
-          name="url"
-          value={url}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setUrl(event.target.value);
-          }}
-          disabled={loading}
-        />
-
-        <TextField
-          select
-          label="Genre"
-          size="small"
-          value={genre}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setGenre(event.target.value);
-          }}
-          disabled={loading}
-        >
-          <MenuItem value="Action">Action</MenuItem>
-          <MenuItem value="Comedy">Comedy</MenuItem>
-          <MenuItem value="Documentary">Documentary</MenuItem>
-          <MenuItem value="Science-fiction">Science-fiction</MenuItem>
-          <MenuItem value="Horror">Horror</MenuItem>
-          <MenuItem value="Drama">Drama</MenuItem>
-        </TextField>
-
-        <TextField
-          multiline
-          label="Description"
-          name="description"
-          id="outlined-multiline-static"
-          rows={5}
-          value={description}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setDescription(event.target.value);
-          }}
-          disabled={loading}
-        />
-        {uploadedImage && (
-          <Typography color={"primary"}>
-            Image uploaded: {uploadedImage.name}
-          </Typography>
-        )}
-        <Button variant="outlined" component="label">
-          Upload image
-          <input
-            hidden
-            accept="image/*"
-            type="file"
-            onChange={handleImageUpload}
+      <DialogContent
+        sx={{
+          width: { xs: "100%", sm: "535px" },
+          paddingBottom: 0,
+        }}
+      >
+        <Stack spacing={2} component="form" onSubmit={handleSubmit} noValidate>
+          <TextField
+            label="ID"
+            required
+            size="small"
+            value={id}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setId(event.target.value);
+            }}
             disabled={loading}
           />
-        </Button>
 
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{
-            position: { xs: "fixed", sm: "relative" },
-            bottom: { xs: 20, sm: "auto" },
-            right: { xs: 24, sm: "auto" },
-            left: { xs: 24, sm: "auto" },
-          }}
-        >
+          <TextField
+            label="Title"
+            size="small"
+            name="title"
+            disabled={loading}
+            value={title}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setTitle(event.target.value);
+            }}
+          />
+          <TextField
+            label="URL"
+            size="small"
+            name="url"
+            value={url}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setUrl(event.target.value);
+            }}
+            disabled={loading}
+          />
+
+          <TextField
+            select
+            label="Genre"
+            size="small"
+            value={genre}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setGenre(event.target.value);
+            }}
+            disabled={loading}
+          >
+            <MenuItem value="Action">Action</MenuItem>
+            <MenuItem value="Comedy">Comedy</MenuItem>
+            <MenuItem value="Documentary">Documentary</MenuItem>
+            <MenuItem value="Science-fiction">Science-fiction</MenuItem>
+            <MenuItem value="Horror">Horror</MenuItem>
+            <MenuItem value="Drama">Drama</MenuItem>
+          </TextField>
+
+          <TextField
+            multiline
+            label="Description"
+            name="description"
+            id="outlined-multiline-static"
+            rows={5}
+            value={description}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setDescription(event.target.value);
+            }}
+            disabled={loading}
+          />
+          {uploadedImage && (
+            <Typography color={"primary"}>
+              Image uploaded: {uploadedImage.name}
+            </Typography>
+          )}
+          <Button variant="outlined" component="label">
+            Upload image
+            <input
+              hidden
+              accept="image/*"
+              type="file"
+              onChange={handleImageUpload}
+              disabled={loading}
+            />
+          </Button>
+        </Stack>
+      </DialogContent>
+      <DialogActions sx={{ paddingX: 3, paddingY: 2 }}>
+        <Button variant="contained" type="submit" fullWidth>
           Update movie
         </Button>
-      </Stack>
+      </DialogActions>
     </>
   );
 };
