@@ -1,7 +1,7 @@
 declare global {
   namespace Express {
     export interface Request {
-      userIsAdmin: Boolean;
+      user: { isAdmin: Boolean; id: string };
     }
   }
 }

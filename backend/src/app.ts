@@ -1,6 +1,7 @@
 import moviesRouter from "./routes/movies";
 import usersRouter from "./routes/users";
 import authRouter from "./routes/auth";
+import myListRouter from "./routes/myList";
 import globalErrorHandler from "./error-handling/globalErrorHandler";
 import cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
@@ -30,6 +31,7 @@ app.use("/images", express.static("images"));
 app.use("/api/v1/movies", moviesRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/myList", myListRouter);
 app.use(globalErrorHandler);
 app.get("/", (req: Request, res: Response) => {
   res.send("Choose an endpoint: /movies /users");

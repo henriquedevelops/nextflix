@@ -14,7 +14,7 @@ export default (
   next: NextFunction
 ) => {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    if (err.code === "P2023") {
+    if (err.code === "P2023" || err.code === "P2025") {
       res.status(404).json({
         message: "Requested resource was not found.",
         statusCode: 404,

@@ -11,7 +11,7 @@ export default createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#D0D0D0",
+      main: "#CCCCCC",
     },
     secondary: {
       main: red.A700,

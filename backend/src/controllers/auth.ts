@@ -55,14 +55,14 @@ export const requireLogin = tryCatch(
 
     if (!email || !id) throw new CustomError("Unauthorized", 401);
 
-    req.userIsAdmin = isAdmin;
+    req.user = { isAdmin, id };
     next();
   }
 );
 
 export const restricToAdmin = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.userIsAdmin) throw new CustomError("Unauthorized", 401);
+    if (!req.user.isAdmin) throw new CustomError("Unauthorized", 401);
 
     next();
   }
