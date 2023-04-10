@@ -7,7 +7,6 @@ import {
   CardMedia,
   CircularProgress,
   Container,
-  CssBaseline,
   Grid,
   Typography,
 } from "@mui/material";
@@ -19,7 +18,7 @@ import SelectedMovieModal from "./SelectedMovieModal";
 const MoviesListContainer: FC<MoviesListContainerProps> = ({
   moviesRendered,
   drawerWidth,
-  totalAmountOfMoviesFoundInDb,
+  amountOfMoviesFound,
   fetchMovies,
 }) => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | undefined>(
@@ -28,10 +27,12 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
 
   return (
     <>
-      <SelectedMovieModal
-        selectedMovie={selectedMovie}
-        setSelectedMovie={setSelectedMovie}
-      />
+      {selectedMovie && (
+        <SelectedMovieModal
+          selectedMovie={selectedMovie}
+          setSelectedMovie={setSelectedMovie}
+        />
+      )}
       <Container
         maxWidth={false}
         sx={{
@@ -44,7 +45,7 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
         <InfiniteScroll
           dataLength={moviesRendered.length}
           next={async () => await fetchMovies()}
-          hasMore={totalAmountOfMoviesFoundInDb > moviesRendered.length}
+          hasMore={amountOfMoviesFound > moviesRendered.length}
           loader={
             <Box
               sx={{

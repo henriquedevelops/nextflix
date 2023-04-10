@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { FunctionComponent as FC } from "react";
-import { useMyListIds } from "@/utils/contexts";
+import { useMyListIds, useAddRemoveToMyList } from "@/utils/contexts";
 import axios from "@/utils/axios";
 
 const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
@@ -20,6 +20,7 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   setSelectedMovie,
 }) => {
   const { myListIds, setMyListIds } = useMyListIds();
+  const { setMoviesRendered, setAmountOfMoviesFound } = useAddRemoveToMyList();
 
   const handleAddOrRemoveMovieMyList = async () => {
     try {
@@ -30,6 +31,10 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
         setMyListIds((previousList) =>
           previousList.filter((id) => id !== selectedMovie.id)
         );
+        setMoviesRendered((previousList) =>
+          previousList.filter((movie) => movie.id !== selectedMovie.id)
+        );
+        setAmountOfMoviesFound((previousValue) => previousValue - 1);
         await axios.delete(`/myList/${selectedMovie.id}`);
       }
     } catch (error) {

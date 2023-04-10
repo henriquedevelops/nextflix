@@ -35,7 +35,7 @@ export interface MyListIdsContextType {
 export interface MoviesListContainerProps {
   moviesRendered: Movie[];
   drawerWidth: number;
-  totalAmountOfMoviesFoundInDb: number;
+  amountOfMoviesFound: number;
   fetchMovies: () => Promise<void>;
 }
 
@@ -68,4 +68,9 @@ export interface AdminPanelFormProps {
 
 export interface ResponseDataFromFetchMyListIds {
   moviesIdsFound: string[];
+}
+
+export interface AddRemoveToMyListContextType {
+  setMoviesRendered: Dispatch<SetStateAction<Movie[]>>;
+  setAmountOfMoviesFound: Dispatch<SetStateAction<number>>;
 }

@@ -2,6 +2,7 @@ import Main from "@/components/main-page/Main";
 import axios from "@/utils/axios";
 import { LoggedUserContext, MyListIdsContext } from "@/utils/contexts";
 import { ResponseDataFromFetchMyListIds, User } from "@/utils/types";
+import { CssBaseline } from "@mui/material";
 import jwtDecode from "jwt-decode";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";

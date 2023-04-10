@@ -5,7 +5,6 @@ import {
   AppBar,
   Box,
   CardMedia,
-  CssBaseline,
   Drawer,
   IconButton,
   Toolbar,
@@ -13,11 +12,11 @@ import {
 import { FunctionComponent as FC, useEffect, useState } from "react";
 import MoviesListContainer from "./MoviesListContainer";
 import Sidebar from "./Sidebar";
+import { AddRemoveToMyListContext } from "@/utils/contexts";
 
 const Main: FC = () => {
   const [moviesRendered, setMoviesRendered] = useState<Movie[]>([]);
-  const [totalAmountOfMoviesFoundInDb, setTotalAmountOfMoviesFoundInDb] =
-    useState(1);
+  const [amountOfMoviesFound, setAmountOfMoviesFound] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [searchTitle, setSearchTitle] = useState<string>("");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -38,7 +37,7 @@ const Main: FC = () => {
       const amountOfMoviesFound = response.data.amountOfMoviesFound;
 
       setMoviesRendered([...moviesRendered, ...moviesFromResponse]);
-      setTotalAmountOfMoviesFoundInDb(amountOfMoviesFound);
+      setAmountOfMoviesFound(amountOfMoviesFound);
     } catch (error) {
       console.error(error);
     }
@@ -51,90 +50,93 @@ const Main: FC = () => {
   const drawerWidth = 270;
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        color="transparent"
-        position="fixed"
-        sx={{
-          backgroundColor: "black",
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar sx={{ display: { sm: "none" } }}>
-          <IconButton
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2 }}
+    <AddRemoveToMyListContext.Provider
+      value={{ setMoviesRendered, setAmountOfMoviesFound }}
+    >
+      <Box sx={{ display: "flex" }}>
+        <AppBar
+          color="transparent"
+          position="fixed"
+          sx={{
+            backgroundColor: "black",
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+          }}
+        >
+          <Toolbar sx={{ display: { sm: "none" } }}>
+            <IconButton
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <CardMedia
+              component="img"
+              sx={{ width: "200px", marginTop: "1px" }}
+              image="/images/logo2.png"
+            />
+          </Toolbar>
+        </AppBar>
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
+        >
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <CardMedia
-            component="img"
-            sx={{ width: "200px", marginTop: "1px" }}
-            image="/images/logo2.png"
-          />
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          <Sidebar
-            setSelectedGenre={setSelectedGenre}
-            selectedGenre={selectedGenre}
-            setMoviesRendered={setMoviesRendered}
-            searchTitle={searchTitle}
-            setSearchTitle={setSearchTitle}
-          />
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-              borderRight: "none",
-            },
-          }}
-          open
-        >
-          <Sidebar
-            setSelectedGenre={setSelectedGenre}
-            selectedGenre={selectedGenre}
-            setMoviesRendered={setMoviesRendered}
-            searchTitle={searchTitle}
-            setSearchTitle={setSearchTitle}
-          />
-        </Drawer>
-      </Box>
+            <Sidebar
+              setSelectedGenre={setSelectedGenre}
+              selectedGenre={selectedGenre}
+              setMoviesRendered={setMoviesRendered}
+              searchTitle={searchTitle}
+              setSearchTitle={setSearchTitle}
+            />
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+                borderRight: "none",
+              },
+            }}
+            open
+          >
+            <Sidebar
+              setSelectedGenre={setSelectedGenre}
+              selectedGenre={selectedGenre}
+              setMoviesRendered={setMoviesRendered}
+              searchTitle={searchTitle}
+              setSearchTitle={setSearchTitle}
+            />
+          </Drawer>
+        </Box>
 
-      <MoviesListContainer
-        moviesRendered={moviesRendered}
-        drawerWidth={drawerWidth}
-        totalAmountOfMoviesFoundInDb={totalAmountOfMoviesFoundInDb}
-        fetchMovies={fetchMovies}
-      />
-    </Box>
+        <MoviesListContainer
+          moviesRendered={moviesRendered}
+          drawerWidth={drawerWidth}
+          amountOfMoviesFound={amountOfMoviesFound}
+          fetchMovies={fetchMovies}
+        />
+      </Box>
+    </AddRemoveToMyListContext.Provider>
   );
 };
 
