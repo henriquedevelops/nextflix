@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, createContext, useContext } from "react";
 import {
-  LoggedUserContextType,
-  Movie,
-  MyListIdsContextType,
   AddRemoveToMyListContextType,
+  LoggedUserContextType,
+  MessageAlertContextType,
+  MyListIdsContextType,
 } from "@/utils/types";
+import { createContext, useContext } from "react";
 
 export const LoggedUserContext = createContext<LoggedUserContextType>(
   {} as LoggedUserContextType
@@ -24,3 +24,9 @@ export const AddRemoveToMyListContext =
   );
 
 export const useAddRemoveToMyList = () => useContext(AddRemoveToMyListContext);
+
+export const MessageAlertContext = createContext<MessageAlertContextType>(
+  {} as MessageAlertContextType
+);
+
+export const useMessageAlert = () => useContext(MessageAlertContext);

@@ -62,9 +62,7 @@ export interface SelectedMovieModalProps {
   setSelectedMovie: (value: Movie | undefined) => void;
 }
 
-export interface AdminPanelFormProps {
-  setMessageAlert: (newMessageAlert: string) => void;
-}
+export interface AdminPanelFormProps {}
 
 export interface ResponseDataFromFetchMyListIds {
   moviesIdsFound: string[];
@@ -73,4 +71,8 @@ export interface ResponseDataFromFetchMyListIds {
 export interface AddRemoveToMyListContextType {
   setMoviesRendered: Dispatch<SetStateAction<Movie[]>>;
   setAmountOfMoviesFound: Dispatch<SetStateAction<number>>;
+}
+
+export interface MessageAlertContextType {
+  setMessageAlert: (newMessageAlert: string) => void;
 }

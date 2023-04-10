@@ -6,14 +6,16 @@ import { Button, MenuItem, Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
 import { validateImage } from "@/utils/validators";
+import { useMessageAlert } from "@/utils/contexts";
 
-const CreateMovieForm: FC<AdminPanelFormProps> = ({ setMessageAlert }) => {
+const CreateMovieForm: FC<AdminPanelFormProps> = () => {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [genre, setGenre] = useState("");
   const [description, setDescription] = useState("");
   const [uploadedImage, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const { setMessageAlert } = useMessageAlert();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     validateImage(event, setImage, setMessageAlert);

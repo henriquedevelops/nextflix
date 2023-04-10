@@ -12,7 +12,11 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { FunctionComponent as FC } from "react";
-import { useMyListIds, useAddRemoveToMyList } from "@/utils/contexts";
+import {
+  useMyListIds,
+  useAddRemoveToMyList,
+  useMessageAlert,
+} from "@/utils/contexts";
 import axios from "@/utils/axios";
 
 const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
@@ -21,6 +25,7 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
 }) => {
   const { myListIds, setMyListIds } = useMyListIds();
   const { setMoviesRendered, setAmountOfMoviesFound } = useAddRemoveToMyList();
+  const { setMessageAlert } = useMessageAlert();
 
   const handleAddOrRemoveMovieMyList = async () => {
     try {
@@ -38,6 +43,9 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
         await axios.delete(`/myList/${selectedMovie.id}`);
       }
     } catch (error) {
+      setMessageAlert(
+        "There was a connection error. Please check your internet connection, refresh the page and try again."
+      );
       console.log(error);
     }
   };

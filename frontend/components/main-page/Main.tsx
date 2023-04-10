@@ -12,7 +12,7 @@ import {
 import { FunctionComponent as FC, useEffect, useState } from "react";
 import MoviesListContainer from "./MoviesListContainer";
 import Sidebar from "./Sidebar";
-import { AddRemoveToMyListContext } from "@/utils/contexts";
+import { AddRemoveToMyListContext, useMessageAlert } from "@/utils/contexts";
 
 const Main: FC = () => {
   const [moviesRendered, setMoviesRendered] = useState<Movie[]>([]);
@@ -20,6 +20,7 @@ const Main: FC = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [searchTitle, setSearchTitle] = useState<string>("");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { setMessageAlert } = useMessageAlert();
 
   useEffect(() => {
     fetchMovies();
@@ -39,6 +40,9 @@ const Main: FC = () => {
       setMoviesRendered([...moviesRendered, ...moviesFromResponse]);
       setAmountOfMoviesFound(amountOfMoviesFound);
     } catch (error) {
+      setMessageAlert(
+        "There was a connection error. Please check your internet connection, refresh the page and try again."
+      );
       console.error(error);
     }
   };

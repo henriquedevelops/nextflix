@@ -1,4 +1,5 @@
 import axios from "@/utils/axios";
+import { useMessageAlert } from "@/utils/contexts";
 import { AdminPanelFormProps, Movie } from "@/utils/types";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
@@ -8,11 +9,12 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
 
-const DeleteMovieForm: FC<AdminPanelFormProps> = ({ setMessageAlert }) => {
+const DeleteMovieForm: FC<AdminPanelFormProps> = () => {
   const [loading, setLoading] = useState(false);
   const [confirmationIsOpen, setShowConfirmation] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState("");
   const [selectedMovieTitle, setSelectedMovieTitle] = useState("");
+  const { setMessageAlert } = useMessageAlert();
 
   const handleChangeSelectedMovieId = (
     event: React.ChangeEvent<HTMLInputElement>
