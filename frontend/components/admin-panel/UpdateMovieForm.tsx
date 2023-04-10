@@ -3,11 +3,7 @@ import axios from "@/utils/axios";
 import { AdminPanelFormProps } from "@/utils/types";
 import validateImage from "@/utils/validateImage";
 import { DialogActions, DialogContent, Typography } from "@mui/material";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
+import { Button, MenuItem, Stack, TextField } from "@mui/material";
 import { FunctionComponent as FC, useState } from "react";
 
 const UpdateMovieForm: FC<AdminPanelFormProps> = ({ setMessageAlert }) => {

@@ -1,7 +1,6 @@
 import axios from "@/utils/axios";
 import { AdminPanelFormProps, Movie } from "@/utils/types";
 import Alert from "@mui/material/Alert";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";

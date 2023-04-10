@@ -1,25 +1,27 @@
 import axios from "@/utils/axios";
 import { useLoggedUser } from "@/utils/loggedUserContext";
 import { SidebarProps } from "@/utils/types";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import LogoutIcon from "@mui/icons-material/Logout";
-import Box from "@mui/material/Box";
-import CardMedia from "@mui/material/CardMedia";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import {
+  AdminPanelSettings as AdminPanelSettingsIcon,
+  Logout as LogoutIcon,
+  Search as SearchIcon,
+} from "@mui/icons-material";
+import {
+  Box,
+  CardMedia,
+  FormControl,
+  Input,
+  InputAdornment,
+  InputLabel,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent as FC, useState } from "react";
 import AdminPanel from "../admin-panel/AdminPanel";
-import TextField from "@mui/material/TextField";
-import SearchIcon from "@mui/icons-material/Search";
-import FormControl from "@mui/material/FormControl";
-import Input from "@mui/material/Input";
-import InputAdornment from "@mui/material/InputAdornment";
-import InputLabel from "@mui/material/InputLabel";
-import Container from "@mui/material/Container";
 
 const Sidebar: FC<SidebarProps> = ({
   setSelectedGenre,

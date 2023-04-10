@@ -1,18 +1,13 @@
+import { User } from "@/utils/types";
 import validateEmail, { emailErrorToBoolean } from "@/utils/validateEmail";
 import validatePassword, {
   passwordErrorToBoolean,
 } from "@/utils/validatePassword";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import { AxiosError } from "axios";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
 import axios from "../../utils/axios";
-import { User } from "@/utils/types";
 
 type RegisterFormProps = {
   toggleSelectedForm: () => void;

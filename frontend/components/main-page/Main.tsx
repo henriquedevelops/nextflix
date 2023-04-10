@@ -1,19 +1,18 @@
-import MenuIcon from "@mui/icons-material/Menu";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import { FunctionComponent as FC, useEffect, useState } from "react";
 import axios from "@/utils/axios";
 import { Movie, ResponseFromGetMovies } from "@/utils/types";
-import Sidebar from "./Sidebar";
-import CardMedia from "@mui/material/CardMedia";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import {
+  AppBar,
+  Box,
+  CardMedia,
+  CssBaseline,
+  Drawer,
+  IconButton,
+  Toolbar,
+} from "@mui/material";
+import { FunctionComponent as FC, useEffect, useState } from "react";
 import MoviesList from "./MoviesList";
-import CircularProgress from "@mui/material/CircularProgress";
-import SelectedMovieModal from "./SelectedMovieModal";
+import Sidebar from "./Sidebar";
 
 const Main: FC = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>("");

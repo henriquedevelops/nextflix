@@ -1,13 +1,14 @@
 import axios from "@/utils/axios";
-import { User } from "@/utils/types";
 import validateEmail from "@/utils/validateEmail";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";

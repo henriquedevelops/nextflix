@@ -1,17 +1,16 @@
 import theme from "@/MUITheme/theme";
 import { SelectedMovieModalProps } from "@/utils/types";
-import { useMediaQuery } from "@mui/material";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import {
+  Button,
+  CardMedia,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { FunctionComponent as FC } from "react";
-declare var webkit: any;
 
 const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   selectedMovie,

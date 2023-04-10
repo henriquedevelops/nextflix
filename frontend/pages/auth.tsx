@@ -1,9 +1,6 @@
 import LoginForm from "@/components/auth-page/LoginForm";
 import RegisterForm from "@/components/auth-page/RegisterForm";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
+import { Box, Container, CssBaseline, Typography } from "@mui/material";
 import { NextPageContext } from "next";
 import { parseCookies } from "nookies";
 import { useCallback, useState } from "react";
