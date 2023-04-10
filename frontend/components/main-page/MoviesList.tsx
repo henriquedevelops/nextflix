@@ -26,7 +26,6 @@ const MoviesList: FC<MoviesListProps> = ({
 
   return (
     <>
-      <CssBaseline />
       <SelectedMovieModal
         selectedMovie={selectedMovie}
         setSelectedMovie={setSelectedMovie}

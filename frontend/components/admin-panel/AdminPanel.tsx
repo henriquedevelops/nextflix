@@ -33,7 +33,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
     messageAlert && setMessageAlertIsOpen(true);
   }, [messageAlert]);
 
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleChangeSelectedAction = (
     event: React.SyntheticEvent,
@@ -48,7 +48,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
         open={adminModalIsOpen}
         onClose={handleOpenCloseAdminModal}
         maxWidth={false}
-        fullScreen={fullScreen}
+        fullScreen={isSmallScreen}
         PaperProps={{
           sx: {
             position: "absolute",
