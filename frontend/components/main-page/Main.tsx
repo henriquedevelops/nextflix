@@ -1,5 +1,5 @@
 import axios from "@/utils/axios";
-import { Movie, ResponseFromGetMovies } from "@/utils/types";
+import { Movie, ResponseDataFromFetchMovies } from "@/utils/types";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import {
   AppBar,
@@ -11,15 +11,16 @@ import {
   Toolbar,
 } from "@mui/material";
 import { FunctionComponent as FC, useEffect, useState } from "react";
-import MoviesList from "./MoviesList";
+import MoviesListContainer from "./MoviesListContainer";
 import Sidebar from "./Sidebar";
 
 const Main: FC = () => {
+  const [moviesRendered, setMoviesRendered] = useState<Movie[]>([]);
+  const [totalAmountOfMoviesFoundInDb, setTotalAmountOfMoviesFoundInDb] =
+    useState(1);
   const [selectedGenre, setSelectedGenre] = useState<string>("");
-  const [moviesList, setMoviesList] = useState<Movie[]>([]);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1);
   const [searchTitle, setSearchTitle] = useState<string>("");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     fetchMovies();
@@ -27,14 +28,17 @@ const Main: FC = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await axios.get<ResponseFromGetMovies>(
-        `/movies?genre=${selectedGenre}&skip=${moviesList.length}&title=${searchTitle}`
+      const response = await axios.get<ResponseDataFromFetchMovies>(
+        selectedGenre === "My list"
+          ? `/myList?skip=${moviesRendered.length}&title=${searchTitle}`
+          : `/movies?genre=${selectedGenre}&skip=${moviesRendered.length}&title=${searchTitle}`
       );
+
       const moviesFromResponse = response.data.moviesFound;
       const amountOfMoviesFound = response.data.amountOfMoviesFound;
 
-      setMoviesList([...moviesList, ...moviesFromResponse]);
-      setTotalAmountOfMovies(amountOfMoviesFound);
+      setMoviesRendered([...moviesRendered, ...moviesFromResponse]);
+      setTotalAmountOfMoviesFoundInDb(amountOfMoviesFound);
     } catch (error) {
       console.error(error);
     }
@@ -97,7 +101,7 @@ const Main: FC = () => {
           <Sidebar
             setSelectedGenre={setSelectedGenre}
             selectedGenre={selectedGenre}
-            setMoviesList={setMoviesList}
+            setMoviesRendered={setMoviesRendered}
             searchTitle={searchTitle}
             setSearchTitle={setSearchTitle}
           />
@@ -117,17 +121,17 @@ const Main: FC = () => {
           <Sidebar
             setSelectedGenre={setSelectedGenre}
             selectedGenre={selectedGenre}
-            setMoviesList={setMoviesList}
+            setMoviesRendered={setMoviesRendered}
             searchTitle={searchTitle}
             setSearchTitle={setSearchTitle}
           />
         </Drawer>
       </Box>
 
-      <MoviesList
-        moviesList={moviesList}
+      <MoviesListContainer
+        moviesRendered={moviesRendered}
         drawerWidth={drawerWidth}
-        totalAmountOfMovies={totalAmountOfMovies}
+        totalAmountOfMoviesFoundInDb={totalAmountOfMoviesFoundInDb}
         fetchMovies={fetchMovies}
       />
     </Box>

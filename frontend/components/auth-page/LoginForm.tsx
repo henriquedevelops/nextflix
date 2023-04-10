@@ -1,5 +1,5 @@
 import axios from "@/utils/axios";
-import validateEmail from "@/utils/validateEmail";
+import { validateEmail } from "@/utils/validators";
 import {
   Box,
   Button,

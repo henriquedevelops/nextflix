@@ -109,7 +109,7 @@ Prisma delete method to delete the movie from the database. It returns a 204
 status code in the response, indicating that the request was successful but 
 there is no content to return. */
 export const deleteMovie = tryCatch(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id;
 
   await prisma.movie.delete({
     where: {

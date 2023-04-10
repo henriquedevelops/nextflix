@@ -1,5 +1,5 @@
 import axios from "@/utils/axios";
-import { useLoggedUser } from "@/utils/loggedUserContext";
+import { useLoggedUser } from "@/utils/contexts";
 import { SidebarProps } from "@/utils/types";
 import {
   AdminPanelSettings as AdminPanelSettingsIcon,
@@ -26,7 +26,7 @@ import AdminPanel from "../admin-panel/AdminPanel";
 const Sidebar: FC<SidebarProps> = ({
   setSelectedGenre,
   selectedGenre,
-  setMoviesList,
+  setMoviesRendered,
   searchTitle,
   setSearchTitle,
 }) => {
@@ -41,7 +41,7 @@ const Sidebar: FC<SidebarProps> = ({
     )
       return;
 
-    setMoviesList([]);
+    setMoviesRendered([]);
 
     newGenre === "All movies"
       ? setSelectedGenre("")
@@ -49,7 +49,7 @@ const Sidebar: FC<SidebarProps> = ({
   };
 
   const handleSearchTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMoviesList([]);
+    setMoviesRendered([]);
     setSearchTitle(event.target.value);
   };
 
@@ -91,6 +91,7 @@ const Sidebar: FC<SidebarProps> = ({
               "Science-fiction",
               "Horror",
               "Drama",
+              "My list",
             ].map((text, index) => (
               <ListItem sx={{ color: "#CFCFCF" }} key={text} disablePadding>
                 <ListItemButton

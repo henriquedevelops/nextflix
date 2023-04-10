@@ -1,10 +1,10 @@
 import appendToFormData from "@/utils/appendToFormData";
 import axios from "@/utils/axios";
 import { AdminPanelFormProps } from "@/utils/types";
-import validateImage from "@/utils/validateImage";
 import { DialogActions, DialogContent, Typography } from "@mui/material";
 import { Button, MenuItem, Stack, TextField } from "@mui/material";
 import { FunctionComponent as FC, useState } from "react";
+import { validateImage } from "@/utils/validators";
 
 const UpdateMovieForm: FC<AdminPanelFormProps> = ({ setMessageAlert }) => {
   const [id, setId] = useState("");

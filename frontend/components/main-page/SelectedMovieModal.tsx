@@ -12,11 +12,31 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { FunctionComponent as FC } from "react";
+import { useMyListIds } from "@/utils/contexts";
+import axios from "@/utils/axios";
 
 const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   selectedMovie,
   setSelectedMovie,
 }) => {
+  const { myListIds, setMyListIds } = useMyListIds();
+
+  const handleAddOrRemoveMovieMyList = async () => {
+    try {
+      if (!myListIds.includes(selectedMovie.id)) {
+        setMyListIds((previousList) => [...previousList, selectedMovie.id]);
+        await axios.post(`/myList`, { movieId: selectedMovie.id });
+      } else {
+        setMyListIds((previousList) =>
+          previousList.filter((id) => id !== selectedMovie.id)
+        );
+        await axios.delete(`/myList/${selectedMovie.id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
@@ -76,8 +96,15 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
               </DialogContent>
               <DialogActions sx={{ padding: 0 }}>
                 <Stack spacing={2} width={"100%"}>
-                  <Button fullWidth variant="outlined" color="primary">
-                    watch later
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleAddOrRemoveMovieMyList}
+                  >
+                    {myListIds.includes(selectedMovie.id)
+                      ? "remove from my list"
+                      : "watch later"}
                   </Button>
                   <Button fullWidth variant="contained" color="secondary">
                     watch now

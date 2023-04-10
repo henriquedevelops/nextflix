@@ -1,4 +1,4 @@
-import { Movie, MoviesListProps } from "@/utils/types";
+import { Movie, MoviesListContainerProps } from "@/utils/types";
 import {
   Box,
   Card,
@@ -16,10 +16,10 @@ import { FunctionComponent as FC, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SelectedMovieModal from "./SelectedMovieModal";
 
-const MoviesList: FC<MoviesListProps> = ({
-  moviesList,
+const MoviesListContainer: FC<MoviesListContainerProps> = ({
+  moviesRendered,
   drawerWidth,
-  totalAmountOfMovies,
+  totalAmountOfMoviesFoundInDb,
   fetchMovies,
 }) => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | undefined>(
@@ -42,9 +42,9 @@ const MoviesList: FC<MoviesListProps> = ({
         }}
       >
         <InfiniteScroll
-          dataLength={moviesList.length}
+          dataLength={moviesRendered.length}
           next={async () => await fetchMovies()}
-          hasMore={totalAmountOfMovies > moviesList.length}
+          hasMore={totalAmountOfMoviesFoundInDb > moviesRendered.length}
           loader={
             <Box
               sx={{
@@ -58,9 +58,24 @@ const MoviesList: FC<MoviesListProps> = ({
               <CircularProgress />
             </Box>
           }
+          endMessage={
+            moviesRendered.length < 1 && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "350px",
+                  width: "100%",
+                }}
+              >
+                <Typography variant="h5">No movies found</Typography>
+              </Box>
+            )
+          }
         >
           <Grid container spacing={{ xs: 4, sm: 1 }}>
-            {moviesList.map((movie) => (
+            {moviesRendered.map((movie) => (
               <Grid
                 item
                 key={movie.id}
@@ -108,4 +123,4 @@ const MoviesList: FC<MoviesListProps> = ({
   );
 };
 
-export default MoviesList;
+export default MoviesListContainer;

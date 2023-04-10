@@ -3,6 +3,7 @@ import {
   getMyList,
   addToMyList,
   deleteFromMyList,
+  getMyListIds,
 } from "../controllers/myList";
 import { requireLogin } from "../controllers/auth";
 
@@ -12,7 +13,8 @@ router.use(requireLogin);
 
 router
   .get("/", getMyList)
-  .post("/:movieId", addToMyList)
+  .get("/id", getMyListIds)
+  .post("/", addToMyList)
   .delete("/:movieId", deleteFromMyList);
 
 export default router;

@@ -1,7 +1,10 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface User {
   email: string;
   id: string;
   isAdmin: boolean;
+  myListIds: string[];
 }
 
 export interface Movie {
@@ -24,15 +27,19 @@ export interface FormValues {
 export interface LoggedUserContextType {
   loggedUser: User;
 }
+export interface MyListIdsContextType {
+  myListIds: string[];
+  setMyListIds: Dispatch<SetStateAction<string[]>>;
+}
 
-export interface MoviesListProps {
-  moviesList: Movie[];
+export interface MoviesListContainerProps {
+  moviesRendered: Movie[];
   drawerWidth: number;
-  totalAmountOfMovies: number;
+  totalAmountOfMoviesFoundInDb: number;
   fetchMovies: () => Promise<void>;
 }
 
-export interface ResponseFromGetMovies {
+export interface ResponseDataFromFetchMovies {
   moviesFound: Movie[];
   amountOfMoviesFound: number;
 }
@@ -40,7 +47,7 @@ export interface ResponseFromGetMovies {
 export interface SidebarProps {
   setSelectedGenre: (value: string) => void;
   selectedGenre: string | null;
-  setMoviesList: (previousMovies: Movie[]) => void;
+  setMoviesRendered: (previousMovies: Movie[]) => void;
   searchTitle: string;
   setSearchTitle: (newSearchTitle: string) => void;
 }
@@ -51,10 +58,14 @@ export interface AdminPanelProps {
 }
 
 export interface SelectedMovieModalProps {
-  selectedMovie: Movie | undefined;
+  selectedMovie: Movie;
   setSelectedMovie: (value: Movie | undefined) => void;
 }
 
 export interface AdminPanelFormProps {
   setMessageAlert: (newMessageAlert: string) => void;
+}
+
+export interface ResponseDataFromFetchMyListIds {
+  moviesIdsFound: string[];
 }
