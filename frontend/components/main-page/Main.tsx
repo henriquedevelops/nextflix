@@ -13,10 +13,11 @@ import { FunctionComponent as FC, useEffect, useState } from "react";
 import MoviesListContainer from "./MoviesListContainer";
 import Sidebar from "./Sidebar";
 import { AddRemoveToMyListContext, useMessageAlert } from "@/utils/contexts";
+import { genericErrorAlert } from "@/utils/validators";
 
 const Main: FC = () => {
   const [moviesRendered, setMoviesRendered] = useState<Movie[]>([]);
-  const [amountOfMoviesFound, setAmountOfMoviesFound] = useState(1);
+  const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [searchTitle, setSearchTitle] = useState<string>("");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -29,20 +30,24 @@ const Main: FC = () => {
   const fetchMovies = async () => {
     try {
       const response = await axios.get<ResponseDataFromFetchMovies>(
-        selectedGenre === "My list"
-          ? `/myList?skip=${moviesRendered.length}&title=${searchTitle}`
-          : `/movies?genre=${selectedGenre}&skip=${moviesRendered.length}&title=${searchTitle}`
+        `/${selectedGenre === "My list" ? "myList" : "movies"}?skip=${
+          moviesRendered.length
+        }&genre=${selectedGenre}&title=${searchTitle}`
       );
 
-      const moviesFromResponse = response.data.moviesFound;
-      const amountOfMoviesFound = response.data.amountOfMoviesFound;
+      if (response.status === 204) {
+        setTotalAmountOfMovies(0);
+        return;
+      }
 
-      setMoviesRendered([...moviesRendered, ...moviesFromResponse]);
-      setAmountOfMoviesFound(amountOfMoviesFound);
+      const newSliceOfMovies = response.data.oneSliceOfMovies;
+      const totalAmount = response.data.totalAmountOfMovies;
+
+      setMoviesRendered([...moviesRendered, ...newSliceOfMovies]);
+      setTotalAmountOfMovies(totalAmount);
     } catch (error) {
-      setMessageAlert(
-        "There was a connection error. Please check your internet connection, refresh the page and try again."
-      );
+      setMessageAlert(genericErrorAlert);
+      setTotalAmountOfMovies(0);
       console.error(error);
     }
   };
@@ -55,7 +60,7 @@ const Main: FC = () => {
 
   return (
     <AddRemoveToMyListContext.Provider
-      value={{ setMoviesRendered, setAmountOfMoviesFound }}
+      value={{ setMoviesRendered, setTotalAmountOfMovies }}
     >
       <Box sx={{ display: "flex" }}>
         <AppBar
@@ -136,7 +141,7 @@ const Main: FC = () => {
         <MoviesListContainer
           moviesRendered={moviesRendered}
           drawerWidth={drawerWidth}
-          amountOfMoviesFound={amountOfMoviesFound}
+          totalAmountOfMovies={totalAmountOfMovies}
           fetchMovies={fetchMovies}
         />
       </Box>

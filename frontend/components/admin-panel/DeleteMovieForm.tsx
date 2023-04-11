@@ -35,9 +35,9 @@ const DeleteMovieForm: FC<AdminPanelFormProps> = () => {
       setSelectedMovieTitle(movieFound.title);
       setShowConfirmation(true);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
-      setMessageAlert("Invalid movie ID");
+      setMessageAlert(error.response.data.message);
     }
   };
 

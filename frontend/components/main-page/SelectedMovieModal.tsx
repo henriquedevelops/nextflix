@@ -18,13 +18,14 @@ import {
   useMessageAlert,
 } from "@/utils/contexts";
 import axios from "@/utils/axios";
+import { genericErrorAlert } from "@/utils/validators";
 
 const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   selectedMovie,
   setSelectedMovie,
 }) => {
   const { myListIds, setMyListIds } = useMyListIds();
-  const { setMoviesRendered, setAmountOfMoviesFound } = useAddRemoveToMyList();
+  const { setMoviesRendered, setTotalAmountOfMovies } = useAddRemoveToMyList();
   const { setMessageAlert } = useMessageAlert();
 
   const handleAddOrRemoveMovieMyList = async () => {
@@ -39,13 +40,11 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
         setMoviesRendered((previousList) =>
           previousList.filter((movie) => movie.id !== selectedMovie.id)
         );
-        setAmountOfMoviesFound((previousValue) => previousValue - 1);
+        setTotalAmountOfMovies((previousValue) => previousValue - 1);
         await axios.delete(`/myList/${selectedMovie.id}`);
       }
     } catch (error) {
-      setMessageAlert(
-        "There was a connection error. Please check your internet connection, refresh the page and try again."
-      );
+      setMessageAlert(genericErrorAlert);
       console.log(error);
     }
   };

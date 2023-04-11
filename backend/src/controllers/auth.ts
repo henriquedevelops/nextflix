@@ -17,13 +17,13 @@ export const login = tryCatch(async (req: Request, res: Response) => {
       email: req.body.email,
     },
   });
-  if (!userFound) throw new CustomError("Invalid email address.", 401);
+  if (!userFound) throw new CustomError("Invalid email address.", 400);
 
   const passwordIsCorrect = await compare(
     req.body.password,
     userFound.password
   );
-  if (!passwordIsCorrect) throw new CustomError("Wrong password.", 401);
+  if (!passwordIsCorrect) throw new CustomError("Wrong password.", 400);
 
   const { password: _, email, id, isAdmin } = userFound;
 
@@ -62,7 +62,8 @@ export const requireLogin = tryCatch(
 
 export const restricToAdmin = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user.isAdmin) throw new CustomError("Unauthorized", 401);
+    if (!req.user.isAdmin)
+      throw new CustomError("This route is restricted for administrators", 403);
 
     next();
   }

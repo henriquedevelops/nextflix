@@ -50,11 +50,9 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
       setTitle("");
       setImage(null);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
-      setMessageAlert(
-        "Error updating movie, please check your internet connection"
-      );
+      setMessageAlert(error.response.data.message);
     }
   };
 

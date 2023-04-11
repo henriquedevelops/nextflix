@@ -35,13 +35,13 @@ export interface MyListIdsContextType {
 export interface MoviesListContainerProps {
   moviesRendered: Movie[];
   drawerWidth: number;
-  amountOfMoviesFound: number;
+  totalAmountOfMovies: number;
   fetchMovies: () => Promise<void>;
 }
 
 export interface ResponseDataFromFetchMovies {
-  moviesFound: Movie[];
-  amountOfMoviesFound: number;
+  oneSliceOfMovies: Movie[];
+  totalAmountOfMovies: number;
 }
 
 export interface SidebarProps {
@@ -70,7 +70,7 @@ export interface ResponseDataFromFetchMyListIds {
 
 export interface AddRemoveToMyListContextType {
   setMoviesRendered: Dispatch<SetStateAction<Movie[]>>;
-  setAmountOfMoviesFound: Dispatch<SetStateAction<number>>;
+  setTotalAmountOfMovies: Dispatch<SetStateAction<number>>;
 }
 
 export interface MessageAlertContextType {

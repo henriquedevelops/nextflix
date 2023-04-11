@@ -6,6 +6,7 @@ import {
   MyListIdsContext,
 } from "@/utils/contexts";
 import { User } from "@/utils/types";
+import { genericErrorAlert } from "@/utils/validators";
 import { Alert, Snackbar, ThemeProvider, createTheme } from "@mui/material";
 import jwtDecode from "jwt-decode";
 import { NextPageContext } from "next";
@@ -53,9 +54,7 @@ const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
       );
       setMyListIds(response.data.moviesIdsFound);
     } catch (error) {
-      setMessageAlert(
-        "There was a connection error. Please check your internet connection, refresh the page and try again."
-      );
+      setMessageAlert(genericErrorAlert);
       console.log(error);
     }
   };

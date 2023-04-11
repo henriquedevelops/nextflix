@@ -12,20 +12,19 @@ export interface decodedToken {
   isAdmin: boolean;
 }
 
-export interface CreateMovieRequestData {
-  title: string;
-  genre: string;
-  description: string;
-  image: string;
-  url: string;
-}
-
-export interface UpdateMovieRequestData {
+export interface CreateUpdateMovieRequestBody {
   title: string | undefined;
+  url: string | undefined;
   genre: string | undefined;
   description: string | undefined;
-  image: string | undefined;
+}
+
+export interface validateMovieArgument {
+  title: string | undefined;
   url: string | undefined;
+  genre: string | undefined;
+  description: string | undefined;
+  file: Express.Multer.File | undefined;
 }
 
 export interface GetMoviesRequest extends Request {

@@ -18,7 +18,7 @@ import SelectedMovieModal from "./SelectedMovieModal";
 const MoviesListContainer: FC<MoviesListContainerProps> = ({
   moviesRendered,
   drawerWidth,
-  amountOfMoviesFound,
+  totalAmountOfMovies,
   fetchMovies,
 }) => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | undefined>(
@@ -45,14 +45,14 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
         <InfiniteScroll
           dataLength={moviesRendered.length}
           next={async () => await fetchMovies()}
-          hasMore={amountOfMoviesFound > moviesRendered.length}
+          hasMore={totalAmountOfMovies > moviesRendered.length}
           loader={
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "350px",
+                height: moviesRendered.length > 0 ? "350px" : "100vh",
                 width: "100%",
               }}
             >

@@ -17,40 +17,33 @@ export default (
     if (err.code === "P2023" || err.code === "P2025") {
       res.status(404).json({
         message: "Requested resource was not found.",
-        statusCode: 404,
       });
     } else if (err.code === "P2002") {
       res.status(409).json({
         message: "Conflict in database.",
-        statusCode: 409,
       });
     } else {
       res.status(400).json({
         message: "Invalid request",
-        statusCode: 400,
       });
     }
   }
 
   if (err instanceof CustomError) {
     res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message, // Include the error message here
-      isOperational: err.isOperational,
+      message: err.message,
     });
   }
 
   if (err instanceof JsonWebTokenError) {
     res.status(401).json({
       message: "Invalid token",
-      statusCode: 401,
     });
   }
 
   if (err instanceof TokenExpiredError) {
     res.status(401).json({
       message: "Token has expired",
-      statusCode: 401,
     });
   }
 

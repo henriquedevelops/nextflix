@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
 import { validateImage } from "@/utils/validators";
 import { useMessageAlert } from "@/utils/contexts";
+import { AxiosError } from "axios";
 
 const CreateMovieForm: FC<AdminPanelFormProps> = () => {
   const [title, setTitle] = useState("");
@@ -53,11 +54,10 @@ const CreateMovieForm: FC<AdminPanelFormProps> = () => {
       setDescription("");
       setImage(null);
       setLoading(false);
-    } catch (error) {
-      setMessageAlert(
-        `Error creating movie, please check your internet connection`
-      );
+    } catch (error: any) {
+      setMessageAlert(error.response.data.message);
       setLoading(false);
+      console.log(error);
     }
   };
 

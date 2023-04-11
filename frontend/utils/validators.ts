@@ -66,3 +66,6 @@ export const passwordErrorToBoolean = (error: string): boolean => {
     error === "Password must be at least 8 characters"
   );
 };
+
+export const genericErrorAlert =
+  "Something went wrong! Please check your internet connection";

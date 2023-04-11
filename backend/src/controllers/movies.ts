@@ -1,62 +1,64 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import prisma from "../../prisma/client";
 import tryCatch from "../error-handling/tryCatch";
-import { CreateMovieRequestData, UpdateMovieRequestData } from "../utils/types";
+import { CreateUpdateMovieRequestBody } from "../utils/types";
+import CustomError from "../error-handling/customError";
+import {
+  allowedGenres,
+  validateMovie,
+  validateSkip,
+} from "../utils/validators";
 
-/* This function retrieves movies from the database based on the 
-optional query parameter "selectedGenre". If it is provided, it 
-returns only the movies that belong to that genre. Otherwise, it 
-returns all the movies in the database. The result is sent back 
-as a JSON response with HTTP status code 201. */
-export const getMovies = tryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const genre = req.query.genre?.toString();
-    const title = req.query.title?.toString();
-    const skip = req.query.skip
-      ? parseInt(req.query.skip?.toString())
-      : undefined;
+export const getMovies = tryCatch(async (req: Request, res: Response) => {
+  const genre = req.query.genre?.toString();
+  if (genre && !allowedGenres.includes(genre))
+    throw new CustomError("Invalid genre", 400);
 
-    const moviesFound = await prisma.movie.findMany({
-      where: {
-        AND: [
-          genre ? { genre } : {},
-          title ? { title: { contains: title, mode: "insensitive" } } : {},
-        ],
-      },
-      skip,
-      take: 18,
-    });
+  const skip = validateSkip(req.query.skip);
 
-    const amountOfMoviesFound = await prisma.movie.count({
-      where: {
-        AND: [
-          genre ? { genre } : {},
-          title ? { title: { contains: title, mode: "insensitive" } } : {},
-        ],
-      },
-    });
+  const title = req.query.title?.toString();
 
-    res.status(201).json({ moviesFound, amountOfMoviesFound });
-  }
-);
+  const oneSliceOfMovies = await prisma.movie.findMany({
+    where: {
+      AND: [
+        genre ? { genre } : {},
+        title ? { title: { contains: title, mode: "insensitive" } } : {},
+      ],
+    },
+    skip,
+    take: 18,
+  });
 
-/* This function creates a new movie in the database using data from the 
-request body as arguments. Once the movie is created, it responds with a 
-201 HTTP status code and the JSON representation of the newly created movie. */
+  if (oneSliceOfMovies.length === 0) res.sendStatus(204);
+
+  const totalAmountOfMovies = await prisma.movie.count({
+    where: {
+      AND: [
+        genre ? { genre } : {},
+        title ? { title: { contains: title, mode: "insensitive" } } : {},
+      ],
+    },
+  });
+
+  res.status(200).json({ oneSliceOfMovies, totalAmountOfMovies });
+});
+
 export const createMovie = tryCatch(async (req: Request, res: Response) => {
-  const { title, url, description, genre }: CreateMovieRequestData = req.body;
-  const image = req.file?.path;
+  const { title, url, description, genre }: CreateUpdateMovieRequestBody =
+    req.body;
+  const file = req.file;
 
-  if (!title || !url || !genre || !description || !image) {
-    throw new Error("errou");
-  }
+  if (!title || !url || !genre || !description || !file)
+    throw new CustomError("All fields are required", 400);
+
+  validateMovie({ title, url, genre, description, file });
 
   await prisma.movie.create({
     data: {
       title,
       genre,
       description,
-      image,
+      image: file.path,
       url,
     },
   });
@@ -64,14 +66,18 @@ export const createMovie = tryCatch(async (req: Request, res: Response) => {
   res.sendStatus(201);
 });
 
-/* This function receives the movie id in the request parameters and the 
-updated movie data in the request body. It uses the Prisma update method 
-to update the movie in the database and returns the updated movie in the 
-response. */
 export const updateMovie = tryCatch(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const { title, url, genre, description }: UpdateMovieRequestData = req.body;
-  const image = req.file?.path;
+  if (!id) throw new CustomError("A movie id is required", 400);
+
+  const { title, url, genre, description }: CreateUpdateMovieRequestBody =
+    req.body;
+  const file = req.file;
+
+  if (!title && !url && !genre && !description && !file)
+    throw new CustomError("No changes to be made", 400);
+
+  validateMovie({ title, url, genre, description, file });
 
   const updatedMovie = await prisma.movie.update({
     where: {
@@ -82,39 +88,33 @@ export const updateMovie = tryCatch(async (req: Request, res: Response) => {
       url,
       genre,
       description,
-      image,
+      image: file?.path,
     },
   });
 
-  res.status(201).json(updatedMovie.title);
+  res.status(200).json(updatedMovie.title);
 });
 
-/* This function retrieves a single movie from the database based on the 
-id parameter passed in the request URL and then returns the movie as a JSON 
-response with status code 201. */
-export const getMovieById = tryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
+export const getMovieById = tryCatch(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  if (!id) throw new CustomError("A movie id is required", 400);
 
-    const movieFound = await prisma.movie.findUnique({
-      where: { id },
-    });
+  const movieFound = await prisma.movie.findUnique({
+    where: { id },
+  });
 
-    res.status(201).json(movieFound);
-  }
-);
+  res.status(200).json(movieFound);
+});
 
-/* This function receives the movie id in the request parameters and uses the 
-Prisma delete method to delete the movie from the database. It returns a 204 
-status code in the response, indicating that the request was successful but 
-there is no content to return. */
 export const deleteMovie = tryCatch(async (req: Request, res: Response) => {
   const id = req.params.id;
+  if (!id) throw new CustomError("A movie id is required", 400);
 
   await prisma.movie.delete({
     where: {
       id,
     },
   });
+
   res.sendStatus(204);
 });

@@ -1,72 +1,77 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "../../prisma/client";
 import tryCatch from "../error-handling/tryCatch";
+import { validateSkip } from "../utils/validators";
+import CustomError from "../error-handling/customError";
 
-export const getMyList = tryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user?.id;
-    const skip = req.query.skip
-      ? parseInt(req.query.skip?.toString())
-      : undefined;
+export const getMyList = tryCatch(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
 
-    const moviesFound = (
-      await prisma.movieFromUserList.findMany({
-        where: { userId },
-        include: { movie: true },
-        skip,
-        take: 18,
-      })
-    ).map(({ movie }) => movie);
+  const skip = validateSkip(req.query.skip);
 
-    const amountOfMoviesFound = await prisma.movieFromUserList.count({
+  const oneSliceOfMovies = (
+    await prisma.movieFromUserList.findMany({
       where: { userId },
-    });
+      include: { movie: true },
+      skip,
+      take: 18,
+    })
+  ).map(({ movie }) => movie);
 
-    res.status(201).json({ moviesFound, amountOfMoviesFound });
-  }
-);
+  if (oneSliceOfMovies.length === 0) res.sendStatus(204);
 
-export const getMyListIds = tryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user?.id;
+  const totalAmountOfMovies = await prisma.movieFromUserList.count({
+    where: { userId },
+  });
 
-    const moviesIdsFound = (
-      await prisma.movieFromUserList.findMany({
-        where: { userId },
-        include: { movie: { select: { id: true } } },
-      })
-    ).map(({ movie }) => movie.id);
+  res.status(200).json({ oneSliceOfMovies, totalAmountOfMovies });
+});
 
-    res.status(201).json({ moviesIdsFound });
-  }
-);
+export const getMyListIds = tryCatch(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
 
-export const addToMyList = tryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user?.id;
-    const movieId = req.body.movieId;
+  const moviesIdsFound = (
+    await prisma.movieFromUserList.findMany({
+      where: { userId },
+      include: { movie: { select: { id: true } } },
+    })
+  ).map(({ movie }) => movie.id);
 
-    const movieFound = await prisma.movie.findUnique({
-      where: { id: movieId },
-    });
+  if (moviesIdsFound.length === 0) res.sendStatus(204);
 
-    movieFound &&
-      (await prisma.movieFromUserList.create({
-        data: {
-          movieId,
-          userId,
-          movieTitle: movieFound.title,
-        },
-      }));
+  res.status(200).json({ moviesIdsFound });
+});
 
-    res.sendStatus(201);
-  }
-);
+export const addToMyList = tryCatch(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const movieId = req.body.movieId;
+
+  if (!userId) throw new CustomError("User ID required", 400);
+  if (!movieId) throw new CustomError("Movie ID required", 400);
+
+  const movieFound = await prisma.movie.findUnique({
+    where: { id: movieId },
+  });
+
+  movieFound &&
+    (await prisma.movieFromUserList.create({
+      data: {
+        movieId,
+        userId,
+        movieTitle: movieFound.title,
+      },
+    }));
+
+  res.sendStatus(201);
+});
 
 export const deleteFromMyList = tryCatch(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     const userId = req.user?.id;
     const movieId = req.params.movieId;
+
+    if (!userId) throw new CustomError("User ID required", 400);
+    if (!movieId) throw new CustomError("Movie ID required", 400);
 
     await prisma.movieFromUserList.deleteMany({
       where: { userId, movieId },
