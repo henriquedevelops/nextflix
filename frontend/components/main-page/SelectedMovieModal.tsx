@@ -19,6 +19,7 @@ import {
 } from "@/utils/contexts";
 import axios from "@/utils/axios";
 import { genericErrorAlert } from "@/utils/validators";
+import { useRouter } from "next/router";
 
 const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   selectedMovie,
@@ -28,6 +29,11 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   const { setMoviesRendered, setTotalAmountOfMovies, selectedGenre } =
     useAddRemoveToMyList();
   const { setMessageAlert } = useMessageAlert();
+  const nextRouter = useRouter();
+
+  const handleWatchNowClick = () => {
+    nextRouter.push(`/${selectedMovie.id}`);
+  };
 
   const handleAddOrRemoveMovieMyList = async () => {
     try {
@@ -127,7 +133,12 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
                       ? "remove from my list"
                       : "watch later"}
                   </Button>
-                  <Button fullWidth variant="contained" color="secondary">
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleWatchNowClick}
+                  >
                     watch now
                   </Button>
                 </Stack>

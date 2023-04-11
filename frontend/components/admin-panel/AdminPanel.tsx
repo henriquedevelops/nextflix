@@ -33,7 +33,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
         PaperProps={{
           sx: {
             position: "absolute",
-            top: { xs: 0, sm: "15vh" },
+            top: { xs: 0, sm: "13vh" },
             paddingBottom: 1,
           },
         }}
