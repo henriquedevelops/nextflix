@@ -25,22 +25,31 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   setSelectedMovie,
 }) => {
   const { myListIds, setMyListIds } = useMyListIds();
-  const { setMoviesRendered, setTotalAmountOfMovies } = useAddRemoveToMyList();
+  const { setMoviesRendered, setTotalAmountOfMovies, selectedGenre } =
+    useAddRemoveToMyList();
   const { setMessageAlert } = useMessageAlert();
 
   const handleAddOrRemoveMovieMyList = async () => {
     try {
       if (!myListIds.includes(selectedMovie.id)) {
         setMyListIds((previousList) => [...previousList, selectedMovie.id]);
+        if (selectedGenre === "My list") {
+          setMoviesRendered((previousList) => [...previousList, selectedMovie]);
+          setTotalAmountOfMovies((previousValue) => previousValue + 1);
+        }
+
         await axios.post(`/myList`, { movieId: selectedMovie.id });
       } else {
         setMyListIds((previousList) =>
           previousList.filter((id) => id !== selectedMovie.id)
         );
-        setMoviesRendered((previousList) =>
-          previousList.filter((movie) => movie.id !== selectedMovie.id)
-        );
-        setTotalAmountOfMovies((previousValue) => previousValue - 1);
+        if (selectedGenre === "My list") {
+          setMoviesRendered((previousList) =>
+            previousList.filter((movie) => movie.id !== selectedMovie.id)
+          );
+          setTotalAmountOfMovies((previousValue) => previousValue - 1);
+        }
+
         await axios.delete(`/myList/${selectedMovie.id}`);
       }
     } catch (error) {
@@ -49,7 +58,7 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
     }
   };
 
-  const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <>
@@ -58,7 +67,7 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
           open={Boolean(selectedMovie)}
           onClose={() => setSelectedMovie(undefined)}
           maxWidth={false}
-          fullScreen={isExtraSmallScreen}
+          fullScreen={isSmallScreen}
         >
           <Stack
             direction="row"
@@ -114,7 +123,7 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
                     color="primary"
                     onClick={handleAddOrRemoveMovieMyList}
                   >
-                    {myListIds.includes(selectedMovie.id)
+                    {myListIds && myListIds.includes(selectedMovie.id)
                       ? "remove from my list"
                       : "watch later"}
                   </Button>

@@ -29,12 +29,8 @@ export const validateMovie = ({
   if (description && description.length > 450)
     throw new CustomError("Description must be 450 characters max", 400);
 
-  if (
-    file &&
-    (file.size > 1024 * 1024 ||
-      file.path.split(".").pop()?.toLowerCase() !== "jpeg")
-  )
-    throw new CustomError("Invalid image format", 400);
+  if (file && file.size > 1024 * 1024)
+    throw new CustomError("Image must be 1 MB max", 400);
 };
 
 export const validateSkip = (skipValue: any): number => {

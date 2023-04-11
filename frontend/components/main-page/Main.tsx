@@ -60,7 +60,7 @@ const Main: FC = () => {
 
   return (
     <AddRemoveToMyListContext.Provider
-      value={{ setMoviesRendered, setTotalAmountOfMovies }}
+      value={{ setMoviesRendered, setTotalAmountOfMovies, selectedGenre }}
     >
       <Box sx={{ display: "flex" }}>
         <AppBar

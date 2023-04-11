@@ -45,8 +45,6 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
       return;
     }
 
-    setLoading(false);
-    setError("");
     nextRouter.push("/");
   };
 

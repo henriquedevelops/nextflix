@@ -22,7 +22,7 @@ export const emailErrorToBoolean = (error: string): boolean => {
   );
 };
 
-export const validateImage = (
+export const validateAndCropImage = (
   event: React.ChangeEvent<HTMLInputElement>,
   setImage: React.Dispatch<React.SetStateAction<File | null>>,
   setMessageAlert: (newMessage: string) => void
@@ -33,7 +33,55 @@ export const validateImage = (
       setMessageAlert("Image must be jpeg format and 1 MB max");
       return;
     }
-    setImage(file);
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const image = new Image();
+
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        const aspectRatio = 3 / 4;
+        let width = image.width;
+        let height = image.height;
+
+        if (width / height > aspectRatio) {
+          width = height * aspectRatio;
+        } else {
+          height = width / aspectRatio;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        if (!context) return;
+        context.drawImage(
+          image,
+          (image.width - width) / 2,
+          (image.height - height) / 2,
+          width,
+          height,
+          0,
+          0,
+          width,
+          height
+        );
+
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const croppedFile = new File([blob], file.name, {
+            type: blob.type,
+          });
+
+          setImage(croppedFile);
+        }, "image/jpeg");
+      };
+
+      image.src = event?.target?.result as string;
+    };
+
+    reader.readAsDataURL(file);
   }
 };
 

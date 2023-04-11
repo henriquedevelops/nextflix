@@ -63,8 +63,6 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
       return;
     }
 
-    setLoading(false);
-    setError("");
     nextRouter.push("/");
   };
 

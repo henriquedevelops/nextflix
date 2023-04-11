@@ -75,7 +75,7 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
             )
           }
         >
-          <Grid container spacing={{ xs: 4, sm: 1 }}>
+          <Grid container spacing={{ xs: 4, sm: 4, md: 1 }}>
             {moviesRendered.map((movie) => (
               <Grid
                 item
@@ -87,7 +87,7 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
                 xl={3}
                 xxl={2}
               >
-                <Card>
+                <Card sx={{ height: "100%" }}>
                   <CardActionArea
                     disableTouchRipple
                     onClick={() => setSelectedMovie(movie)}

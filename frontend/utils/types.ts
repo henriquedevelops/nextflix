@@ -71,6 +71,7 @@ export interface ResponseDataFromFetchMyListIds {
 export interface AddRemoveToMyListContextType {
   setMoviesRendered: Dispatch<SetStateAction<Movie[]>>;
   setTotalAmountOfMovies: Dispatch<SetStateAction<number>>;
+  selectedGenre: string;
 }
 
 export interface MessageAlertContextType {

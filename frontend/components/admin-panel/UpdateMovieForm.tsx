@@ -4,7 +4,7 @@ import { AdminPanelFormProps } from "@/utils/types";
 import { DialogActions, DialogContent, Typography } from "@mui/material";
 import { Button, MenuItem, Stack, TextField } from "@mui/material";
 import { FunctionComponent as FC, useState } from "react";
-import { validateImage } from "@/utils/validators";
+import { validateAndCropImage } from "@/utils/validators";
 import { useMessageAlert } from "@/utils/contexts";
 
 const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
@@ -18,7 +18,7 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
   const { setMessageAlert } = useMessageAlert();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    validateImage(event, setImage, setMessageAlert);
+    validateAndCropImage(event, setImage, setMessageAlert);
   };
 
   const handleSubmit = async () => {

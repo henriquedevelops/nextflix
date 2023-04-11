@@ -33,9 +33,9 @@ export async function getServerSideProps(context: NextPageContext) {
 
 const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
   const [myListIds, setMyListIds] = useState<string[]>([]);
-  const nextRouter = useRouter();
   const [messageAlert, setMessageAlert] = useState<string>("");
   const [messageAlertIsOpen, setMessageAlertIsOpen] = useState(false);
+  const nextRouter = useRouter();
 
   useEffect(() => {
     if (!loggedUser) nextRouter.push("/auth");
@@ -52,6 +52,9 @@ const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
       const response = await axios.get<{ moviesIdsFound: string[] }>(
         `/myList/id`
       );
+
+      if (response.status === 204) return;
+
       setMyListIds(response.data.moviesIdsFound);
     } catch (error) {
       setMessageAlert(genericErrorAlert);
