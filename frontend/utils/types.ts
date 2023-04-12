@@ -27,6 +27,7 @@ export interface FormValues {
 export interface LoggedUserContextType {
   loggedUser: User;
 }
+
 export interface MyListIdsContextType {
   myListIds: string[];
   setMyListIds: Dispatch<SetStateAction<string[]>>;

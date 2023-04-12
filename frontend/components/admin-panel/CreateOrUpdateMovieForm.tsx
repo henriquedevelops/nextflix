@@ -1,10 +1,9 @@
-import appendToFormData from "@/utils/appendToFormData";
 import axios from "@/utils/axios";
 import { AdminPanelFormProps } from "@/utils/types";
 import { DialogActions, DialogContent, Typography } from "@mui/material";
 import { Button, MenuItem, Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { FunctionComponent as FC, useState } from "react";
+import { FunctionComponent as FC, useEffect, useState } from "react";
 import { validateAndCropImage } from "@/utils/validators";
 import { useMessageAlert } from "@/utils/contexts";
 import { AxiosError } from "axios";
@@ -21,6 +20,10 @@ const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
   const [loading, setLoading] = useState(false);
   const { setMessageAlert } = useMessageAlert();
 
+  useEffect(() => {
+    resetStates();
+  }, [selectedAction]);
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     validateAndCropImage(event, setImage, setMessageAlert);
   };
@@ -35,26 +38,19 @@ const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
 
     if (
       selectedAction === "Create" &&
-      (!title || !url || !genre || !description)
+      (!title || !url || !genre || !description || !uploadedImage)
     ) {
       setMessageAlert("All fields are required");
       setLoading(false);
       return;
     }
 
-    if (selectedAction === "Create" && !uploadedImage) {
-      setMessageAlert("An image is required");
-      setLoading(false);
-      return;
-    }
-
-    const formData = appendToFormData(
-      title,
-      url,
-      genre,
-      description,
-      uploadedImage
-    );
+    const formData = new FormData();
+    title && formData.append("title", title);
+    url && formData.append("url", url);
+    genre && formData.append("genre", genre);
+    description && formData.append("description", description);
+    uploadedImage && formData.append("image", uploadedImage);
 
     try {
       let updatedMovieTitle: string | undefined;
@@ -70,18 +66,22 @@ const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
           selectedAction === "Create" ? "created" : "updated"
         }`
       );
-      setId("");
-      setTitle("");
-      setUrl("");
-      setGenre("");
-      setDescription("");
-      setImage(null);
-      setLoading(false);
+      resetStates();
     } catch (error: any) {
       setMessageAlert(error.response.data.message);
       setLoading(false);
       console.log(error);
     }
+  };
+
+  const resetStates = () => {
+    setId("");
+    setTitle("");
+    setUrl("");
+    setGenre("");
+    setDescription("");
+    setImage(null);
+    setLoading(false);
   };
 
   return (

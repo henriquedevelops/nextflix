@@ -9,9 +9,16 @@ export const getMyList = tryCatch(async (req: Request, res: Response) => {
 
   const skip = validateSkip(req.query.skip);
 
+  const title = req.query.title?.toString();
+
   const oneSliceOfMovies = (
     await prisma.movieFromUserList.findMany({
-      where: { userId },
+      where: {
+        AND: [
+          { userId },
+          title ? { movieTitle: { contains: title, mode: "insensitive" } } : {},
+        ],
+      },
       include: { movie: true },
       skip,
       take: 18,
@@ -21,7 +28,12 @@ export const getMyList = tryCatch(async (req: Request, res: Response) => {
   if (oneSliceOfMovies.length === 0) res.sendStatus(204);
 
   const totalAmountOfMovies = await prisma.movieFromUserList.count({
-    where: { userId },
+    where: {
+      AND: [
+        { userId },
+        title ? { movieTitle: { contains: title, mode: "insensitive" } } : {},
+      ],
+    },
   });
 
   res.status(200).json({ oneSliceOfMovies, totalAmountOfMovies });
