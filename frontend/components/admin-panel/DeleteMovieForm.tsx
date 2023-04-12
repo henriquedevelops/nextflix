@@ -9,7 +9,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
 
-const DeleteMovieForm: FC<AdminPanelFormProps> = () => {
+const DeleteMovieForm: FC = () => {
   const [loading, setLoading] = useState(false);
   const [confirmationIsOpen, setShowConfirmation] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState("");

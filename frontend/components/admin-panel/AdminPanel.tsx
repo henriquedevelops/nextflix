@@ -11,9 +11,8 @@ import {
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { FunctionComponent as FC, useState } from "react";
-import CreateMovieForm from "./CreateMovieForm";
+import CreateOrUpdateMovieForm from "./CreateOrUpdateMovieForm";
 import DeleteMovieForm from "./DeleteMovieForm";
-import UpdateMovieForm from "./UpdateMovieForm";
 
 const AdminPanel: FC<AdminPanelProps> = ({
   adminModalIsOpen,
@@ -69,8 +68,9 @@ const AdminPanel: FC<AdminPanelProps> = ({
           </Box>
         </DialogTitle>
 
-        {selectedAction === "Create" && <CreateMovieForm />}
-        {selectedAction === "Update" && <UpdateMovieForm />}
+        {(selectedAction === "Create" || selectedAction === "Update") && (
+          <CreateOrUpdateMovieForm selectedAction={selectedAction} />
+        )}
         {selectedAction === "Delete" && <DeleteMovieForm />}
       </Dialog>
     </>

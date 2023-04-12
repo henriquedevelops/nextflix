@@ -62,7 +62,9 @@ export interface SelectedMovieModalProps {
   setSelectedMovie: (value: Movie | undefined) => void;
 }
 
-export interface AdminPanelFormProps {}
+export interface AdminPanelFormProps {
+  selectedAction: string;
+}
 
 export interface ResponseDataFromFetchMyListIds {
   moviesIdsFound: string[];

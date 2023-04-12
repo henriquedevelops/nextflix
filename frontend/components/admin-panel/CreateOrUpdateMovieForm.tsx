@@ -2,12 +2,16 @@ import appendToFormData from "@/utils/appendToFormData";
 import axios from "@/utils/axios";
 import { AdminPanelFormProps } from "@/utils/types";
 import { DialogActions, DialogContent, Typography } from "@mui/material";
-import { Button, MenuItem, Stack, TextField } from "@mui/material";
+import { Button, MenuItem, Stack } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
 import { validateAndCropImage } from "@/utils/validators";
 import { useMessageAlert } from "@/utils/contexts";
+import { AxiosError } from "axios";
 
-const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
+const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
+  selectedAction,
+}) => {
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -22,12 +26,27 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
   };
 
   const handleSubmit = async () => {
-    if (!id) {
+    if (selectedAction === "Update" && !id) {
       setMessageAlert("Please enter a movie ID");
       return;
     }
 
     setLoading(true);
+
+    if (
+      selectedAction === "Create" &&
+      (!title || !url || !genre || !description)
+    ) {
+      setMessageAlert("All fields are required");
+      setLoading(false);
+      return;
+    }
+
+    if (selectedAction === "Create" && !uploadedImage) {
+      setMessageAlert("An image is required");
+      setLoading(false);
+      return;
+    }
 
     const formData = appendToFormData(
       title,
@@ -38,21 +57,30 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
     );
 
     try {
-      const { data: updatedMovieTitle } = await axios.patch<string>(
-        `/movies/${id}`,
-        formData
+      let updatedMovieTitle: string | undefined;
+
+      if (selectedAction === "Create") await axios.post("/movies", formData);
+      if (selectedAction === "Update") {
+        const response = await axios.patch<string>(`/movies/${id}`, formData);
+        updatedMovieTitle = response.data;
+      }
+
+      setMessageAlert(
+        `Movie "${updatedMovieTitle || title}" successfully ${
+          selectedAction === "Create" ? "created" : "updated"
+        }`
       );
-      setMessageAlert(`Movie "${updatedMovieTitle}" successfully updated`);
+      setId("");
+      setTitle("");
       setUrl("");
       setGenre("");
       setDescription("");
-      setId("");
-      setTitle("");
       setImage(null);
       setLoading(false);
     } catch (error: any) {
-      setLoading(false);
       setMessageAlert(error.response.data.message);
+      setLoading(false);
+      console.log(error);
     }
   };
 
@@ -65,18 +93,20 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
         }}
       >
         <Stack spacing={2} paddingTop={3}>
+          {selectedAction === "Update" && (
+            <TextField
+              label="ID"
+              required
+              size="small"
+              value={id}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setId(event.target.value);
+              }}
+              disabled={loading}
+            />
+          )}
           <TextField
-            label="ID"
-            required
-            size="small"
-            value={id}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setId(event.target.value);
-            }}
-            disabled={loading}
-          />
-
-          <TextField
+            required={selectedAction === "Create"}
             label="Title"
             size="small"
             name="title"
@@ -87,6 +117,7 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
             }}
           />
           <TextField
+            required={selectedAction === "Create"}
             label="URL"
             size="small"
             name="url"
@@ -98,6 +129,7 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
           />
 
           <TextField
+            required={selectedAction === "Create"}
             select
             label="Genre"
             size="small"
@@ -107,20 +139,25 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
             }}
             disabled={loading}
           >
-            <MenuItem value="Action">Action</MenuItem>
-            <MenuItem value="Comedy">Comedy</MenuItem>
-            <MenuItem value="Documentary">Documentary</MenuItem>
-            <MenuItem value="Science-fiction">Science-fiction</MenuItem>
-            <MenuItem value="Horror">Horror</MenuItem>
-            <MenuItem value="Drama">Drama</MenuItem>
+            {[
+              "Action",
+              "Comedy",
+              "Documentary",
+              "Science-fiction",
+              "Horror",
+              "Drama",
+            ].map((item) => (
+              <MenuItem value={item}>{item}</MenuItem>
+            ))}
           </TextField>
 
           <TextField
+            required={selectedAction === "Create"}
             multiline
             label="Description"
             name="description"
             id="outlined-multiline-static"
-            rows={5}
+            rows={selectedAction === "Create" ? 8 : 5}
             value={description}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setDescription(event.target.value);
@@ -132,7 +169,7 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
               Image uploaded: {uploadedImage.name}
             </Typography>
           )}
-          <Button variant="outlined" component="label">
+          <Button variant="outlined" component="label" disabled={loading}>
             Upload image
             <input
               hidden
@@ -144,18 +181,19 @@ const UpdateMovieForm: FC<AdminPanelFormProps> = () => {
           </Button>
         </Stack>
       </DialogContent>
+
       <DialogActions sx={{ paddingX: 3, paddingY: 2 }}>
         <Button
-          disabled={loading}
-          variant="contained"
           fullWidth
+          variant="contained"
           onClick={handleSubmit}
+          disabled={loading}
         >
-          Update movie
+          {selectedAction} movie
         </Button>
       </DialogActions>
     </>
   );
 };
 
-export default UpdateMovieForm;
+export default CreateOrUpdateMovieForm;
