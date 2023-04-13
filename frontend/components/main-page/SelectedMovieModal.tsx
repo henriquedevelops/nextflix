@@ -121,6 +121,7 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
                   </Typography>
                 </Stack>
               </DialogContent>
+
               <DialogActions sx={{ padding: 0 }}>
                 <Stack spacing={2} width={"100%"}>
                   <Button
@@ -133,6 +134,7 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
                       ? "remove from my list"
                       : "watch later"}
                   </Button>
+
                   <Button
                     fullWidth
                     variant="contained"

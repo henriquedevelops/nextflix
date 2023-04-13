@@ -103,6 +103,7 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
         >
           Sign In
         </Button>
+
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Typography

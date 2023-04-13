@@ -49,12 +49,14 @@ const Auth = () => {
             width: "256px",
           }}
         />
+
         {selectedForm === "login" ? (
           <LoginForm toggleSelectedForm={toggleSelectedForm} />
         ) : (
           <RegisterForm toggleSelectedForm={toggleSelectedForm} />
         )}
       </Box>
+
       <Typography
         variant="body2"
         color="text.secondary"

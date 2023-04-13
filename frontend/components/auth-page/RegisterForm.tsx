@@ -126,6 +126,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
         >
           SIGN UP
         </Button>
+
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Typography

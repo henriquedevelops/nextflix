@@ -84,7 +84,7 @@ const Main: FC = () => {
             <CardMedia
               component="img"
               sx={{ width: "200px", marginTop: "1px" }}
-              image="/images/logo2.png"
+              image="/images/Logo2.png"
             />
           </Toolbar>
         </AppBar>

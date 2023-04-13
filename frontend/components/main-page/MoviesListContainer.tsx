@@ -96,6 +96,7 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
                       component="img"
                       image={`http://localhost:80/${movie.image}`}
                     />
+
                     <CardContent>
                       <Typography
                         gutterBottom
@@ -105,6 +106,7 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
                       >
                         {movie.title}
                       </Typography>
+
                       <Typography
                         variant="body2"
                         color="text.secondary"

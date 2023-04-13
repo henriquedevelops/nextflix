@@ -79,7 +79,7 @@ const Sidebar: FC<SidebarProps> = ({
               marginBottom: 3,
               display: { xs: "none", sm: "block" },
             }}
-            image="/images/logo2.png"
+            image="/images/Logo2.png"
           />
 
           <List>
@@ -102,11 +102,13 @@ const Sidebar: FC<SidebarProps> = ({
                 </ListItemButton>
               </ListItem>
             ))}
+
             <FormControl
               sx={{ ml: 1.8, mt: 0, width: "237px" }}
               variant={"standard"}
             >
               <InputLabel>Search</InputLabel>
+
               <Input
                 value={searchTitle}
                 onChange={handleSearchTitle}
@@ -118,6 +120,7 @@ const Sidebar: FC<SidebarProps> = ({
               />
             </FormControl>
           </List>
+
           <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
             <ListItem
               disablePadding
@@ -138,6 +141,7 @@ const Sidebar: FC<SidebarProps> = ({
               adminModalIsOpen={adminModalIsOpen}
               handleOpenCloseAdminModal={handleOpenCloseAdminModal}
             />
+
             <ListItem disablePadding>
               <ListItemButton onClick={handleSignOut}>
                 <ListItemIcon>
