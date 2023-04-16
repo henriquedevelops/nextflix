@@ -8,6 +8,7 @@ import {
   validateMovie,
   validateSkip,
 } from "../utils/validators";
+import { getBase64Image } from "../utils/multer";
 
 export const getMovies = tryCatch(async (req: Request, res: Response) => {
   const genre = req.query.genre?.toString();
@@ -18,7 +19,7 @@ export const getMovies = tryCatch(async (req: Request, res: Response) => {
 
   const title = req.query.title?.toString();
 
-  const oneSliceOfMovies = await prisma.movie.findMany({
+  const oneSliceOfMoviesRaw = await prisma.movie.findMany({
     where: {
       AND: [
         genre ? { genre } : {},
@@ -26,10 +27,9 @@ export const getMovies = tryCatch(async (req: Request, res: Response) => {
       ],
     },
     skip,
-    take: 18,
   });
 
-  if (oneSliceOfMovies.length === 0) res.sendStatus(204);
+  if (oneSliceOfMoviesRaw.length === 0) return res.sendStatus(204);
 
   const totalAmountOfMovies = await prisma.movie.count({
     where: {
@@ -40,25 +40,30 @@ export const getMovies = tryCatch(async (req: Request, res: Response) => {
     },
   });
 
+  const oneSliceOfMovies = oneSliceOfMoviesRaw.map((movie) => {
+    const base64Image = movie.image.toString("base64");
+    return { ...movie, image: base64Image };
+  });
+
   res.status(200).json({ oneSliceOfMovies, totalAmountOfMovies });
 });
 
 export const createMovie = tryCatch(async (req: Request, res: Response) => {
   const { title, url, description, genre }: CreateUpdateMovieRequestBody =
     req.body;
-  const file = req.file;
+  const image = req.file?.buffer;
 
-  if (!title || !url || !genre || !description || !file)
+  if (!title || !url || !genre || !description || !image)
     throw new CustomError("All fields are required", 400);
 
-  validateMovie({ title, url, genre, description, file });
+  validateMovie({ title, url, genre, description });
 
   await prisma.movie.create({
     data: {
       title,
       genre,
       description,
-      image: file.path,
+      image,
       url,
     },
   });
@@ -72,12 +77,12 @@ export const updateMovie = tryCatch(async (req: Request, res: Response) => {
 
   const { title, url, genre, description }: CreateUpdateMovieRequestBody =
     req.body;
-  const file = req.file;
+  const image: Buffer = req.body.buffer;
 
-  if (!title && !url && !genre && !description && !file)
+  if (!title && !url && !genre && !description && !image)
     throw new CustomError("No changes to be made", 400);
 
-  validateMovie({ title, url, genre, description, file });
+  validateMovie({ title, url, genre, description });
 
   const updatedMovie = await prisma.movie.update({
     where: {
@@ -88,7 +93,7 @@ export const updateMovie = tryCatch(async (req: Request, res: Response) => {
       url,
       genre,
       description,
-      image: file?.path,
+      image,
     },
   });
 
@@ -103,7 +108,11 @@ export const getMovieById = tryCatch(async (req: Request, res: Response) => {
     where: { id },
   });
 
-  res.status(200).json(movieFound);
+  if (!movieFound) return res.sendStatus(204);
+
+  const base64Image = movieFound.image.toString("base64");
+
+  res.status(200).json({ ...movieFound, image: base64Image });
 });
 
 export const deleteMovie = tryCatch(async (req: Request, res: Response) => {

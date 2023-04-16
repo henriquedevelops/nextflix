@@ -18,31 +18,31 @@ export default createTheme({
       light: red[500],
     },
     background: {
-      default: "black",
+      default: "#060606",
     },
   },
   components: {
     MuiDrawer: {
-      styleOverrides: { paper: { backgroundColor: "black" } },
+      styleOverrides: { paper: { backgroundColor: "#060606" } },
     },
     MuiBackdrop: {
       styleOverrides: {
         root: {
-          backgroundColor: "rgba(0, 0, 0, 0.8)", // Change the value here to the desired color
+          backgroundColor: "rgba(0, 0, 0, 0.80)", // Change the value here to the desired color
         },
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: "#080808",
+          backgroundColor: "#040404",
         },
       },
     },
     MuiDialog: {
       styleOverrides: {
         paper: {
-          backgroundColor: "#080808",
+          backgroundColor: "#040404",
         },
       },
     },

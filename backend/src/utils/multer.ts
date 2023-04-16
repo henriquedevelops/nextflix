@@ -1,5 +1,6 @@
 import multer from "multer";
 
-const upload = multer({ dest: "images/", limits: { fileSize: 3000000 } });
+const storage = multer.memoryStorage();
+const upload = multer({ storage, limits: { fileSize: 1000000 } });
 
 export default upload;

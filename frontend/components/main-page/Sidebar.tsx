@@ -121,7 +121,15 @@ const Sidebar: FC<SidebarProps> = ({
             </FormControl>
           </List>
 
-          <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              width: "100%",
+              backgroundColor: { xs: "auto", sm: "#060606" },
+              zIndex: 1,
+            }}
+          >
             <ListItem
               disablePadding
               sx={{

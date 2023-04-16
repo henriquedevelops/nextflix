@@ -24,7 +24,6 @@ export interface validateMovieArgument {
   url: string | undefined;
   genre: string | undefined;
   description: string | undefined;
-  file: Express.Multer.File | undefined;
 }
 
 export interface GetMoviesRequest extends Request {

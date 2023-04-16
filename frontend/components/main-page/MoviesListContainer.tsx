@@ -94,7 +94,7 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
                   >
                     <CardMedia
                       component="img"
-                      image={`http://localhost:80/${movie.image}`}
+                      image={`data:image/jpeg;base64,${movie.image}`}
                     />
 
                     <CardContent>

@@ -15,7 +15,6 @@ export const validateMovie = ({
   url,
   genre,
   description,
-  file,
 }: validateMovieArgument) => {
   if (title && title.length > 35)
     throw new CustomError("Title must be 35 characters max", 400);
@@ -28,9 +27,6 @@ export const validateMovie = ({
 
   if (description && description.length > 450)
     throw new CustomError("Description must be 450 characters max", 400);
-
-  if (file && file.size > 1024 * 1024)
-    throw new CustomError("Image must be 1 MB max", 400);
 };
 
 export const validateSkip = (skipValue: any): number => {

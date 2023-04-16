@@ -2,7 +2,9 @@ import theme from "@/MUITheme/theme";
 import { SelectedMovieModalProps } from "@/utils/types";
 import {
   Button,
+  Card,
   CardMedia,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
@@ -79,21 +81,20 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
             direction="row"
             color="primary"
             sx={{
-              backgroundColor: "black",
+              backgroundColor: "#060606",
               width: { xs: "100%", sm: "100%", md: "500px", lg: "900px" },
               height: { xs: "100%", sm: "100%", md: "600px", lg: "650px" },
             }}
           >
             <CardMedia
               component="img"
-              image={`http://localhost:80/${selectedMovie.image}`}
+              image={`data:image/jpeg;base64,${selectedMovie.image}`}
               sx={{
-                height: "100%",
                 display: { xs: "none", sm: "none", md: "none", lg: "block" },
+                height: "100%",
               }}
             />
-
-            <Stack spacing={1} padding={4}>
+            <Stack spacing={1} padding={4} width={"100%"}>
               <Button
                 sx={{
                   position: "fixed",
@@ -105,7 +106,6 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
               >
                 <ArrowBackIcon />
               </Button>
-
               <DialogContent
                 sx={{ padding: 1, paddingTop: { xs: 8, sm: 8, md: 0 } }}
               >
@@ -121,7 +121,6 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
                   </Typography>
                 </Stack>
               </DialogContent>
-
               <DialogActions sx={{ padding: 0 }}>
                 <Stack spacing={2} width={"100%"}>
                   <Button
@@ -134,7 +133,6 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
                       ? "remove from my list"
                       : "watch later"}
                   </Button>
-
                   <Button
                     fullWidth
                     variant="contained"

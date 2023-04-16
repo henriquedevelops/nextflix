@@ -12,7 +12,7 @@ model Movie {
   title       String              @unique
   description String
   genre       String
-  image       String
+  image       Bytes
   url         String
   users       MovieFromUserList[]
 }
