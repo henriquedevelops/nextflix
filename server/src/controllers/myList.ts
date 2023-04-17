@@ -25,7 +25,7 @@ export const getMyList = tryCatch(async (req: Request, res: Response) => {
     })
   ).map(({ movie }) => movie);
 
-  if (oneSliceOfMoviesRaw.length === 0) res.sendStatus(204);
+  if (oneSliceOfMoviesRaw.length === 0) return res.sendStatus(204);
 
   const totalAmountOfMovies = await prisma.movieFromUserList.count({
     where: {
