@@ -8,7 +8,6 @@ import {
   validateMovie,
   validateSkip,
 } from "../utils/validators";
-import { getBase64Image } from "../utils/multer";
 
 export const getMovies = tryCatch(async (req: Request, res: Response) => {
   const genre = req.query.genre?.toString();
@@ -27,6 +26,7 @@ export const getMovies = tryCatch(async (req: Request, res: Response) => {
       ],
     },
     skip,
+    take: 18,
   });
 
   if (oneSliceOfMoviesRaw.length === 0) return res.sendStatus(204);
