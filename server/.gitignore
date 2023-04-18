@@ -38,6 +38,5 @@ next-env.d.ts
 utility.txt
 
 .env
+.gitignore
 
-uploads
-images

@@ -47,10 +47,11 @@ export default (
     });
   }
 
+  console.log(err);
+
   res.status(500).json({
     name: "Internal Server Error",
     message: "An internal server error occurred",
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
     statusCode: 500,
   });
 };

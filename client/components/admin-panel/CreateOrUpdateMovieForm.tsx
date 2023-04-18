@@ -146,8 +146,10 @@ const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
               "Science-fiction",
               "Horror",
               "Drama",
-            ].map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
+            ].map((item, index) => (
+              <MenuItem key={index} value={item}>
+                {item}
+              </MenuItem>
             ))}
           </TextField>
 

@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  server:
+    build: ./server
+    ports:
+      - "80:80"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - .env
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server

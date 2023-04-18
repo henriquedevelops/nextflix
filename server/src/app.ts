@@ -37,7 +37,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Choose an endpoint: /movies /users");
 });
 
-const port = process.env.PORT;
+const port = process.env.SERVER_PORT;
 
 app.listen(port, async () => {
   console.log(`Server is listening on port ${port}. 🚀`);
