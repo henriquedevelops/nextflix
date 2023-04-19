@@ -51,6 +51,7 @@ export interface SidebarProps {
   setMoviesRendered: (previousMovies: Movie[]) => void;
   searchTitle: string;
   setSearchTitle: (newSearchTitle: string) => void;
+  setTotalAmountOfMovies: (newTotal: number) => void;
 }
 
 export interface AdminPanelProps {
@@ -79,4 +80,8 @@ export interface AddRemoveToMyListContextType {
 
 export interface MessageAlertContextType {
   setMessageAlert: (newMessageAlert: string) => void;
+}
+
+export interface RegisterFormProps {
+  toggleSelectedForm: () => void;
 }

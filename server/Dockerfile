@@ -10,7 +10,7 @@ COPY prisma ./prisma/
 
 RUN npx prisma generate
 
-COPY . .
+COPY . /app
 
 EXPOSE 80
 

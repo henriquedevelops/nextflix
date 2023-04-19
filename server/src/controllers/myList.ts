@@ -54,7 +54,7 @@ export const getMyListIds = tryCatch(async (req: Request, res: Response) => {
     })
   ).map(({ movie }) => movie.id);
 
-  if (moviesIdsFound.length === 0) res.sendStatus(204);
+  if (moviesIdsFound.length === 0) return res.sendStatus(204);
 
   res.status(200).json({ moviesIdsFound });
 });

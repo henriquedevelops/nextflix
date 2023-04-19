@@ -4,6 +4,8 @@ import tryCatch from "../error-handling/tryCatch";
 import { hash, compare } from "bcrypt";
 import CustomError from "../error-handling/customError";
 
+/* Create a new user by extracting email and password from the request body, 
+hash the password, and save the user to the database with the hashed password. */
 export const createUser = tryCatch(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const emailIsValid =

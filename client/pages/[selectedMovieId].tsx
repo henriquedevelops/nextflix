@@ -22,7 +22,7 @@ export async function getServerSideProps(context: NextPageContext) {
   return { props: {} };
 }
 
-const Player: FC = () => {
+const MoviePlayer: FC = () => {
   const nextRouter = useRouter();
   const { selectedMovieId } = nextRouter.query;
   const [movie, setMovie] = useState<Movie>();
@@ -77,4 +77,4 @@ const Player: FC = () => {
   );
 };
 
-export default Player;
+export default MoviePlayer;

@@ -23,6 +23,14 @@ import axios from "@/utils/axios";
 import { genericErrorAlert } from "@/utils/validators";
 import { useRouter } from "next/router";
 
+/* 
+This modal component opens up when the user selects a movie from the list.
+It contains the movie title, genre, description and two buttons: "Watch now",
+and "Watch later" (or "Remove from my list").
+
+On large screen sizes it also contains the movie image.
+*/
+
 const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   selectedMovie,
   setSelectedMovie,
@@ -81,7 +89,7 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
             direction="row"
             color="primary"
             sx={{
-              backgroundColor: "#060606",
+              backgroundColor: "#050505",
               width: { xs: "100%", sm: "100%", md: "500px", lg: "900px" },
               height: { xs: "100%", sm: "100%", md: "600px", lg: "650px" },
             }}

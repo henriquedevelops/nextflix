@@ -8,24 +8,24 @@ datasource db {
 }
 
 model Movie {
-  id          String              @id @default(auto()) @map("_id") @db.ObjectId
-  title       String              @unique
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String   @unique
   description String
   genre       String
   image       Bytes
   url         String
-  users       MovieFromUserList[]
+  users       MyList[]
 }
 
 model User {
-  id       String              @id @default(auto()) @map("_id") @db.ObjectId
-  email    String              @unique
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  email    String   @unique
   password String
-  isAdmin  Boolean             @default(false)
-  myList   MovieFromUserList[]
+  isAdmin  Boolean  @default(false)
+  myList   MyList[]
 }
 
-model MovieFromUserList {
+model MyList {
   movie      Movie  @relation(fields: [movieId], references: [id])
   user       User   @relation(fields: [userId], references: [id])
   id         String @id @default(auto()) @map("_id") @db.ObjectId

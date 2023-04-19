@@ -1,8 +1,14 @@
-/* This class CustomError extends the built-in JavaScript 
-Error class and adds a statusCode getter and a toJSON method. 
-The statusCode getter is used to set the HTTP status code for 
-the error, and the toJSON method returns an object with the 
-error name, message, stack trace, and status code. */
+/* 
+
+This is a class that extends the built-in Error class. 
+
+It adds a statusCode property to represent the HTTP status code 
+associated with the error, and a custom constructor to create
+instances of the CustomError class with the given error message 
+and status code following the REST architecture.
+
+*/
+
 export default class CustomError extends Error {
   statusCode: number;
 

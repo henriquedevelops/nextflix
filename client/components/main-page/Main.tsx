@@ -15,6 +15,10 @@ import Sidebar from "./Sidebar";
 import { AddRemoveToMyListContext, useMessageAlert } from "@/utils/contexts";
 import { genericErrorAlert } from "@/utils/validators";
 
+/* 
+This component contains the entire content of the index page.
+*/
+
 const Main: FC = () => {
   const [moviesRendered, setMoviesRendered] = useState<Movie[]>([]);
   const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1);
@@ -27,6 +31,11 @@ const Main: FC = () => {
     fetchMovies();
   }, [selectedGenre, searchTitle]);
 
+  /* "fetchMovies" function is responsible for fetching from the 
+  resource "movies" as well as for the resource "myList". The request
+  includes query parameters for pagination and 2 optional filters: genre
+  and search title. After fetching, it updates the "moviesRendered" state
+  accordingly  */
   const fetchMovies = async () => {
     try {
       const response = await axios.get<ResponseDataFromFetchMovies>(
@@ -114,6 +123,7 @@ const Main: FC = () => {
               setMoviesRendered={setMoviesRendered}
               searchTitle={searchTitle}
               setSearchTitle={setSearchTitle}
+              setTotalAmountOfMovies={setTotalAmountOfMovies}
             />
           </Drawer>
           <Drawer
@@ -134,6 +144,7 @@ const Main: FC = () => {
               setMoviesRendered={setMoviesRendered}
               searchTitle={searchTitle}
               setSearchTitle={setSearchTitle}
+              setTotalAmountOfMovies={setTotalAmountOfMovies}
             />
           </Drawer>
         </Box>

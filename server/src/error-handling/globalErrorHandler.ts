@@ -3,10 +3,17 @@ import { Request, Response, NextFunction } from "express";
 import CustomError from "./customError";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
-/* Global error handling middleware verifies the error sorce and then 
+/* 
+
+Global error handling middleware verifies the error source and then 
 sends an appropriate HTTP response with an error message and status 
-code included. If the error is not recognized, it sends a 500 status 
-code with a generic error message.*/
+code included following the REST architecture. 
+
+If the error is not recognized, it sends a 500 status code with a 
+generic error message.
+
+*/
+
 export default (
   err: CustomError | Prisma.PrismaClientKnownRequestError,
   req: Request,

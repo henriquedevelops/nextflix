@@ -15,6 +15,12 @@ import { FunctionComponent as FC, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SelectedMovieModal from "./SelectedMovieModal";
 
+/* 
+This component contains only one of three things: the movies that are 
+currently being rendered, a loading sign circle or a message saying 
+that no movie was found.
+*/
+
 const MoviesListContainer: FC<MoviesListContainerProps> = ({
   moviesRendered,
   drawerWidth,

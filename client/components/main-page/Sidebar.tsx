@@ -29,12 +29,15 @@ const Sidebar: FC<SidebarProps> = ({
   setMoviesRendered,
   searchTitle,
   setSearchTitle,
+  setTotalAmountOfMovies,
 }) => {
   const { loggedUser } = useLoggedUser();
   const [adminModalIsOpen, setAdminModalIsOpen] = useState<boolean>(false);
   const nextRouter = useRouter();
 
   const selectNewGenre = async (newGenre: string) => {
+    /* Check if the user clicked in the genre that is already selected and
+    then prevent unnecessary request if he did. */
     if (
       (newGenre === "All movies" && selectedGenre === "") ||
       newGenre === selectedGenre
@@ -42,6 +45,7 @@ const Sidebar: FC<SidebarProps> = ({
       return;
 
     setMoviesRendered([]);
+    setTotalAmountOfMovies(1);
 
     newGenre === "All movies"
       ? setSelectedGenre("")

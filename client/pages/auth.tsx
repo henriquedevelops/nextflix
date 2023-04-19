@@ -5,6 +5,12 @@ import { NextPageContext } from "next";
 import { parseCookies } from "nookies";
 import { useCallback, useState } from "react";
 
+/* 
+This page displays a login or register form depending on the selected form state
+and it also includes server-side logic for redirecting users who have a valid 
+access token to the homepage.
+*/
+
 export async function getServerSideProps(context: NextPageContext) {
   const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
 

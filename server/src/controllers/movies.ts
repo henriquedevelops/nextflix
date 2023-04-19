@@ -9,6 +9,8 @@ import {
   validateSkip,
 } from "../utils/validators";
 
+/* Retrieve a slice of movies from the database based on filters and sends 
+it to the client, along with the total amount of movies that match the filters. */
 export const getMovies = tryCatch(async (req: Request, res: Response) => {
   const genre = req.query.genre?.toString();
   if (genre && !allowedGenres.includes(genre))
@@ -48,6 +50,8 @@ export const getMovies = tryCatch(async (req: Request, res: Response) => {
   res.status(200).json({ oneSliceOfMovies, totalAmountOfMovies });
 });
 
+/* Create a new movie in the database based on the request body, including 
+the movie image in binary format. */
 export const createMovie = tryCatch(async (req: Request, res: Response) => {
   const { title, url, description, genre }: CreateUpdateMovieRequestBody =
     req.body;
@@ -71,6 +75,8 @@ export const createMovie = tryCatch(async (req: Request, res: Response) => {
   res.sendStatus(201);
 });
 
+/* Update an existing movie in the database based on the request body, including 
+the movie image in binary format.  */
 export const updateMovie = tryCatch(async (req: Request, res: Response) => {
   const id = req.params.id;
   if (!id) throw new CustomError("A movie id is required", 400);
@@ -100,6 +106,8 @@ export const updateMovie = tryCatch(async (req: Request, res: Response) => {
   res.status(200).json(updatedMovie.title);
 });
 
+/* Retrieve a movie by ID from the database and send it to the client, 
+including the movie image in string format. */
 export const getMovieById = tryCatch(async (req: Request, res: Response) => {
   const id = req.params.id;
   if (!id) throw new CustomError("A movie id is required", 400);

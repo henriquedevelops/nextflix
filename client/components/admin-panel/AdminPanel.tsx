@@ -14,6 +14,11 @@ import { FunctionComponent as FC, useState } from "react";
 import CreateOrUpdateMovieForm from "./CreateOrUpdateMovieForm";
 import DeleteMovieForm from "./DeleteMovieForm";
 
+/* 
+This modal component contains panel that allows the admin to create, update
+and delete movies directly from the index page
+*/
+
 const AdminPanel: FC<AdminPanelProps> = ({
   adminModalIsOpen,
   handleOpenCloseAdminModal,

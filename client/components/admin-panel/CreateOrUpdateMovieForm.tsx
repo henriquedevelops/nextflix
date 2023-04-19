@@ -14,6 +14,11 @@ import {
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useEffect, useState } from "react";
 
+/* 
+Two similar forms merged into a single one. This component is rendered inside the
+admin panel. It is used for the creating as well as for updating a movie.
+*/
+
 const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
   selectedAction,
 }) => {

@@ -14,6 +14,15 @@ import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import { FunctionComponent as FC, useEffect, useState } from "react";
 
+/* 
+This page performs server side rendering logic to check if the user is logged in.
+If he is it renders the "Main" component, otherwise it redirects him to the 
+authentication page.
+
+It is also responsible for a global message alert system and for passing context 
+providers to the "Main" component and its children 
+*/
+
 export async function getServerSideProps(context: NextPageContext) {
   const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
 

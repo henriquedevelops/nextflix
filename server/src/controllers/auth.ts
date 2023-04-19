@@ -11,6 +11,9 @@ dotenv.config();
 
 const jwtSecret = process.env.JWT_SECRET;
 
+/* Authenticate a user by checking his email and password, generate a 
+JWT access token with a 12-hour expiration time, and sets it as an 
+HTTP-only cookie in the response. */
 export const login = tryCatch(async (req: Request, res: Response) => {
   const userFound = await prisma.user.findUnique({
     where: {
@@ -31,16 +34,18 @@ export const login = tryCatch(async (req: Request, res: Response) => {
   const accessToken = jwt.sign({ email, id, isAdmin }, jwtSecret, {
     expiresIn: "12h",
   });
-  res.cookie("accessToken-Nextflix", accessToken, {
-    httpOnly: true,
-  });
 
-  res.sendStatus(200);
+  res
+    .status(200)
+    .cookie("accessToken-Nextflix", accessToken, {
+      httpOnly: true,
+    })
+    .end();
 });
 
-/* This function authenticates a user by extracting the JWT token 
-from the cookies in the request object, verifying it, and then adding 
-user object to the request object before calling the next middleware. */
+/* Extract the JWT token from the cookies in the request object, verify it,
+and then add the user object to the request object before calling the next
+middleware. */
 export const requireLogin = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     if (!jwtSecret) throw new CustomError("JWT secret not found.", 500);
@@ -70,7 +75,5 @@ export const restricToAdmin = tryCatch(
 );
 
 export const logout = (req: Request, res: Response) => {
-  res.clearCookie("accessToken-Nextflix");
-
-  res.sendStatus(200);
+  res.status(200).clearCookie("accessToken-Nextflix").end();
 };
