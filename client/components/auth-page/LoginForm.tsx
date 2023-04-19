@@ -1,8 +1,8 @@
 import axios from "@/utils/axios";
 import { validateEmail } from "@/utils/validators";
+import { LoadingButton } from "@mui/lab";
 import {
   Box,
-  Button,
   Checkbox,
   FormControlLabel,
   Grid,
@@ -90,7 +90,7 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         />
-        <Button
+        <LoadingButton
           type="submit"
           fullWidth
           variant="contained"
@@ -99,10 +99,10 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
             mb: 2,
           }}
           color="secondary"
-          disabled={loading}
+          loading={loading}
         >
           Sign In
-        </Button>
+        </LoadingButton>
 
         <Grid container justifyContent="flex-end">
           <Grid item>

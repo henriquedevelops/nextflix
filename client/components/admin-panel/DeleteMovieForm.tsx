@@ -1,8 +1,8 @@
 import axios from "@/utils/axios";
 import { useMessageAlert } from "@/utils/contexts";
-import { AdminPanelFormProps, Movie } from "@/utils/types";
+import { Movie } from "@/utils/types";
+import { LoadingButton } from "@mui/lab";
 import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Stack from "@mui/material/Stack";
@@ -91,16 +91,16 @@ const DeleteMovieForm: FC = () => {
               action can't be undone!
             </Alert>
           )}
-          <Button
+          <LoadingButton
             variant="contained"
-            disabled={loading}
+            loading={loading}
             onClick={
               !confirmationIsOpen ? handleOpenConfirmation : handleDeleteMovie
             }
             fullWidth
           >
             {confirmationIsOpen ? "Confirm" : "Delete movie"}
-          </Button>
+          </LoadingButton>
         </Stack>
       </DialogActions>
     </>

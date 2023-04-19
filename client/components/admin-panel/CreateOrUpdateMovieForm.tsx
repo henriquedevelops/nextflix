@@ -1,12 +1,18 @@
 import axios from "@/utils/axios";
+import { useMessageAlert } from "@/utils/contexts";
 import { AdminPanelFormProps } from "@/utils/types";
-import { DialogActions, DialogContent, Typography } from "@mui/material";
-import { Button, MenuItem, Stack } from "@mui/material";
+import { validateAndCropImage } from "@/utils/validators";
+import { LoadingButton } from "@mui/lab";
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useEffect, useState } from "react";
-import { validateAndCropImage } from "@/utils/validators";
-import { useMessageAlert } from "@/utils/contexts";
-import { AxiosError } from "axios";
 
 const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
   selectedAction,
@@ -185,14 +191,14 @@ const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
       </DialogContent>
 
       <DialogActions sx={{ paddingX: 3, paddingY: 2 }}>
-        <Button
+        <LoadingButton
           fullWidth
           variant="contained"
           onClick={handleSubmit}
-          disabled={loading}
+          loading={loading}
         >
           {selectedAction} movie
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </>
   );

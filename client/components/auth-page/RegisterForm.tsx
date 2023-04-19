@@ -1,16 +1,16 @@
 import { User } from "@/utils/types";
-
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import { useRouter } from "next/router";
-import * as React from "react";
-import { FunctionComponent as FC, useState } from "react";
-import axios from "../../utils/axios";
 import {
   emailErrorToBoolean,
   passwordErrorToBoolean,
   validateEmail,
   validatePassword,
 } from "@/utils/validators";
+import { LoadingButton } from "@mui/lab";
+import { Box, Grid, TextField, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import * as React from "react";
+import { FunctionComponent as FC, useState } from "react";
+import axios from "../../utils/axios";
 
 type RegisterFormProps = {
   toggleSelectedForm: () => void;
@@ -113,7 +113,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           helperText={passwordErrorToBoolean(error) && error}
           disabled={loading}
         />
-        <Button
+        <LoadingButton
           type="submit"
           fullWidth
           variant="contained"
@@ -122,10 +122,10 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
             mb: 2,
           }}
           color="secondary"
-          disabled={loading}
+          loading={loading}
         >
           SIGN UP
-        </Button>
+        </LoadingButton>
 
         <Grid container justifyContent="flex-end">
           <Grid item>
