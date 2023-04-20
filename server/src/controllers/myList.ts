@@ -12,7 +12,7 @@ export const getMyList = tryCatch(async (req: Request, res: Response) => {
   const title = req.query.title?.toString();
 
   const oneSliceOfMoviesRaw = (
-    await prisma.movieFromUserList.findMany({
+    await prisma.myList.findMany({
       where: {
         AND: [
           { userId },
@@ -27,7 +27,7 @@ export const getMyList = tryCatch(async (req: Request, res: Response) => {
 
   if (oneSliceOfMoviesRaw.length === 0) return res.sendStatus(204);
 
-  const totalAmountOfMovies = await prisma.movieFromUserList.count({
+  const totalAmountOfMovies = await prisma.myList.count({
     where: {
       AND: [
         { userId },
@@ -48,7 +48,7 @@ export const getMyListIds = tryCatch(async (req: Request, res: Response) => {
   const userId = req.user?.id;
 
   const moviesIdsFound = (
-    await prisma.movieFromUserList.findMany({
+    await prisma.myList.findMany({
       where: { userId },
       include: { movie: { select: { id: true } } },
     })
@@ -71,7 +71,7 @@ export const addToMyList = tryCatch(async (req: Request, res: Response) => {
   });
 
   movieFound &&
-    (await prisma.movieFromUserList.create({
+    (await prisma.myList.create({
       data: {
         movieId,
         userId,
@@ -90,7 +90,7 @@ export const deleteFromMyList = tryCatch(
     if (!userId) throw new CustomError("User ID required", 400);
     if (!movieId) throw new CustomError("Movie ID required", 400);
 
-    await prisma.movieFromUserList.deleteMany({
+    await prisma.myList.deleteMany({
       where: { userId, movieId },
     });
 
