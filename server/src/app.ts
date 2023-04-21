@@ -24,21 +24,25 @@ app.use(
   })
 );
 
+const corsOrigin = {
+  origin: true,
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOrigin));
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+  const origin = req.headers.origin;
+  origin && res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "1800");
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
+    "PUT, POST, GET, DELETE, PATCH, OPTIONS"
   );
+
   next();
 });
-
-app.options("http://localhost:3000", cors());
 
 app.use(express.json());
 app.use(cookieParser());

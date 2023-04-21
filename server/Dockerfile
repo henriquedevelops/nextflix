@@ -14,4 +14,5 @@ COPY . /app
 
 EXPOSE 80
 
-CMD ["npm", "start", "&", "npx", "prisma", "migrate", "deploy"]
+CMD ["npm", "start"]
+#CMD ["npm", "start", "&", "npx", "prisma", "migrate", "deploy"]
