@@ -7,7 +7,7 @@ declare global {
 }
 
 export interface decodedToken {
-  email: string;
+  username: string;
   id: number;
   isAdmin: boolean;
 }

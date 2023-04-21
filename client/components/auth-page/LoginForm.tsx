@@ -1,5 +1,5 @@
 import axios from "@/utils/axios";
-import { validateEmail } from "@/utils/validators";
+import { LoginFormProps } from "@/utils/types";
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
@@ -13,10 +13,6 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { FunctionComponent as FC, useState } from "react";
 
-type LoginFormProps = {
-  toggleSelectedForm: () => void;
-};
-
 const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -27,15 +23,23 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
     setLoading(true);
     const data = new FormData(event.currentTarget);
 
-    const email = data.get("email")?.toString();
-    const password = data.get("password")?.toString() as string;
+    const username = data.get("username")?.toString();
+    const password = data.get("password")?.toString();
 
-    const emailIsValid = validateEmail(email, setError, setLoading);
-    if (!emailIsValid) return;
+    if (!username) {
+      setError("Please enter you username");
+      setLoading(false);
+      return;
+    }
+    if (!password) {
+      setError("Please enter you password");
+      setLoading(false);
+      return;
+    }
 
     try {
       await axios.post("/auth", {
-        email,
+        username,
         password,
       });
     } catch (error) {
@@ -64,13 +68,14 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           margin="dense"
           required
           fullWidth
-          label="Email Address"
-          name="email"
+          label="Username"
+          name="username"
           size="small"
-          type="email"
-          helperText={error === "Invalid email address" && error}
+          type="username"
+          helperText={error === "Please enter you username" && error}
           error={
-            error === "Invalid email address" || error === "Invalid credentials"
+            error === "Please enter you username" ||
+            error === "Invalid credentials"
           }
           disabled={loading}
         />
@@ -82,8 +87,15 @@ const LoginForm: FC<LoginFormProps> = ({ toggleSelectedForm }) => {
           type="password"
           name="password"
           size="small"
-          helperText={error === "Invalid credentials" && error}
-          error={error === "Invalid credentials"}
+          helperText={
+            (error === "Invalid credentials" ||
+              error === "Please enter you password") &&
+            error
+          }
+          error={
+            error === "Invalid credentials" ||
+            error === "Please enter you password"
+          }
           disabled={loading}
         />
         <FormControlLabel

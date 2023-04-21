@@ -1,26 +1,58 @@
-export const validateEmail = (
-  email: string | undefined,
+export const validateCredentialsLength = (
+  username: string | undefined,
+  password: string | undefined,
   setError: (message: string) => void,
   setLoading: (loading: boolean) => void
 ): boolean => {
-  const isValid =
-    email && /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(email);
-
-  if (!isValid) {
-    setError("Invalid email address");
+  if (!username || username?.length < 4) {
+    setError("Username must be at least 4 characters");
     setLoading(false);
     return false;
-  } else {
-    setError("");
-    return true;
   }
+
+  if (!password || password?.length < 8) {
+    setError("Password must be at least 8 characters");
+    setLoading(false);
+    return false;
+  }
+
+  setError("");
+  return true;
 };
 
-export const emailErrorToBoolean = (error: string): boolean => {
+export const validatePasswordsMatch = (
+  password: string | undefined,
+  passwordConfirm: string | undefined,
+  setError: (message: string) => void,
+  setLoading: (loading: boolean) => void
+): boolean => {
+  if (!password || !passwordConfirm || password !== passwordConfirm) {
+    setError("Passwords don't match");
+    setLoading(false);
+    return false;
+  }
+
+  setError("");
+  return true;
+};
+
+export const usernameErrorToBoolean = (error: string): boolean => {
   return (
-    error === "Invalid email address" || error === "Email address unavailable"
+    error === "Username must be at least 4 characters" ||
+    error === "Username unavailable"
   );
 };
+
+export const passwordErrorToBoolean = (error: string): boolean => {
+  return (
+    error === "Passwords don't match" ||
+    error === "Invalid credentials" ||
+    error === "Password must be at least 8 characters"
+  );
+};
+
+export const genericErrorAlert =
+  "Something went wrong! Please check your internet connection";
 
 export const validateAndCropImage = (
   event: React.ChangeEvent<HTMLInputElement>,
@@ -84,36 +116,3 @@ export const validateAndCropImage = (
     reader.readAsDataURL(file);
   }
 };
-
-export const validatePassword = (
-  password: string | undefined,
-  passwordConfirm: string | undefined,
-  setError: (message: string) => void,
-  setLoading: (loading: boolean) => void
-): boolean => {
-  if (!password || password?.length < 8) {
-    setError("Password must be at least 8 characters");
-    setLoading(false);
-    return false;
-  }
-
-  if (!password || !passwordConfirm || password !== passwordConfirm) {
-    setError("Passwords don't match");
-    setLoading(false);
-    return false;
-  }
-
-  setError("");
-  return true;
-};
-
-export const passwordErrorToBoolean = (error: string): boolean => {
-  return (
-    error === "Passwords don't match" ||
-    error === "Invalid credentials" ||
-    error === "Password must be at least 8 characters"
-  );
-};
-
-export const genericErrorAlert =
-  "Something went wrong! Please check your internet connection";

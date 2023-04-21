@@ -11,16 +11,16 @@ dotenv.config();
 
 const jwtSecret = process.env.JWT_SECRET;
 
-/* Authenticate a user by checking his email and password, generate a 
+/* Authenticate a user by checking his username and password, generate a 
 JWT access token with a 12-hour expiration time, and sets it as an 
 HTTP-only cookie in the response. */
 export const login = tryCatch(async (req: Request, res: Response) => {
   const userFound = await prisma.user.findUnique({
     where: {
-      email: req.body.email,
+      username: req.body.username,
     },
   });
-  if (!userFound) throw new CustomError("Invalid email address.", 400);
+  if (!userFound) throw new CustomError("Invalid username.", 400);
 
   const passwordIsCorrect = await compare(
     req.body.password,
@@ -28,10 +28,10 @@ export const login = tryCatch(async (req: Request, res: Response) => {
   );
   if (!passwordIsCorrect) throw new CustomError("Wrong password.", 400);
 
-  const { password: _, email, id, isAdmin } = userFound;
+  const { password: _, username, id, isAdmin } = userFound;
 
   if (!jwtSecret) throw new CustomError("JWT secret not found", 500);
-  const accessToken = jwt.sign({ email, id, isAdmin }, jwtSecret, {
+  const accessToken = jwt.sign({ username, id, isAdmin }, jwtSecret, {
     expiresIn: "12h",
   });
 
@@ -53,12 +53,12 @@ export const requireLogin = tryCatch(
     const tokenReceived = req.cookies["accessToken-Nextflix"];
     if (!tokenReceived) throw new CustomError("Unauthorized", 401);
 
-    const { email, id, isAdmin } = jwt.verify(
+    const { username, id, isAdmin } = jwt.verify(
       tokenReceived,
       jwtSecret
     ) as decodedToken;
 
-    if (!email || !id) throw new CustomError("Unauthorized", 401);
+    if (!username || !id) throw new CustomError("Unauthorized", 401);
 
     req.user = { isAdmin, id };
     next();

@@ -1,9 +1,9 @@
 import { RegisterFormProps, User } from "@/utils/types";
 import {
-  emailErrorToBoolean,
+  usernameErrorToBoolean,
   passwordErrorToBoolean,
-  validateEmail,
-  validatePassword,
+  validateCredentialsLength,
+  validatePasswordsMatch,
 } from "@/utils/validators";
 import { LoadingButton } from "@mui/lab";
 import { Box, Grid, TextField, Typography } from "@mui/material";
@@ -22,14 +22,19 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
     setLoading(true);
 
     const data = new FormData(event.currentTarget);
-    const email = data.get("email")?.toString();
+    const username = data.get("username")?.toString();
     const password = data.get("password")?.toString();
     const passwordConfirm = data.get("password-confirm")?.toString();
 
-    const emailIsValid = validateEmail(email, setError, setLoading);
-    if (!emailIsValid) return;
+    const credentialsLengthIsValid = validateCredentialsLength(
+      username,
+      password,
+      setError,
+      setLoading
+    );
+    if (!credentialsLengthIsValid) return;
 
-    const passwordIsValid = validatePassword(
+    const passwordIsValid = validatePasswordsMatch(
       password,
       passwordConfirm,
       setError,
@@ -39,17 +44,17 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
 
     try {
       await axios.post("/users", {
-        email,
+        username,
         password,
       });
 
       await axios.post<User>("/auth", {
-        email,
+        username,
         password,
       });
     } catch (error: any) {
       if (error.response?.data?.statusCode === 409) {
-        setError("Email address unavailable");
+        setError("Username unavailable");
         setLoading(false);
         return;
       }
@@ -78,12 +83,14 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
           margin="dense"
           required
           fullWidth
-          label="Email Address"
+          label="Username"
           size="small"
-          name="email"
-          type="email"
-          helperText={emailErrorToBoolean(error) && error}
-          error={emailErrorToBoolean(error) || error === "Invalid credentials"}
+          name="username"
+          type="username"
+          helperText={usernameErrorToBoolean(error) && error}
+          error={
+            usernameErrorToBoolean(error) || error === "Invalid credentials"
+          }
           disabled={loading}
         />
         <TextField

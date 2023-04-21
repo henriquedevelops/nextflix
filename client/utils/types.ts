@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface User {
-  email: string;
+  username: string;
   id: number;
   isAdmin: boolean;
   myListIds: number[];
@@ -57,6 +57,10 @@ export interface SidebarProps {
 export interface AdminPanelProps {
   adminModalIsOpen: boolean;
   handleOpenCloseAdminModal: () => void;
+}
+
+export interface LoginFormProps {
+  toggleSelectedForm: () => void;
 }
 
 export interface SelectedMovieModalProps {
