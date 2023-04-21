@@ -78,7 +78,7 @@ export const createMovie = tryCatch(async (req: Request, res: Response) => {
 /* Update an existing movie in the database based on the request body, including 
 the movie image in binary format.  */
 export const updateMovie = tryCatch(async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id = Number(req.params.id);
   if (!id) throw new CustomError("A movie id is required", 400);
 
   const { title, url, genre, description }: CreateUpdateMovieRequestBody =
@@ -109,7 +109,7 @@ export const updateMovie = tryCatch(async (req: Request, res: Response) => {
 /* Retrieve a movie by ID from the database and send it to the client, 
 including the movie image in string format. */
 export const getMovieById = tryCatch(async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id = Number(req.params.id);
   if (!id) throw new CustomError("A movie id is required", 400);
 
   const movieFound = await prisma.movie.findUnique({
@@ -124,7 +124,7 @@ export const getMovieById = tryCatch(async (req: Request, res: Response) => {
 });
 
 export const deleteMovie = tryCatch(async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id = Number(req.params.id);
   if (!id) throw new CustomError("A movie id is required", 400);
 
   await prisma.movie.delete({

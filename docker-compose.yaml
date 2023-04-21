@@ -1,5 +1,11 @@
 version: "3.8"
 services:
+  database:
+    image: postgres
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
   server:
     build: ./server
     ports:
@@ -7,8 +13,11 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
+      - /migrations
     env_file:
       - .env
+    depends_on:
+      - database
   client:
     build: ./client
     ports:
@@ -18,3 +27,6 @@ services:
       - /app/node_modules
     depends_on:
       - server
+
+volumes:
+  db_data:

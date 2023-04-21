@@ -48,7 +48,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ toggleSelectedForm }) => {
         password,
       });
     } catch (error: any) {
-      if (error.response.data.statusCode === 409) {
+      if (error.response?.data?.statusCode === 409) {
         setError("Email address unavailable");
         setLoading(false);
         return;

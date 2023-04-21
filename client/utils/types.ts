@@ -2,13 +2,13 @@ import { Dispatch, SetStateAction } from "react";
 
 export interface User {
   email: string;
-  id: string;
+  id: number;
   isAdmin: boolean;
-  myListIds: string[];
+  myListIds: number[];
 }
 
 export interface Movie {
-  id: string;
+  id: number;
   title: string;
   url: string;
   genre: string;
@@ -29,8 +29,8 @@ export interface LoggedUserContextType {
 }
 
 export interface MyListIdsContextType {
-  myListIds: string[];
-  setMyListIds: Dispatch<SetStateAction<string[]>>;
+  myListIds: number[];
+  setMyListIds: Dispatch<SetStateAction<number[]>>;
 }
 
 export interface MoviesListContainerProps {
