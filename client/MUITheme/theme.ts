@@ -35,7 +35,7 @@ export default createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: "#040404",
+          backgroundColor: "#090909",
         },
       },
     },

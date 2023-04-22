@@ -10,9 +10,9 @@ services:
     build: ./server
     ports:
       - "80:80"
-    #volumes:
-    #  - ./server:/app
-    #  - /app/node_modules
+    volumes:
+      - ./server:/app
+      - /app/node_modules
     env_file:
       - .env
     depends_on:
@@ -21,9 +21,9 @@ services:
     build: ./client
     ports:
       - "3000:3000"
-    #volumes:
-    #  - ./client:/app
-    #  - /app/node_modules
+    volumes:
+      - ./client:/app
+      - /app/node_modules
     depends_on:
       - server
 

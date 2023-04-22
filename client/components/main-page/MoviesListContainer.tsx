@@ -42,7 +42,7 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
       <Container
         maxWidth={false}
         sx={{
-          marginTop: { xs: 6.2, sm: 0 },
+          marginTop: { xs: 6.2, sm: 1 },
           padding: { xs: 0 },
           flexGrow: 1,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
