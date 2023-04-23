@@ -6,6 +6,7 @@ services:
       - .env
     volumes:
       - data:/var/lib/postgresql/data
+
   server:
     build: ./server
     ports:
@@ -17,6 +18,7 @@ services:
       - .env
     depends_on:
       - database
+
   client:
     build: ./client
     ports:
