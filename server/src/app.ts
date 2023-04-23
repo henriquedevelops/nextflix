@@ -1,24 +1,22 @@
-import moviesRouter from "./routes/movies";
-import usersRouter from "./routes/users";
-import authRouter from "./routes/auth";
-import myListRouter from "./routes/myList";
-import globalErrorHandler from "./error-handling/globalErrorHandler";
 import cookieParser from "cookie-parser";
-import * as dotenv from "dotenv";
-dotenv.config();
-import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
-import helmet from "helmet";
+import * as dotenv from "dotenv";
+import express from "express";
 import rateLimit from "express-rate-limit";
-import ExpressMongoSanitize from "express-mongo-sanitize";
+import helmet from "helmet";
+import globalErrorHandler from "./error-handling/globalErrorHandler";
+import authRouter from "./routes/auth";
+import moviesRouter from "./routes/movies";
+import myListRouter from "./routes/myList";
+import usersRouter from "./routes/users";
+dotenv.config();
 
 const app = express();
 
 app.use(helmet());
-app.use(ExpressMongoSanitize());
 app.use(
   rateLimit({
-    max: 100,
+    max: 1000,
     windowMs: 60 * 60 * 1000,
     message: "Please try again later!",
   })
@@ -27,22 +25,8 @@ app.use(
 const corsOrigin = {
   origin: true,
   credentials: true,
-  optionSuccessStatus: 200,
 };
 app.use(cors(corsOrigin));
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  origin && res.setHeader("Access-Control-Allow-Origin", origin);
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Max-Age", "1800");
-  res.setHeader("Access-Control-Allow-Headers", "content-type");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "PUT, POST, GET, DELETE, PATCH, OPTIONS"
-  );
-
-  next();
-});
 
 app.use(express.json());
 app.use(cookieParser());

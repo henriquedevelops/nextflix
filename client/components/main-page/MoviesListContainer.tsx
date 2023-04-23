@@ -16,9 +16,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import SelectedMovieModal from "./SelectedMovieModal";
 
 /* 
-This component contains only one of three things: the movies that are 
+
+This component contains one of three things: the movie cardss that are 
 currently being rendered, a loading sign circle or a message saying 
 that no movie was found.
+
 */
 
 const MoviesListContainer: FC<MoviesListContainerProps> = ({
@@ -42,7 +44,8 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
       <Container
         maxWidth={false}
         sx={{
-          marginTop: { xs: 6.2, sm: 1 },
+          marginY: { xs: 6.2, sm: 0, md: 1 },
+          marginRight: { xs: 0, sm: 0, md: 1 },
           padding: { xs: 0 },
           flexGrow: 1,
           width: { sm: `calc(100% - ${drawerWidth}px)` },

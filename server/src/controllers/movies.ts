@@ -20,6 +20,17 @@ export const getMovies = tryCatch(async (req: Request, res: Response) => {
 
   const title = req.query.title?.toString();
 
+  const totalAmountOfMovies = await prisma.movie.count({
+    where: {
+      AND: [
+        genre ? { genre } : {},
+        title ? { title: { contains: title, mode: "insensitive" } } : {},
+      ],
+    },
+  });
+
+  if (totalAmountOfMovies === 0) return res.sendStatus(204);
+
   const oneSliceOfMoviesRaw = await prisma.movie.findMany({
     where: {
       AND: [
@@ -29,17 +40,6 @@ export const getMovies = tryCatch(async (req: Request, res: Response) => {
     },
     skip,
     take: 18,
-  });
-
-  if (oneSliceOfMoviesRaw.length === 0) return res.sendStatus(204);
-
-  const totalAmountOfMovies = await prisma.movie.count({
-    where: {
-      AND: [
-        genre ? { genre } : {},
-        title ? { title: { contains: title, mode: "insensitive" } } : {},
-      ],
-    },
   });
 
   const oneSliceOfMovies = oneSliceOfMoviesRaw.map((movie) => {
@@ -79,11 +79,11 @@ export const createMovie = tryCatch(async (req: Request, res: Response) => {
 the movie image in binary format.  */
 export const updateMovie = tryCatch(async (req: Request, res: Response) => {
   const id = Number(req.params.id);
-  if (!id) throw new CustomError("A movie id is required", 400);
+  if (!id) throw new CustomError("Invalid movie ID", 400);
 
   const { title, url, genre, description }: CreateUpdateMovieRequestBody =
     req.body;
-  const image: Buffer = req.body.buffer;
+  const image = req.file?.buffer;
 
   if (!title && !url && !genre && !description && !image)
     throw new CustomError("No changes to be made", 400);
@@ -110,7 +110,7 @@ export const updateMovie = tryCatch(async (req: Request, res: Response) => {
 including the movie image in string format. */
 export const getMovieById = tryCatch(async (req: Request, res: Response) => {
   const id = Number(req.params.id);
-  if (!id) throw new CustomError("A movie id is required", 400);
+  if (!id) throw new CustomError("Invalid movie ID", 400);
 
   const movieFound = await prisma.movie.findUnique({
     where: { id },
@@ -125,7 +125,7 @@ export const getMovieById = tryCatch(async (req: Request, res: Response) => {
 
 export const deleteMovie = tryCatch(async (req: Request, res: Response) => {
   const id = Number(req.params.id);
-  if (!id) throw new CustomError("A movie id is required", 400);
+  if (!id) throw new CustomError("Invalid movie ID", 400);
 
   await prisma.movie.delete({
     where: {

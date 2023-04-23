@@ -2,6 +2,7 @@ import axios from "@/utils/axios";
 import { useMessageAlert } from "@/utils/contexts";
 import { Movie } from "@/utils/types";
 import { LoadingButton } from "@mui/lab";
+import { Button } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -29,9 +30,15 @@ const DeleteMovieForm: FC = () => {
     }
     setLoading(true);
     try {
-      const { data: movieFound } = await axios.get<Movie>(
-        `/movies/${selectedMovieId}`
-      );
+      const response = await axios.get<Movie>(`/movies/${selectedMovieId}`);
+
+      if (response.status === 204) {
+        setLoading(false);
+        setMessageAlert("Invalid movie ID");
+        return;
+      }
+
+      const movieFound = response.data;
       setSelectedMovieTitle(movieFound.title);
       setShowConfirmation(true);
       setLoading(false);
@@ -48,15 +55,20 @@ const DeleteMovieForm: FC = () => {
     try {
       await axios.delete(`/movies/${selectedMovieId}`);
       setMessageAlert(`Movie "${selectedMovieTitle}" successfully deleted!`);
-      setLoading(false);
-      setSelectedMovieId("");
-      setSelectedMovieTitle("");
+      resetStates();
     } catch (error) {
       setLoading(false);
       setMessageAlert(
         "Error deleting movie, please check your internet connection"
       );
     }
+  };
+
+  const resetStates = () => {
+    setShowConfirmation(false);
+    setSelectedMovieId("");
+    setSelectedMovieTitle("");
+    setLoading(false);
   };
 
   return (
@@ -86,10 +98,20 @@ const DeleteMovieForm: FC = () => {
       >
         <Stack spacing={2} paddingTop={2} width={"100%"}>
           {confirmationIsOpen && (
-            <Alert variant="outlined" severity="warning">
-              Are you sure you want to delete movie "{selectedMovieTitle}"? This
-              action can't be undone!
-            </Alert>
+            <>
+              <Alert variant="outlined" severity="warning">
+                Are you sure you want to delete movie "{selectedMovieTitle}"?
+              </Alert>
+
+              <Button
+                fullWidth
+                variant="outlined"
+                disabled={loading}
+                onClick={() => resetStates()}
+              >
+                Cancel
+              </Button>
+            </>
           )}
           <LoadingButton
             variant="contained"

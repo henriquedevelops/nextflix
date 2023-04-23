@@ -36,20 +36,11 @@ const Sidebar: FC<SidebarProps> = ({
   const nextRouter = useRouter();
 
   const selectNewGenre = async (newGenre: string) => {
-    /* Check if the user clicked in the genre that is already selected and
-    then prevent unnecessary request if he did. */
-    if (
-      (newGenre === "All movies" && selectedGenre === "") ||
-      newGenre === selectedGenre
-    )
-      return;
+    if (newGenre === selectedGenre) return;
 
     setMoviesRendered([]);
     setTotalAmountOfMovies(1);
-
-    newGenre === "All movies"
-      ? setSelectedGenre("")
-      : setSelectedGenre(newGenre);
+    setSelectedGenre(newGenre);
   };
 
   const handleSearchTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +89,9 @@ const Sidebar: FC<SidebarProps> = ({
           ].map((text, index) => (
             <ListItem sx={{ color: "#CFCFCF" }} key={text} disablePadding>
               <ListItemButton
-                selected={text === selectedGenre}
+                selected={
+                  text === selectedGenre && selectedGenre !== "All movies"
+                }
                 onClick={() => selectNewGenre(text)}
                 sx={{ borderRadius: 1 }}
               >

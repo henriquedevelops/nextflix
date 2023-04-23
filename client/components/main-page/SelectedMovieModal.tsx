@@ -89,7 +89,7 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
             direction="row"
             color="primary"
             sx={{
-              backgroundColor: "#050505",
+              backgroundColor: "#060606",
               width: { xs: "100%", sm: "100%", md: "500px", lg: "900px" },
               height: { xs: "100%", sm: "100%", md: "600px", lg: "650px" },
             }}

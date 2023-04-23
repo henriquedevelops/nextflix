@@ -61,6 +61,7 @@ export interface AdminPanelProps {
 
 export interface LoginFormProps {
   toggleSelectedForm: () => void;
+  selectedForm: string;
 }
 
 export interface SelectedMovieModalProps {

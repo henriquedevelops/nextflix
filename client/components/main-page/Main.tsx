@@ -22,7 +22,7 @@ This component contains the entire content of the index page.
 const Main: FC = () => {
   const [moviesRendered, setMoviesRendered] = useState<Movie[]>([]);
   const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1);
-  const [selectedGenre, setSelectedGenre] = useState<string>("");
+  const [selectedGenre, setSelectedGenre] = useState<string>("All movies");
   const [searchTitle, setSearchTitle] = useState<string>("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const { setMessageAlert } = useMessageAlert();
@@ -41,7 +41,9 @@ const Main: FC = () => {
       const response = await axios.get<ResponseDataFromFetchMovies>(
         `/${selectedGenre === "My list" ? "myList" : "movies"}?skip=${
           moviesRendered.length
-        }&genre=${selectedGenre}&title=${searchTitle}`
+        }&genre=${selectedGenre === "All movies" ? "" : selectedGenre}${
+          searchTitle && "&title=" + searchTitle
+        }`
       );
 
       if (response.status === 204) {
@@ -85,7 +87,9 @@ const Main: FC = () => {
             <IconButton
               aria-label="open drawer"
               edge="start"
-              onClick={handleDrawerToggle}
+              onClick={() => {
+                setMobileOpen(!mobileOpen);
+              }}
               sx={{ mr: 2 }}
             >
               <MenuIcon />
@@ -105,7 +109,9 @@ const Main: FC = () => {
           <Drawer
             variant="temporary"
             open={mobileOpen}
-            onClose={handleDrawerToggle}
+            onClose={() => {
+              setMobileOpen(!mobileOpen);
+            }}
             ModalProps={{
               keepMounted: true, // Better open performance on mobile.
             }}

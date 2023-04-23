@@ -1,6 +1,7 @@
 export const validateCredentialsLength = (
   username: string | undefined,
   password: string | undefined,
+  selectedForm: string,
   setError: (message: string) => void,
   setLoading: (loading: boolean) => void
 ): boolean => {
@@ -10,8 +11,20 @@ export const validateCredentialsLength = (
     return false;
   }
 
-  if (!password || password?.length < 8) {
-    setError("Password must be at least 8 characters");
+  if (!password) {
+    setError(
+      `Please enter ${selectedForm === "Sign in" ? "your" : "a"} password`
+    );
+    setLoading(false);
+    return false;
+  }
+
+  if (password?.length < 8) {
+    setError(
+      selectedForm === "Sign in"
+        ? "Invalid credentials"
+        : "Password must be at least 8 characters"
+    );
     setLoading(false);
     return false;
   }
@@ -38,6 +51,9 @@ export const validatePasswordsMatch = (
 
 export const usernameErrorToBoolean = (error: string): boolean => {
   return (
+    error === "Invalid credentials" ||
+    error === "Please enter your username" ||
+    error === "Please enter a username" ||
     error === "Username must be at least 4 characters" ||
     error === "Username unavailable"
   );
@@ -45,6 +61,8 @@ export const usernameErrorToBoolean = (error: string): boolean => {
 
 export const passwordErrorToBoolean = (error: string): boolean => {
   return (
+    error === "Please enter your password" ||
+    error === "Please enter a password" ||
     error === "Passwords don't match" ||
     error === "Invalid credentials" ||
     error === "Password must be at least 8 characters"
