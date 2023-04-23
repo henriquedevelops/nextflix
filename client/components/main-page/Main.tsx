@@ -10,7 +10,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import { FunctionComponent as FC, useEffect, useState } from "react";
-import MoviesListContainer from "./MoviesListContainer";
+import MoviesList from "./MoviesList";
 import Sidebar from "./Sidebar";
 import { AddRemoveToMyListContext, useMessageAlert } from "@/utils/contexts";
 import { genericErrorAlert } from "@/utils/validators";
@@ -154,8 +154,7 @@ const Main: FC = () => {
             />
           </Drawer>
         </Box>
-
-        <MoviesListContainer
+        <MoviesList
           moviesRendered={moviesRendered}
           drawerWidth={drawerWidth}
           totalAmountOfMovies={totalAmountOfMovies}

@@ -10,7 +10,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
 
-const DeleteMovieForm: FC = () => {
+const DeleteForm: FC = () => {
   const [loading, setLoading] = useState(false);
   const [confirmationIsOpen, setShowConfirmation] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState("");
@@ -87,7 +87,6 @@ const DeleteMovieForm: FC = () => {
           />
         </Stack>
       </DialogContent>
-
       <DialogActions
         sx={{
           width: { xs: "100%", sm: "535px" },
@@ -102,7 +101,6 @@ const DeleteMovieForm: FC = () => {
               <Alert variant="outlined" severity="warning">
                 Are you sure you want to delete movie "{selectedMovieTitle}"?
               </Alert>
-
               <Button
                 fullWidth
                 variant="outlined"
@@ -129,4 +127,4 @@ const DeleteMovieForm: FC = () => {
   );
 };
 
-export default DeleteMovieForm;
+export default DeleteForm;

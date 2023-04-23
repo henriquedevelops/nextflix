@@ -1,5 +1,5 @@
 import theme from "@/MUITheme/theme";
-import { SelectedMovieModalProps } from "@/utils/types";
+import { SelectedMovieProps } from "@/utils/types";
 import {
   Button,
   Card,
@@ -31,7 +31,7 @@ and "Watch later" (or "Remove from my list").
 On large screen sizes it also contains the movie image.
 */
 
-const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
+const SelectedMovie: FC<SelectedMovieProps> = ({
   selectedMovie,
   setSelectedMovie,
 }) => {
@@ -159,4 +159,4 @@ const SelectedMovieModal: FC<SelectedMovieModalProps> = ({
   );
 };
 
-export default SelectedMovieModal;
+export default SelectedMovie;

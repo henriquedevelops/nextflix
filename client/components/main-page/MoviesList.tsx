@@ -1,4 +1,4 @@
-import { Movie, MoviesListContainerProps } from "@/utils/types";
+import { Movie, MoviesListProps } from "@/utils/types";
 import {
   Box,
   Card,
@@ -13,17 +13,17 @@ import {
 import { FunctionComponent as FC, useState } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import SelectedMovieModal from "./SelectedMovieModal";
+import SelectedMovie from "./SelectedMovie";
 
 /* 
 
-This component contains one of three things: the movie cardss that are 
+This component contains one of three things: the movie cards that are 
 currently being rendered, a loading sign circle or a message saying 
 that no movie was found.
 
 */
 
-const MoviesListContainer: FC<MoviesListContainerProps> = ({
+const MoviesList: FC<MoviesListProps> = ({
   moviesRendered,
   drawerWidth,
   totalAmountOfMovies,
@@ -36,7 +36,7 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
   return (
     <>
       {selectedMovie && (
-        <SelectedMovieModal
+        <SelectedMovie
           selectedMovie={selectedMovie}
           setSelectedMovie={setSelectedMovie}
         />
@@ -135,4 +135,4 @@ const MoviesListContainer: FC<MoviesListContainerProps> = ({
   );
 };
 
-export default MoviesListContainer;
+export default MoviesList;

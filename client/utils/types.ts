@@ -33,7 +33,7 @@ export interface MyListIdsContextType {
   setMyListIds: Dispatch<SetStateAction<number[]>>;
 }
 
-export interface MoviesListContainerProps {
+export interface MoviesListProps {
   moviesRendered: Movie[];
   drawerWidth: number;
   totalAmountOfMovies: number;
@@ -64,7 +64,7 @@ export interface LoginFormProps {
   selectedForm: string;
 }
 
-export interface SelectedMovieModalProps {
+export interface SelectedMovieProps {
   selectedMovie: Movie;
   setSelectedMovie: (value: Movie | undefined) => void;
 }

@@ -18,7 +18,7 @@ import {
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export async function getServerSideProps(context: NextPageContext) {
   const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
@@ -37,10 +37,10 @@ export async function getServerSideProps(context: NextPageContext) {
 
 const Auth = () => {
   const [selectedForm, setSelectedForm] = useState("Sign in");
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const nextRouter = useRouter();
 
@@ -52,13 +52,8 @@ const Auth = () => {
     setPasswordConfirm("");
   }, [selectedForm]);
 
-  const toggleSelectedForm = useCallback(() => {
-    setSelectedForm((currentForm) =>
-      currentForm === "Sign in" ? "Sign up" : "Sign in"
-    );
-  }, []);
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
 
     if (!username) {
@@ -153,12 +148,10 @@ const Auth = () => {
             width: "245px",
           }}
         />
+        <Typography component="h1" variant="h4" align="left" marginBottom={1}>
+          {selectedForm === "Sign in" ? "Welcome back" : "Create your account"}
+        </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate>
-          <Typography component="h1" variant="h4" align="left" marginBottom={1}>
-            {selectedForm === "Sign in"
-              ? "Welcome back"
-              : "Create your account"}
-          </Typography>
           <TextField
             margin="dense"
             required
@@ -229,7 +222,6 @@ const Auth = () => {
             }}
             color="secondary"
             loading={loading}
-            onClick={handleSubmit}
           >
             {selectedForm}
           </LoadingButton>
@@ -238,10 +230,15 @@ const Auth = () => {
           <Grid item>
             <Typography
               variant="body2"
-              onClick={toggleSelectedForm}
+              onClick={() =>
+                setSelectedForm((currentForm) =>
+                  currentForm === "Sign in" ? "Sign up" : "Sign in"
+                )
+              }
               style={{
                 cursor: "pointer",
               }}
+              color={"primary"}
             >
               {selectedForm === "Sign in"
                 ? "Don't have an account? Sign up"

@@ -105,7 +105,6 @@ const Sidebar: FC<SidebarProps> = ({
             variant={"standard"}
           >
             <InputLabel>Search</InputLabel>
-
             <Input
               value={searchTitle}
               onChange={handleSearchTitle}
@@ -117,7 +116,6 @@ const Sidebar: FC<SidebarProps> = ({
             />
           </FormControl>
         </List>
-
         <Box
           sx={{
             position: "absolute",
@@ -145,12 +143,10 @@ const Sidebar: FC<SidebarProps> = ({
               <ListItemText primary="Admin panel" />
             </ListItemButton>
           </ListItem>
-
           <AdminPanel
             adminModalIsOpen={adminModalIsOpen}
             handleOpenCloseAdminModal={handleOpenCloseAdminModal}
           />
-
           <ListItem disablePadding>
             <ListItemButton onClick={handleSignOut} sx={{ borderRadius: 1 }}>
               <ListItemIcon>

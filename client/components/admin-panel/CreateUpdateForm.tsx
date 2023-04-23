@@ -19,9 +19,7 @@ Two similar forms merged into a single one. This component is rendered inside th
 admin panel. It is used for the creating as well as for updating a movie.
 */
 
-const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
-  selectedAction,
-}) => {
+const CreateUpdateForm: FC<AdminPanelFormProps> = ({ selectedAction }) => {
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -163,7 +161,6 @@ const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
               </MenuItem>
             ))}
           </TextField>
-
           <TextField
             required={selectedAction === "Create"}
             multiline
@@ -194,7 +191,6 @@ const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
           </Button>
         </Stack>
       </DialogContent>
-
       <DialogActions sx={{ paddingX: 3, paddingY: 2 }}>
         <LoadingButton
           fullWidth
@@ -209,4 +205,4 @@ const CreateOrUpdateMovieForm: FC<AdminPanelFormProps> = ({
   );
 };
 
-export default CreateOrUpdateMovieForm;
+export default CreateUpdateForm;

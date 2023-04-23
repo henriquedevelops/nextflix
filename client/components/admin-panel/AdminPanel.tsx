@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { FunctionComponent as FC, useState } from "react";
-import CreateOrUpdateMovieForm from "./CreateOrUpdateMovieForm";
-import DeleteMovieForm from "./DeleteMovieForm";
+import CreateUpdateForm from "./CreateUpdateForm";
+import DeleteForm from "./DeleteForm";
 
 /* 
 This modal component contains panel that allows the admin to create, update
@@ -59,7 +59,6 @@ const AdminPanel: FC<AdminPanelProps> = ({
                 <Tab label="Delete" value="Delete" />
               </TabList>
             </TabContext>
-
             <Box
               display="flex"
               justifyContent="flex-end"
@@ -72,11 +71,10 @@ const AdminPanel: FC<AdminPanelProps> = ({
             </Box>
           </Box>
         </DialogTitle>
-
         {(selectedAction === "Create" || selectedAction === "Update") && (
-          <CreateOrUpdateMovieForm selectedAction={selectedAction} />
+          <CreateUpdateForm selectedAction={selectedAction} />
         )}
-        {selectedAction === "Delete" && <DeleteMovieForm />}
+        {selectedAction === "Delete" && <DeleteForm />}
       </Dialog>
     </>
   );
