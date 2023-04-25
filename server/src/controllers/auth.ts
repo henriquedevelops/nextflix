@@ -1,12 +1,11 @@
+import { compare } from "bcrypt";
+import dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import tryCatch from "../error-handling/tryCatch";
-import dotenv from "dotenv";
-import CustomError from "../error-handling/customError";
-import { log } from "console";
 import prisma from "../../prisma/client";
-import { compare } from "bcrypt";
-import { decodedToken } from "../utils/types";
+import CustomError from "../error-handling/customError";
+import tryCatch from "../error-handling/tryCatch";
+import { DecodedToken } from "../utils/types";
 dotenv.config();
 
 const jwtSecret = process.env.JWT_SECRET;
@@ -56,7 +55,7 @@ export const requireLogin = tryCatch(
     const { username, id, isAdmin } = jwt.verify(
       tokenReceived,
       jwtSecret
-    ) as decodedToken;
+    ) as DecodedToken;
 
     if (!username || !id) throw new CustomError("Unauthorized", 401);
 

@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import * as dotenv from "dotenv";
-import express from "express";
+import express, { Response } from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import globalErrorHandler from "./error-handling/globalErrorHandler";
@@ -22,15 +22,20 @@ app.use(
   })
 );
 
-const corsOrigin = {
-  origin: true,
-  credentials: true,
-};
-app.use(cors(corsOrigin));
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
 app.use("/images", express.static("images"));
+
+app.get("/health", (_, res: Response) => {
+  res.sendStatus(200);
+});
 
 app.use("/api/v1/movies", moviesRouter);
 app.use("/api/v1/users", usersRouter);

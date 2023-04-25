@@ -6,10 +6,15 @@ declare global {
   }
 }
 
-export interface decodedToken {
+export interface DecodedToken {
   username: string;
   id: number;
   isAdmin: boolean;
+}
+
+export interface CreateUserRequestBody {
+  username: string | undefined;
+  password: string | undefined;
 }
 
 export interface CreateUpdateMovieRequestBody {
