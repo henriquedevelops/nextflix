@@ -1,14 +1,14 @@
 declare global {
   namespace Express {
     export interface Request {
-      user: { isAdmin: Boolean; id: number };
+      user: { isAdmin: Boolean; id: string };
     }
   }
 }
 
 export interface DecodedToken {
   username: string;
-  id: number;
+  id: string;
   isAdmin: boolean;
 }
 

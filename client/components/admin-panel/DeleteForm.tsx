@@ -99,7 +99,8 @@ const DeleteForm: FC = () => {
           {confirmationIsOpen && (
             <>
               <Alert variant="outlined" severity="warning">
-                Are you sure you want to delete movie "{selectedMovieTitle}"?
+                Are you sure you want to delete movie &quot;{selectedMovieTitle}
+                &quot;?
               </Alert>
               <Button
                 fullWidth

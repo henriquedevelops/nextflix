@@ -15,6 +15,12 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
   if (!password || password.length < 8)
     throw new CustomError("Password must be at least 8 characters", 400);
 
+  const alreadyExistingUser = await prisma.user.findUnique({
+    where: { username },
+  });
+
+  if (alreadyExistingUser) throw new CustomError("Username unavailable.", 409);
+
   const hashedPassword = await hash(password, 10);
 
   await prisma.user.create({
@@ -28,7 +34,7 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
 });
 
 export const deleteUser = tryCatch(async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
 
   if (!id) throw new CustomError("A user id is required", 400);
 

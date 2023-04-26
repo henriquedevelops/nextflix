@@ -58,7 +58,7 @@ const Sidebar: FC<SidebarProps> = ({
       console.error(err);
     }
 
-    nextRouter.push("/auth");
+    nextRouter.push("/login");
   };
 
   return (
@@ -126,27 +126,30 @@ const Sidebar: FC<SidebarProps> = ({
             padding: 1,
           }}
         >
-          <ListItem
-            disablePadding
-            sx={{
-              display: loggedUser.isAdmin ? "block" : "none",
-              color: "#CFCFCF",
-            }}
-          >
-            <ListItemButton
-              onClick={handleOpenCloseAdminModal}
-              sx={{ borderRadius: 1 }}
-            >
-              <ListItemIcon>
-                <AdminPanelSettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Admin panel" />
-            </ListItemButton>
-          </ListItem>
-          <AdminPanel
-            adminModalIsOpen={adminModalIsOpen}
-            handleOpenCloseAdminModal={handleOpenCloseAdminModal}
-          />
+          {loggedUser.isAdmin && (
+            <>
+              <ListItem
+                disablePadding
+                sx={{
+                  color: "#CFCFCF",
+                }}
+              >
+                <ListItemButton
+                  onClick={handleOpenCloseAdminModal}
+                  sx={{ borderRadius: 1 }}
+                >
+                  <ListItemIcon>
+                    <AdminPanelSettingsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Admin panel" />
+                </ListItemButton>
+              </ListItem>
+              <AdminPanel
+                adminModalIsOpen={adminModalIsOpen}
+                handleOpenCloseAdminModal={handleOpenCloseAdminModal}
+              />
+            </>
+          )}
           <ListItem disablePadding>
             <ListItemButton onClick={handleSignOut} sx={{ borderRadius: 1 }}>
               <ListItemIcon>

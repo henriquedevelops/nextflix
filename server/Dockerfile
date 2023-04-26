@@ -14,8 +14,9 @@ COPY . /app
 
 EXPOSE 80
 
+
 #development:
-CMD ["npm", "start"]
+#CMD ["npm", "start"]
 
 #production:
-#CMD ["npx", "ts-node", "src/app.ts"]
+CMD ["npx", "ts-node", "src/app.ts"]

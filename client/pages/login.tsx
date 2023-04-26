@@ -3,15 +3,18 @@ import { User } from "@/utils/types";
 import {
   passwordErrorToBoolean,
   usernameErrorToBoolean,
+  usernameHelperTextToBoolean,
   validateCredentialsLength,
   validatePasswordsMatch,
 } from "@/utils/validators";
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
+  Button,
   CardMedia,
   Container,
   Grid,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -19,6 +22,8 @@ import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import React, { useEffect, useState } from "react";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 export async function getServerSideProps(context: NextPageContext) {
   const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
@@ -40,24 +45,18 @@ const Auth = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [error, setError] = useState("");
+  const [helperText, setHelperText] = useState("");
   const [loading, setLoading] = useState(false);
   const nextRouter = useRouter();
 
-  useEffect(() => {
-    setError("");
-    setLoading(false);
-    setUsername("");
-    setPassword("");
-    setPasswordConfirm("");
-  }, [selectedForm]);
+  useEffect(() => resetStates(), [selectedForm]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
 
     if (!username) {
-      setError(
+      setHelperText(
         `Please enter ${selectedForm === "Sign in" ? "your" : "a"} username`
       );
       setLoading(false);
@@ -68,7 +67,7 @@ const Auth = () => {
       username,
       password,
       selectedForm,
-      setError,
+      setHelperText,
       setLoading
     );
     if (!credentialsLengthIsValid) return;
@@ -86,7 +85,7 @@ const Auth = () => {
       } catch (error) {
         console.log(error, "Invalid credentials");
         setLoading(false);
-        setError("Invalid credentials");
+        setHelperText("Invalid credentials");
         return;
       }
     }
@@ -97,7 +96,7 @@ const Auth = () => {
       const passwordsMatch = validatePasswordsMatch(
         password,
         passwordConfirm,
-        setError,
+        setHelperText,
         setLoading
       );
       if (!passwordsMatch) return;
@@ -114,12 +113,12 @@ const Auth = () => {
         });
       } catch (error: any) {
         if (error.response?.status === 409) {
-          setError("Username unavailable");
-          setLoading(false);
-          return;
+          setHelperText("Username unavailable");
+        } else {
+          console.log(error);
+          setHelperText("Invalid credentials");
         }
-        console.log(error);
-        setError("Invalid credentials");
+
         setLoading(false);
         return;
       }
@@ -128,12 +127,22 @@ const Auth = () => {
     nextRouter.push("/");
   };
 
+  const resetStates = () => {
+    setHelperText("");
+    setLoading(false);
+    setUsername("");
+    setPassword("");
+    setPasswordConfirm("");
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <CardMedia
@@ -148,7 +157,7 @@ const Auth = () => {
             width: "245px",
           }}
         />
-        <Typography component="h1" variant="h4" align="left" marginBottom={1}>
+        <Typography component="h1" variant="h4" alignSelf="flex-start">
           {selectedForm === "Sign in" ? "Welcome back" : "Create your account"}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate>
@@ -160,14 +169,8 @@ const Auth = () => {
             name="username"
             size="small"
             type="username"
-            helperText={
-              (error === "Please enter your username" ||
-                error === "Please enter a username" ||
-                error === "Username must be at least 4 characters" ||
-                error === "Username unavailable") &&
-              error
-            }
-            error={usernameErrorToBoolean(error)}
+            helperText={usernameHelperTextToBoolean(helperText) && helperText}
+            error={usernameErrorToBoolean(helperText)}
             disabled={loading}
             value={username}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,10 +187,10 @@ const Auth = () => {
             size="small"
             helperText={
               selectedForm === "Sign in" &&
-              passwordErrorToBoolean(error) &&
-              error
+              passwordErrorToBoolean(helperText) &&
+              helperText
             }
-            error={passwordErrorToBoolean(error)}
+            error={passwordErrorToBoolean(helperText)}
             disabled={loading}
             value={password}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -203,8 +206,8 @@ const Auth = () => {
               type="password"
               size="small"
               name="password-confirm"
-              error={passwordErrorToBoolean(error)}
-              helperText={passwordErrorToBoolean(error) && error}
+              error={passwordErrorToBoolean(helperText)}
+              helperText={passwordErrorToBoolean(helperText) && helperText}
               disabled={loading}
               value={passwordConfirm}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -217,8 +220,7 @@ const Auth = () => {
             fullWidth
             variant="contained"
             sx={{
-              mt: 1,
-              mb: 1.5,
+              my: 1,
             }}
             color="secondary"
             loading={loading}
@@ -246,15 +248,32 @@ const Auth = () => {
             </Typography>
           </Grid>
         </Grid>
+
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ mt: 12, mb: 1 }}
+        >
+          Henrique Buzon, 2023
+        </Typography>
+        <Stack direction={"row"}>
+          <Button
+            disableRipple
+            onClick={() => window.open("https://github.com/henriquebuzon")}
+          >
+            <GitHubIcon fontSize="large" />
+          </Button>
+          <Button
+            disableRipple
+            onClick={() =>
+              window.open("https://www.linkedin.com/in/henriquebuzon/")
+            }
+          >
+            <LinkedInIcon fontSize="large" />
+          </Button>
+        </Stack>
       </Box>
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        align="center"
-        sx={{ mt: 12, mb: 4 }}
-      >
-        Copyright © Nextflix 2023
-      </Typography>
     </Container>
   );
 };

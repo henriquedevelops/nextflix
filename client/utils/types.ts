@@ -2,13 +2,13 @@ import { Dispatch, SetStateAction } from "react";
 
 export interface User {
   username: string;
-  id: number;
+  id: string;
   isAdmin: boolean;
-  myListIds: number[];
+  myListIds: string[];
 }
 
 export interface Movie {
-  id: number;
+  id: string;
   title: string;
   url: string;
   genre: string;
@@ -29,15 +29,15 @@ export interface LoggedUserContextType {
 }
 
 export interface MyListIdsContextType {
-  myListIds: number[];
-  setMyListIds: Dispatch<SetStateAction<number[]>>;
+  myListIds: string[];
+  setMyListIds: Dispatch<SetStateAction<string[]>>;
 }
 
 export interface MoviesListProps {
   moviesRendered: Movie[];
   drawerWidth: number;
   totalAmountOfMovies: number;
-  fetchMovies: () => Promise<void>;
+  setInfiniteLoader: Dispatch<SetStateAction<number>>;
 }
 
 export interface ResponseDataFromFetchMovies {
@@ -89,4 +89,13 @@ export interface MessageAlertContextType {
 
 export interface RegisterFormProps {
   toggleSelectedForm: () => void;
+}
+
+export interface FetchMoviesArguments {
+  selectedGenre: string;
+  moviesRendered: Movie[];
+  searchTitle: string | undefined;
+  setTotalAmountOfMovies: (newTotal: number) => void;
+  setMoviesRendered: (newMoviesRendered: Movie[]) => void;
+  setMessageAlert: (newMessageAlert: string) => void;
 }

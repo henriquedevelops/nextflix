@@ -24,48 +24,46 @@ const Main: FC = () => {
   const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState<string>("All movies");
   const [searchTitle, setSearchTitle] = useState<string>("");
+  const [infiniteLoader, setInfiniteLoader] = useState<number>(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { setMessageAlert } = useMessageAlert();
 
   useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await axios.get<ResponseDataFromFetchMovies>(
+          `/${selectedGenre === "My list" ? "myList" : "movies"}?skip=${
+            moviesRendered.length
+          }&genre=${selectedGenre === "All movies" ? "" : selectedGenre}${
+            searchTitle && "&title=" + searchTitle
+          }`
+        );
+
+        if (response.status === 204) {
+          setTotalAmountOfMovies(0);
+          return;
+        }
+
+        const newSliceOfMovies = response.data.oneSliceOfMovies;
+        const totalAmount = response.data.totalAmountOfMovies;
+
+        setMoviesRendered([...moviesRendered, ...newSliceOfMovies]);
+        setTotalAmountOfMovies(totalAmount);
+      } catch (error) {
+        setMessageAlert(genericErrorAlert);
+        setTotalAmountOfMovies(0);
+        console.error(error);
+      }
+    };
+
     fetchMovies();
-  }, [selectedGenre, searchTitle]);
+  }, [selectedGenre, searchTitle, infiniteLoader, setMessageAlert]);
 
   /* "fetchMovies" function is responsible for fetching from the 
   resource "movies" as well as for the resource "myList". The request
   includes query parameters for pagination and 2 optional filters: genre
   and search title. After fetching, it updates the "moviesRendered" state
   accordingly  */
-  const fetchMovies = async () => {
-    try {
-      const response = await axios.get<ResponseDataFromFetchMovies>(
-        `/${selectedGenre === "My list" ? "myList" : "movies"}?skip=${
-          moviesRendered.length
-        }&genre=${selectedGenre === "All movies" ? "" : selectedGenre}${
-          searchTitle && "&title=" + searchTitle
-        }`
-      );
-
-      if (response.status === 204) {
-        setTotalAmountOfMovies(0);
-        return;
-      }
-
-      const newSliceOfMovies = response.data.oneSliceOfMovies;
-      const totalAmount = response.data.totalAmountOfMovies;
-
-      setMoviesRendered([...moviesRendered, ...newSliceOfMovies]);
-      setTotalAmountOfMovies(totalAmount);
-    } catch (error) {
-      setMessageAlert(genericErrorAlert);
-      setTotalAmountOfMovies(0);
-      console.error(error);
-    }
-  };
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
 
   const drawerWidth = 270;
 
@@ -158,7 +156,7 @@ const Main: FC = () => {
           moviesRendered={moviesRendered}
           drawerWidth={drawerWidth}
           totalAmountOfMovies={totalAmountOfMovies}
-          fetchMovies={fetchMovies}
+          setInfiniteLoader={setInfiniteLoader}
         />
       </Box>
     </AddRemoveToMyListContext.Provider>

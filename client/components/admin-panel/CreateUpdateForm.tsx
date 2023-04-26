@@ -83,15 +83,7 @@ const CreateUpdateForm: FC<AdminPanelFormProps> = ({ selectedAction }) => {
     }
   };
 
-  const resetStates = () => {
-    setId("");
-    setTitle("");
-    setUrl("");
-    setGenre("");
-    setDescription("");
-    setImage(null);
-    setLoading(false);
-  };
+  const resetStates = () => {};
 
   return (
     <>

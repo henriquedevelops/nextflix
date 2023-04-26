@@ -85,7 +85,7 @@ export const addToMyList = tryCatch(async (req: Request, res: Response) => {
 export const deleteFromMyList = tryCatch(
   async (req: Request, res: Response) => {
     const userId = req.user?.id;
-    const movieId = Number(req.params.movieId);
+    const movieId = req.params.movieId;
 
     if (!userId) throw new CustomError("User ID required", 400);
     if (!movieId) throw new CustomError("Movie ID required", 400);

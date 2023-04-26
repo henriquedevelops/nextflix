@@ -33,9 +33,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/images", express.static("images"));
 
-app.get("/health", (_, res: Response) => {
-  res.sendStatus(200);
-});
+app.get("/health", (_, res: Response) => res.sendStatus(200));
 
 app.use("/api/v1/movies", moviesRouter);
 app.use("/api/v1/users", usersRouter);
@@ -46,6 +44,6 @@ app.use(globalErrorHandler);
 
 const port = process.env.SERVER_PORT;
 
-app.listen(port, async () => {
-  console.log(`Server is listening on port ${port}. 🚀`);
-});
+app.listen(port, async () =>
+  console.log(`Server is listening on port ${port}. 🚀`)
+);

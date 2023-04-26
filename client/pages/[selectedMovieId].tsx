@@ -28,20 +28,20 @@ const MoviePlayer: FC = () => {
   const [movie, setMovie] = useState<Movie>();
 
   useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const response = await axios.get(`/movies/${selectedMovieId}`);
+
+        if (response.status === 204 || !response.data) nextRouter.push("/");
+        setMovie(response.data);
+      } catch (error) {
+        console.error(error);
+        nextRouter.push("/");
+      }
+    };
+
     fetchMovie();
-  }, []);
-
-  const fetchMovie = async () => {
-    try {
-      const response = await axios.get(`/movies/${selectedMovieId}`);
-
-      if (response.status === 204 || !response.data) nextRouter.push("/");
-      setMovie(response.data);
-    } catch (error) {
-      console.error(error);
-      nextRouter.push("/");
-    }
-  };
+  }, [nextRouter, selectedMovieId]);
 
   const handleGoBackClick = () => {
     nextRouter.push("/");

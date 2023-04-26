@@ -27,7 +27,7 @@ const MoviesList: FC<MoviesListProps> = ({
   moviesRendered,
   drawerWidth,
   totalAmountOfMovies,
-  fetchMovies,
+  setInfiniteLoader,
 }) => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | undefined>(
     undefined
@@ -53,7 +53,7 @@ const MoviesList: FC<MoviesListProps> = ({
       >
         <InfiniteScroll
           dataLength={moviesRendered.length}
-          next={async () => await fetchMovies()}
+          next={() => setInfiniteLoader((previousValue) => previousValue + 1)}
           hasMore={totalAmountOfMovies > moviesRendered.length}
           loader={
             <Box

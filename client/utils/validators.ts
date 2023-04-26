@@ -49,6 +49,15 @@ export const validatePasswordsMatch = (
   return true;
 };
 
+export const usernameHelperTextToBoolean = (error: string): boolean => {
+  return (
+    error === "Please enter your username" ||
+    error === "Please enter a username" ||
+    error === "Username must be at least 4 characters" ||
+    error === "Username unavailable"
+  );
+};
+
 export const usernameErrorToBoolean = (error: string): boolean => {
   return (
     error === "Invalid credentials" ||
