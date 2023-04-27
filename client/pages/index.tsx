@@ -1,4 +1,4 @@
-import Main from "@/components/main-page/Main";
+import Main from "@/components/Main";
 import axios from "@/utils/axios";
 import {
   LoggedUserContext,

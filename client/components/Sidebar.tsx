@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent as FC, useState } from "react";
-import AdminPanel from "../admin-panel/AdminPanel";
+import AddIcon from "@mui/icons-material/Add";
 
 const Sidebar: FC<SidebarProps> = ({
   setSelectedGenre,
@@ -30,9 +30,9 @@ const Sidebar: FC<SidebarProps> = ({
   searchTitle,
   setSearchTitle,
   setTotalAmountOfMovies,
+  setAdminSelectedAction,
 }) => {
   const { loggedUser } = useLoggedUser();
-  const [adminModalIsOpen, setAdminModalIsOpen] = useState<boolean>(false);
   const nextRouter = useRouter();
 
   const selectNewGenre = async (newGenre: string) => {
@@ -48,8 +48,7 @@ const Sidebar: FC<SidebarProps> = ({
     setSearchTitle(event.target.value);
   };
 
-  const handleOpenCloseAdminModal = (): void =>
-    setAdminModalIsOpen(!adminModalIsOpen);
+  const handleOpenCloseAdminModal = () => setAdminSelectedAction("Create");
 
   const handleSignOut = async () => {
     try {
@@ -101,7 +100,7 @@ const Sidebar: FC<SidebarProps> = ({
           ))}
 
           <FormControl
-            sx={{ ml: 1.8, mt: 0, width: "226px" }}
+            sx={{ ml: 1.8, width: "226px", marginBottom: 4 }}
             variant={"standard"}
           >
             <InputLabel>Search</InputLabel>
@@ -115,6 +114,26 @@ const Sidebar: FC<SidebarProps> = ({
               }
             />
           </FormControl>
+          {loggedUser.isAdmin && (
+            <ListItem
+              disablePadding
+              sx={{
+                color: "#CFCFCF",
+              }}
+            >
+              <ListItemButton
+                onClick={handleOpenCloseAdminModal}
+                sx={{
+                  borderRadius: 1,
+                }}
+              >
+                <ListItemIcon>
+                  <AddIcon fontSize="large" />
+                </ListItemIcon>
+                <ListItemText primary={"Add new movie"} />
+              </ListItemButton>
+            </ListItem>
+          )}
         </List>
         <Box
           sx={{
@@ -126,30 +145,6 @@ const Sidebar: FC<SidebarProps> = ({
             padding: 1,
           }}
         >
-          {loggedUser.isAdmin && (
-            <>
-              <ListItem
-                disablePadding
-                sx={{
-                  color: "#CFCFCF",
-                }}
-              >
-                <ListItemButton
-                  onClick={handleOpenCloseAdminModal}
-                  sx={{ borderRadius: 1 }}
-                >
-                  <ListItemIcon>
-                    <AdminPanelSettingsIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Admin panel" />
-                </ListItemButton>
-              </ListItem>
-              <AdminPanel
-                adminModalIsOpen={adminModalIsOpen}
-                handleOpenCloseAdminModal={handleOpenCloseAdminModal}
-              />
-            </>
-          )}
           <ListItem disablePadding>
             <ListItemButton onClick={handleSignOut} sx={{ borderRadius: 1 }}>
               <ListItemIcon>

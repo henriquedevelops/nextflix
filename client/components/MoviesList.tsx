@@ -8,12 +8,16 @@ import {
   CircularProgress,
   Container,
   Grid,
+  IconButton,
+  Stack,
   Typography,
 } from "@mui/material";
 import { FunctionComponent as FC, useState } from "react";
-
+import ClearIcon from "@mui/icons-material/Clear";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SelectedMovie from "./SelectedMovie";
+import EditIcon from "@mui/icons-material/Edit";
+import { useLoggedUser } from "@/utils/contexts";
 
 /* 
 
@@ -28,10 +32,21 @@ const MoviesList: FC<MoviesListProps> = ({
   drawerWidth,
   totalAmountOfMovies,
   setInfiniteLoader,
+  setAdminSelectedMovie,
+  setAdminSelectedAction,
 }) => {
+  const { loggedUser } = useLoggedUser();
   const [selectedMovie, setSelectedMovie] = useState<Movie | undefined>(
     undefined
   );
+
+  const handleOpenAdminDialog = (
+    adminSelectedAction: string,
+    adminSelectedMovie: Movie | undefined
+  ) => {
+    setAdminSelectedMovie(adminSelectedMovie);
+    setAdminSelectedAction(adminSelectedAction);
+  };
 
   return (
     <>
@@ -101,11 +116,51 @@ const MoviesList: FC<MoviesListProps> = ({
                     disableTouchRipple
                     onClick={() => setSelectedMovie(movie)}
                   >
-                    <CardMedia
-                      component="img"
-                      image={`data:image/jpeg;base64,${movie.image}`}
-                    />
-
+                    <Box style={{ position: "relative" }}>
+                      <CardMedia
+                        component="img"
+                        image={`data:image/jpeg;base64,${movie.image}`}
+                      />
+                      <Stack
+                        direction={"row"}
+                        sx={{
+                          position: "absolute",
+                          top: 0,
+                          right: 0,
+                          backgroundColor: "rgba(0, 0, 0, 0.70)",
+                          margin: 1,
+                          borderRadius: 1,
+                          zIndex: 1,
+                        }}
+                      >
+                        {loggedUser.isAdmin && (
+                          <>
+                            <IconButton
+                              disableRipple
+                              onClick={(
+                                event: React.MouseEvent<HTMLElement>
+                              ) => {
+                                event.stopPropagation();
+                                handleOpenAdminDialog("Update", movie);
+                              }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              disableRipple
+                              onClick={(
+                                event: React.MouseEvent<HTMLElement>
+                              ) => {
+                                event.stopPropagation();
+                                handleOpenAdminDialog("Delete", movie);
+                              }}
+                            >
+                              <ClearIcon />
+                            </IconButton>
+                          </>
+                        )}
+                      </Stack>
+                    </Box>
                     <CardContent>
                       <Typography
                         gutterBottom

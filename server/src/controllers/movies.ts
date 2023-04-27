@@ -112,8 +112,9 @@ export const updateMovie = tryCatch(async (req: Request, res: Response) => {
       image,
     },
   });
+  const base64Image = updatedMovie.image.toString("base64");
 
-  res.status(200).json(updatedMovie.title);
+  res.status(200).json({ ...updatedMovie, image: base64Image });
 });
 
 /* Retrieve a movie by ID from the database and send it to the client, 

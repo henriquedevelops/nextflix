@@ -14,6 +14,7 @@ import {
   CardMedia,
   Container,
   Grid,
+  IconButton,
   Stack,
   TextField,
   Typography,
@@ -258,20 +259,20 @@ const Auth = () => {
           Henrique Buzon, 2023
         </Typography>
         <Stack direction={"row"}>
-          <Button
+          <IconButton
             disableRipple
             onClick={() => window.open("https://github.com/henriquebuzon")}
           >
             <GitHubIcon fontSize="large" />
-          </Button>
-          <Button
+          </IconButton>
+          <IconButton
             disableRipple
             onClick={() =>
               window.open("https://www.linkedin.com/in/henriquebuzon/")
             }
           >
             <LinkedInIcon fontSize="large" />
-          </Button>
+          </IconButton>
         </Stack>
       </Box>
     </Container>

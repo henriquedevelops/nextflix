@@ -14,6 +14,7 @@ import MoviesList from "./MoviesList";
 import Sidebar from "./Sidebar";
 import { AddRemoveToMyListContext, useMessageAlert } from "@/utils/contexts";
 import { genericErrorAlert } from "@/utils/validators";
+import AdminPanel from "./AdminPanel";
 
 /* 
 This component contains the entire content of the index page.
@@ -27,6 +28,10 @@ const Main: FC = () => {
   const [infiniteLoader, setInfiniteLoader] = useState<number>(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { setMessageAlert } = useMessageAlert();
+  const [adminSelectedAction, setAdminSelectedAction] = useState<string>("");
+  const [adminSelectedMovie, setAdminSelectedMovie] = useState<
+    Movie | undefined
+  >(undefined);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -99,6 +104,15 @@ const Main: FC = () => {
             />
           </Toolbar>
         </AppBar>
+        {adminSelectedAction && (
+          <AdminPanel
+            selectedAction={adminSelectedAction}
+            setSelectedAction={setAdminSelectedAction}
+            selectedMovie={adminSelectedMovie}
+            setSelectedMovie={setAdminSelectedMovie}
+            setMoviesRendered={setMoviesRendered}
+          />
+        )}
         <Box
           component="nav"
           sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -128,6 +142,7 @@ const Main: FC = () => {
               searchTitle={searchTitle}
               setSearchTitle={setSearchTitle}
               setTotalAmountOfMovies={setTotalAmountOfMovies}
+              setAdminSelectedAction={setAdminSelectedAction}
             />
           </Drawer>
           <Drawer
@@ -149,6 +164,7 @@ const Main: FC = () => {
               searchTitle={searchTitle}
               setSearchTitle={setSearchTitle}
               setTotalAmountOfMovies={setTotalAmountOfMovies}
+              setAdminSelectedAction={setAdminSelectedAction}
             />
           </Drawer>
         </Box>
@@ -157,6 +173,8 @@ const Main: FC = () => {
           drawerWidth={drawerWidth}
           totalAmountOfMovies={totalAmountOfMovies}
           setInfiniteLoader={setInfiniteLoader}
+          setAdminSelectedMovie={setAdminSelectedMovie}
+          setAdminSelectedAction={setAdminSelectedAction}
         />
       </Box>
     </AddRemoveToMyListContext.Provider>

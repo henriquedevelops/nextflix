@@ -38,6 +38,8 @@ export interface MoviesListProps {
   drawerWidth: number;
   totalAmountOfMovies: number;
   setInfiniteLoader: Dispatch<SetStateAction<number>>;
+  setAdminSelectedMovie: Dispatch<SetStateAction<Movie | undefined>>;
+  setAdminSelectedAction: Dispatch<SetStateAction<string>>;
 }
 
 export interface ResponseDataFromFetchMovies {
@@ -52,11 +54,15 @@ export interface SidebarProps {
   searchTitle: string;
   setSearchTitle: (newSearchTitle: string) => void;
   setTotalAmountOfMovies: (newTotal: number) => void;
+  setAdminSelectedAction: Dispatch<SetStateAction<string>>;
 }
 
 export interface AdminPanelProps {
-  adminModalIsOpen: boolean;
-  handleOpenCloseAdminModal: () => void;
+  selectedAction: string;
+  setSelectedAction: Dispatch<SetStateAction<string>>;
+  selectedMovie: Movie | undefined;
+  setSelectedMovie: Dispatch<SetStateAction<Movie | undefined>>;
+  setMoviesRendered: Dispatch<SetStateAction<Movie[]>>;
 }
 
 export interface LoginFormProps {
