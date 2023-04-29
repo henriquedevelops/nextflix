@@ -79,12 +79,13 @@ const Auth = () => {
 
     if (selectedForm === "Sign in") {
       try {
-        await axios.post("/auth", {
+        const response = await axios.post("/auth", {
           username,
           password,
         });
+        console.log(response);
       } catch (error) {
-        console.log(error, "Invalid credentials");
+        console.log(error);
         setLoading(false);
         setHelperText("Invalid credentials");
         return;

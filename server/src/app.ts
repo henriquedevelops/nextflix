@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import * as dotenv from "dotenv";
-import express, { Response } from "express";
+import express, { Request, Response } from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import globalErrorHandler from "./error-handling/globalErrorHandler";
@@ -16,29 +16,34 @@ const app = express();
 app.use(helmet());
 app.use(
   rateLimit({
-    max: 1000,
+    max: 300,
     windowMs: 60 * 60 * 1000,
     message: "Please try again later!",
   })
 );
 
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-);
+const corsConfig = {
+  origin: true,
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsConfig));
+app.options("*", cors(corsConfig));
 
 app.use(express.json());
 app.use(cookieParser());
 app.use("/images", express.static("images"));
 
 app.get("/health", (_, res: Response) => res.sendStatus(200));
-
 app.use("/api/v1/movies", moviesRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/myList", myListRouter);
+
+app.use("*", (req: Request, res: Response) => {
+  res.status(404).json({ message: "Not Found" });
+});
 
 app.use(globalErrorHandler);
 

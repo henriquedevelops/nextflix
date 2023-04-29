@@ -38,6 +38,8 @@ export const login = tryCatch(async (req: Request, res: Response) => {
     .status(200)
     .cookie("accessToken-Nextflix", accessToken, {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
     })
     .end();
 });

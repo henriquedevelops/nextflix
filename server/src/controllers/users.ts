@@ -10,10 +10,10 @@ hash the password, and save the user to the database with the hashed password. *
 export const createUser = tryCatch(async (req: Request, res: Response) => {
   const { username, password }: CreateUserRequestBody = req.body;
 
-  if (!username || username.length < 4)
-    throw new CustomError("Username must be at least 4 characters.", 400);
-  if (!password || password.length < 8)
-    throw new CustomError("Password must be at least 8 characters", 400);
+  if (!username || username.length < 4 || username.length > 32)
+    throw new CustomError("Username must have 4 to 32 characters.", 400);
+  if (!password || password.length < 8 || password.length > 56)
+    throw new CustomError("Username must have 8 to 56 characters.", 400);
 
   const alreadyExistingUser = await prisma.user.findUnique({
     where: { username },
