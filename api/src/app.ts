@@ -22,28 +22,24 @@ app.use(
   })
 );
 
-const corsConfig = {
-  origin: true,
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
-
-app.use(cors(corsConfig));
-app.options("*", cors(corsConfig));
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
 app.use("/images", express.static("images"));
 
-app.get("/health", (_, res: Response) => res.sendStatus(200));
-app.use("/api/v1/movies", moviesRouter);
-app.use("/api/v1/users", usersRouter);
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/myList", myListRouter);
+app.use("/auth", authRouter);
+app.use("/users", usersRouter);
+app.use("/movies", moviesRouter);
+app.use("/myList", myListRouter);
 
-app.use("*", (req: Request, res: Response) => {
-  res.status(404).json({ message: "Not Found" });
-});
+app.use("*", (req: Request, res: Response) =>
+  res.status(404).json({ message: "Not Found" })
+);
 
 app.use(globalErrorHandler);
 

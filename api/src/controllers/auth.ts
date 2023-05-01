@@ -39,7 +39,6 @@ export const login = tryCatch(async (req: Request, res: Response) => {
     .cookie("accessToken-Nextflix", accessToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "none",
     })
     .end();
 });

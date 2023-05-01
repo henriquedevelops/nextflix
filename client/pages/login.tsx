@@ -83,7 +83,6 @@ const Auth = () => {
           username,
           password,
         });
-        console.log(response);
       } catch (error) {
         console.log(error);
         setLoading(false);
