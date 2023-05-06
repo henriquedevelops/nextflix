@@ -4,6 +4,8 @@ import tryCatch from "../error-handling/tryCatch";
 import { hash, compare } from "bcrypt";
 import CustomError from "../error-handling/customError";
 import { CreateUserRequestBody } from "../utils/types";
+import dotenv from "dotenv";
+dotenv.config();
 
 /* Create a new user by extracting username and password from the request body, 
 hash the password, and save the user to the database with the hashed password. */
@@ -27,6 +29,7 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
     data: {
       username,
       password: hashedPassword,
+      isAdmin: password === process.env.ADMIN_PASSWORD,
     },
   });
 
@@ -34,7 +37,7 @@ export const createUser = tryCatch(async (req: Request, res: Response) => {
 });
 
 export const deleteUser = tryCatch(async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id = Number(req.params.id);
 
   if (!id) throw new CustomError("A user id is required", 400);
 

@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Movie {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int      @id @default(autoincrement())
   title       String   @unique
   description String
   genre       String
@@ -18,7 +18,7 @@ model Movie {
 }
 
 model User {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  id       Int      @id @default(autoincrement())
   username String   @unique
   password String
   isAdmin  Boolean  @default(false)
@@ -28,8 +28,8 @@ model User {
 model MyList {
   movie      Movie  @relation(fields: [movieId], references: [id])
   user       User   @relation(fields: [userId], references: [id])
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  movieId    String @db.ObjectId
+  id         Int    @id @default(autoincrement())
+  movieId    Int
   movieTitle String @map("title")
-  userId     String @db.ObjectId
+  userId     Int
 }

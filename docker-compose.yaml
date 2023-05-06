@@ -1,5 +1,13 @@
 version: "3.8"
+
 services:
+  database:
+    image: postgres
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
   api:
     build: ./api
     # volumes:
@@ -7,6 +15,8 @@ services:
     #   - /app/node_modules
     env_file:
       - .env
+    depends_on:
+      - database
 
   client:
     build: ./client
@@ -20,7 +30,9 @@ services:
     restart: always
     build: ./nginx
     ports:
-      - "3000:80"
+      - "80:80"
     depends_on:
-      - api
       - client
+
+volumes:
+  db_data:

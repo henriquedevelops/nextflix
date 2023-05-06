@@ -41,7 +41,7 @@ export async function getServerSideProps(context: NextPageContext) {
 }
 
 const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
-  const [myListIds, setMyListIds] = useState<string[]>([]);
+  const [myListIds, setMyListIds] = useState<number[]>([]);
   const [messageAlert, setMessageAlert] = useState<string>("");
   const [messageAlertIsOpen, setMessageAlertIsOpen] = useState(false);
   const nextRouter = useRouter();
@@ -58,7 +58,7 @@ const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
 
   const fetchMyListIds = async () => {
     try {
-      const response = await axios.get<{ moviesIdsFound: string[] }>(
+      const response = await axios.get<{ moviesIdsFound: number[] }>(
         `/myList/id`
       );
 
