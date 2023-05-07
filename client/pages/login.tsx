@@ -15,6 +15,7 @@ import {
   Container,
   Grid,
   IconButton,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -254,25 +255,25 @@ const Auth = () => {
           variant="body2"
           color="text.secondary"
           align="center"
-          sx={{ mt: 12, mb: 1 }}
+          sx={{ mt: 12, mb: 1.6 }}
         >
           Henrique Buzon, 2023
         </Typography>
-        <Stack direction={"row"}>
-          <IconButton
-            disableRipple
-            onClick={() => window.open("https://github.com/henriquebuzon")}
+        <Stack direction={"row"} spacing={1.4}>
+          <Link
+            href="https://github.com/henriquebuzon"
+            rel="noreferrer"
+            target="_blank"
           >
             <GitHubIcon fontSize="large" />
-          </IconButton>
-          <IconButton
-            disableRipple
-            onClick={() =>
-              window.open("https://www.linkedin.com/in/henriquebuzon/")
-            }
+          </Link>
+          <Link
+            href="https://linkedin.com/in/henriquebuzon/"
+            rel=""
+            target="_blank"
           >
             <LinkedInIcon fontSize="large" />
-          </IconButton>
+          </Link>
         </Stack>
       </Box>
     </Container>

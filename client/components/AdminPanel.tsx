@@ -1,20 +1,18 @@
-import axios from "@/utils/axios";
-import { useMessageAlert } from "@/utils/contexts";
-import { AdminPanelProps, Movie } from "@/utils/types";
-import { validateAndCropImage } from "@/utils/validators";
 import { LoadingButton } from "@mui/lab";
 import {
   Alert,
   Button,
   Dialog,
-  DialogActions,
-  DialogContent,
   MenuItem,
   Stack,
   Typography,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { FunctionComponent as FC, useEffect, useState } from "react";
+import { FunctionComponent as FC, useState } from "react";
+import axios from "../utils/axios";
+import { useAddRemoveToMyList, useMessageAlert } from "../utils/contexts";
+import { AdminPanelProps, Movie } from "../utils/types";
+import { validateAndCropImage } from "../utils/validators";
 
 /* 
 This modal component contains panel that allows the admin to create, update
@@ -37,6 +35,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
   const [uploadedImage, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const { setMessageAlert } = useMessageAlert();
+  const { setTotalAmountOfMovies } = useAddRemoveToMyList();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     validateAndCropImage(event, setImage, setMessageAlert);
@@ -87,13 +86,14 @@ const AdminPanel: FC<AdminPanelProps> = ({
           });
         });
 
-        resetStates();
-
+        setSelectedAction("");
         setMessageAlert(
           `Movie "${updatedMovie.title}" successfully updated.
         `
         );
       }
+
+      resetStates();
     } catch (error: any) {
       setMessageAlert(error.response.data.message);
       setLoading(false);
@@ -109,8 +109,10 @@ const AdminPanel: FC<AdminPanelProps> = ({
       setMoviesRendered((previousMovies) => [
         ...previousMovies.filter((movie) => movie.id !== selectedMovie?.id),
       ]);
+      setTotalAmountOfMovies((previousValue) => previousValue - 1);
       setMessageAlert(`Movie "${selectedMovie?.title}" successfully deleted!`);
 
+      setSelectedAction("");
       resetStates();
     } catch (error) {
       setLoading(false);
@@ -131,7 +133,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
     setDescription("");
     setUrl("");
     setImage(null);
-    setSelectedAction("");
+    setLoading(false);
   };
 
   return (

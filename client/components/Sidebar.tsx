@@ -45,6 +45,7 @@ const Sidebar: FC<SidebarProps> = ({
 
   const handleSearchTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMoviesRendered([]);
+    setTotalAmountOfMovies(1);
     setSearchTitle(event.target.value);
   };
 

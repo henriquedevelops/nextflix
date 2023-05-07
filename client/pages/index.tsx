@@ -77,7 +77,7 @@ const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
         <Snackbar
           open={messageAlertIsOpen}
           autoHideDuration={messageAlert.length * 100}
-          anchorOrigin={{ horizontal: "center", vertical: "top" }}
+          anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
           onClose={() => setMessageAlertIsOpen(false)}
           TransitionProps={{ onExited: () => setMessageAlert("") }}
           sx={{ zIndex: 9999 }}

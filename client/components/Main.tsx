@@ -1,5 +1,5 @@
-import axios from "@/utils/axios";
-import { Movie, ResponseDataFromFetchMovies } from "@/utils/types";
+import axios from "axios";
+import { Movie, ResponseDataFromFetchMovies } from "../utils/types";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import {
   AppBar,
@@ -9,12 +9,13 @@ import {
   IconButton,
   Toolbar,
 } from "@mui/material";
-import { FunctionComponent as FC, useEffect, useState } from "react";
+import { FunctionComponent as FC, useEffect, useRef, useState } from "react";
 import MoviesList from "./MoviesList";
 import Sidebar from "./Sidebar";
-import { AddRemoveToMyListContext, useMessageAlert } from "@/utils/contexts";
-import { genericErrorAlert } from "@/utils/validators";
+import { AddRemoveToMyListContext, useMessageAlert } from "../utils/contexts";
+import { genericErrorAlert } from "../utils/validators";
 import AdminPanel from "./AdminPanel";
+import { CancelToken } from "axios";
 
 /* 
 This component contains the entire content of the index page.
@@ -32,16 +33,32 @@ const Main: FC = () => {
   const [adminSelectedMovie, setAdminSelectedMovie] = useState<
     Movie | undefined
   >(undefined);
+  const previousController: any = useRef();
 
   useEffect(() => {
     const fetchMovies = async () => {
+      if (previousController.current) {
+        previousController.current.abort();
+      }
+
+      // A new instance of the AbortController is created before making the API request
+      const controller = new AbortController();
+
+      // grab a reference to its associated AbortSignal object using the AbortController.signal property
+      const signal = controller.signal;
+
+      previousController.current = controller;
       try {
         const response = await axios.get<ResponseDataFromFetchMovies>(
-          `/${selectedGenre === "My list" ? "myList" : "movies"}?skip=${
+          `api/${selectedGenre === "My list" ? "myList" : "movies"}?skip=${
             moviesRendered.length
           }&genre=${selectedGenre === "All movies" ? "" : selectedGenre}${
             searchTitle && "&title=" + searchTitle
-          }`
+          }`,
+          {
+            signal,
+            withCredentials: true,
+          }
         );
 
         if (response.status === 204) {
@@ -54,10 +71,12 @@ const Main: FC = () => {
 
         setMoviesRendered([...moviesRendered, ...newSliceOfMovies]);
         setTotalAmountOfMovies(totalAmount);
-      } catch (error) {
-        setMessageAlert(genericErrorAlert);
-        setTotalAmountOfMovies(0);
-        console.error(error);
+      } catch (error: any) {
+        if (!axios.isCancel(error)) {
+          setMessageAlert(genericErrorAlert);
+          setTotalAmountOfMovies(0);
+          console.error(error);
+        }
       }
     };
 
