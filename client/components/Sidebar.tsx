@@ -49,7 +49,7 @@ const Sidebar: FC<SidebarProps> = ({
     setSearchTitle(event.target.value);
   };
 
-  const handleOpenCloseAdminModal = () => setAdminSelectedAction("Create");
+  const handleOpenCloseAdminModal = () => setAdminSelectedAction("Add");
 
   const handleSignOut = async () => {
     try {

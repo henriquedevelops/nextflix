@@ -22,7 +22,7 @@ export const validateMovie = ({
   if (genre && !allowedGenres.includes(genre))
     throw new CustomError("Invalid genre", 400);
 
-  if (url && !url.startsWith("http://"))
+  if (url && !url.startsWith("https://"))
     throw new CustomError("Invalid URL", 400);
 
   if (description && description.length > 450)

@@ -40,6 +40,7 @@ const SelectedMovie: FC<SelectedMovieProps> = ({
     useAddRemoveToMyList();
   const { setMessageAlert } = useMessageAlert();
   const nextRouter = useRouter();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleWatchNowClick = () => {
     nextRouter.push(`/${selectedMovie.id}`);
@@ -73,8 +74,6 @@ const SelectedMovie: FC<SelectedMovieProps> = ({
       console.log(error);
     }
   };
-
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <>

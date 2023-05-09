@@ -90,11 +90,11 @@ const MoviesList: FC<MoviesListProps> = ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  height: "350px",
+                  height: "100vh",
                   width: "100%",
                 }}
               >
-                <Typography variant="h5">No movies found</Typography>
+                <Typography variant="h5">No movies found.</Typography>
               </Box>
             )
           }

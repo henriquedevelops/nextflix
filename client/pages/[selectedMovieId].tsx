@@ -3,6 +3,7 @@ import { Movie } from "@/utils/types";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, CardMedia, Toolbar, Typography } from "@mui/material";
 import { NextPageContext } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import { FunctionComponent as FC, useEffect, useState } from "react";
@@ -49,6 +50,10 @@ const MoviePlayer: FC = () => {
 
   return (
     <>
+      <Head>
+        <title>{`Watching: ${movie?.title} - Nextflix`}</title>
+      </Head>
+
       <Toolbar
         sx={{
           position: "fixed",

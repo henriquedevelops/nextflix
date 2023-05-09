@@ -26,6 +26,7 @@ import { parseCookies } from "nookies";
 import React, { useEffect, useState } from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import Head from "next/head";
 
 export async function getServerSideProps(context: NextPageContext) {
   const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
@@ -80,7 +81,7 @@ const Auth = () => {
 
     if (selectedForm === "Sign in") {
       try {
-        const response = await axios.post("/auth", {
+        await axios.post("/auth", {
           username,
           password,
         });
@@ -138,145 +139,153 @@ const Auth = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CardMedia
-          component="img"
-          src="/images/Logo1.png"
-          alt="Logo"
+    <>
+      <Head>
+        <title>Login - Nextflix</title>
+      </Head>
+      <Container component="main" maxWidth="xs">
+        <Box
           sx={{
-            marginTop: 6,
-            marginBottom: 8,
-            marginRight: "auto",
-            marginLeft: "auto",
-            width: "245px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
-        <Typography component="h1" variant="h4" alignSelf="flex-start">
-          {selectedForm === "Sign in" ? "Welcome back" : "Create your account"}
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate>
-          <TextField
-            margin="dense"
-            required
-            fullWidth
-            label="Username"
-            name="username"
-            size="small"
-            type="username"
-            helperText={usernameHelperTextToBoolean(helperText) && helperText}
-            error={usernameErrorToBoolean(helperText)}
-            disabled={loading}
-            value={username}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setUsername(event.target.value);
+        >
+          <CardMedia
+            component="img"
+            src="/images/Logo1.png"
+            alt="Logo"
+            sx={{
+              marginTop: 6,
+              marginBottom: 8,
+              marginRight: "auto",
+              marginLeft: "auto",
+              width: "245px",
             }}
           />
-          <TextField
-            margin="dense"
-            required
-            fullWidth
-            label="Password"
-            type="password"
-            name="password"
-            size="small"
-            helperText={
-              selectedForm === "Sign in" &&
-              passwordErrorToBoolean(helperText) &&
-              helperText
-            }
-            error={passwordErrorToBoolean(helperText)}
-            disabled={loading}
-            value={password}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setPassword(event.target.value);
-            }}
-          />
-          {selectedForm === "Sign up" && (
+          <Typography component="h1" variant="h4" alignSelf="flex-start">
+            {selectedForm === "Sign in"
+              ? "Welcome back"
+              : "Create your account"}
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} noValidate>
             <TextField
               margin="dense"
               required
               fullWidth
-              label="Confirm password"
-              type="password"
+              label="Username"
+              name="username"
               size="small"
-              name="password-confirm"
-              error={passwordErrorToBoolean(helperText)}
-              helperText={passwordErrorToBoolean(helperText) && helperText}
+              type="username"
+              helperText={usernameHelperTextToBoolean(helperText) && helperText}
+              error={usernameErrorToBoolean(helperText)}
               disabled={loading}
-              value={passwordConfirm}
+              value={username}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPasswordConfirm(event.target.value);
+                setUsername(event.target.value);
               }}
             />
-          )}
-          <LoadingButton
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{
-              my: 1,
-            }}
-            color="secondary"
-            loading={loading}
-          >
-            {selectedForm}
-          </LoadingButton>
-        </Box>
-        <Grid container justifyContent="flex-end">
-          <Grid item>
-            <Typography
-              variant="body2"
-              onClick={() =>
-                setSelectedForm((currentForm) =>
-                  currentForm === "Sign in" ? "Sign up" : "Sign in"
-                )
+            <TextField
+              margin="dense"
+              required
+              fullWidth
+              label="Password"
+              type="password"
+              name="password"
+              size="small"
+              helperText={
+                selectedForm === "Sign in" &&
+                passwordErrorToBoolean(helperText) &&
+                helperText
               }
-              style={{
-                cursor: "pointer",
+              error={passwordErrorToBoolean(helperText)}
+              disabled={loading}
+              value={password}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setPassword(event.target.value);
               }}
-              color={"primary"}
+            />
+            {selectedForm === "Sign up" && (
+              <TextField
+                margin="dense"
+                required
+                fullWidth
+                label="Confirm password"
+                type="password"
+                size="small"
+                name="password-confirm"
+                error={passwordErrorToBoolean(helperText)}
+                helperText={passwordErrorToBoolean(helperText) && helperText}
+                disabled={loading}
+                value={passwordConfirm}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setPasswordConfirm(event.target.value);
+                }}
+              />
+            )}
+            <LoadingButton
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                my: 1,
+              }}
+              color="secondary"
+              loading={loading}
             >
-              {selectedForm === "Sign in"
-                ? "Don't have an account? Sign up"
-                : "Already have an account? Sign in"}
-            </Typography>
+              {selectedForm}
+            </LoadingButton>
+          </Box>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Typography
+                variant="body2"
+                onClick={() =>
+                  !loading &&
+                  setSelectedForm((currentForm) =>
+                    currentForm === "Sign in" ? "Sign up" : "Sign in"
+                  )
+                }
+                style={{
+                  cursor: !loading ? "pointer" : "default",
+                }}
+                color={"primary"}
+              >
+                {selectedForm === "Sign in"
+                  ? "Don't have an account? Sign up"
+                  : "Already have an account? Sign in"}
+              </Typography>
+            </Grid>
           </Grid>
-        </Grid>
 
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          align="center"
-          sx={{ mt: 12, mb: 1.6 }}
-        >
-          Henrique Buzon, 2023
-        </Typography>
-        <Stack direction={"row"} spacing={1.4}>
-          <Link
-            href="https://github.com/henriquebuzon"
-            rel="noreferrer"
-            target="_blank"
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="center"
+            sx={{ mt: 12, mb: 1.6 }}
           >
-            <GitHubIcon fontSize="large" />
-          </Link>
-          <Link
-            href="https://linkedin.com/in/henriquebuzon/"
-            rel=""
-            target="_blank"
-          >
-            <LinkedInIcon fontSize="large" />
-          </Link>
-        </Stack>
-      </Box>
-    </Container>
+            Henrique Buzon, 2023
+          </Typography>
+          <Stack direction={"row"} spacing={1.4}>
+            <Link
+              href="https://github.com/henriquebuzon"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <GitHubIcon fontSize="large" />
+            </Link>
+            <Link
+              href="https://linkedin.com/in/henriquebuzon/"
+              rel=""
+              target="_blank"
+            >
+              <LinkedInIcon fontSize="large" />
+            </Link>
+          </Stack>
+        </Box>
+      </Container>
+    </>
   );
 };
 

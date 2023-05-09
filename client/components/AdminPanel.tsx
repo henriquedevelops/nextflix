@@ -6,6 +6,7 @@ import {
   MenuItem,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { FunctionComponent as FC, useState } from "react";
@@ -13,9 +14,9 @@ import axios from "../utils/axios";
 import { useAddRemoveToMyList, useMessageAlert } from "../utils/contexts";
 import { AdminPanelProps, Movie } from "../utils/types";
 import { validateAndCropImage } from "../utils/validators";
-
+import theme from "@/MUITheme/theme";
 /* 
-This modal component contains panel that allows the admin to create, update
+This modal component contains panel that allows the admin to Add, update
 and delete movies directly from the index page
 */
 
@@ -32,10 +33,11 @@ const AdminPanel: FC<AdminPanelProps> = ({
   const [description, setDescription] = useState(
     selectedMovie?.description || ""
   );
-  const [uploadedImage, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const { setMessageAlert } = useMessageAlert();
   const { setTotalAmountOfMovies } = useAddRemoveToMyList();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     validateAndCropImage(event, setImage, setMessageAlert);
@@ -45,8 +47,8 @@ const AdminPanel: FC<AdminPanelProps> = ({
     setLoading(true);
 
     if (
-      selectedAction === "Create" &&
-      (!title || !url || !genre || !description || !uploadedImage)
+      selectedAction === "Add" &&
+      (!title || !url || !genre || !description || !image)
     ) {
       setMessageAlert("All fields are required");
       setLoading(false);
@@ -58,14 +60,14 @@ const AdminPanel: FC<AdminPanelProps> = ({
     url && formData.append("url", url);
     genre && formData.append("genre", genre);
     description && formData.append("description", description);
-    uploadedImage && formData.append("image", uploadedImage);
+    image && formData.append("image", image);
 
     try {
-      if (selectedAction === "Create") {
+      if (selectedAction === "Add") {
         await axios.post("/movies", formData);
 
         setMessageAlert(
-          `Movie "${title}" successfully created.
+          `Movie "${title}" successfully added
         `
         );
       }
@@ -88,7 +90,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
 
         setSelectedAction("");
         setMessageAlert(
-          `Movie "${updatedMovie.title}" successfully updated.
+          `Movie "${title}" successfully updated
         `
         );
       }
@@ -110,7 +112,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
         ...previousMovies.filter((movie) => movie.id !== selectedMovie?.id),
       ]);
       setTotalAmountOfMovies((previousValue) => previousValue - 1);
-      setMessageAlert(`Movie "${selectedMovie?.title}" successfully deleted!`);
+      setMessageAlert(`Movie "${title}" successfully deleted`);
 
       setSelectedAction("");
       resetStates();
@@ -125,6 +127,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
   const handleCloseAdminDialog = () => {
     setSelectedAction("");
     setSelectedMovie(undefined);
+    resetStates();
   };
 
   const resetStates = () => {
@@ -134,6 +137,7 @@ const AdminPanel: FC<AdminPanelProps> = ({
     setUrl("");
     setImage(null);
     setLoading(false);
+    setSelectedMovie(undefined);
   };
 
   return (
@@ -142,11 +146,12 @@ const AdminPanel: FC<AdminPanelProps> = ({
         open={Boolean(selectedAction)}
         onClose={handleCloseAdminDialog}
         maxWidth={false}
+        fullWidth={isSmallScreen}
       >
         <Stack
           spacing={2}
           sx={{
-            width: "500px",
+            width: { xs: "100%", sm: "500px" },
             padding: 2.5,
           }}
         >
@@ -217,9 +222,9 @@ const AdminPanel: FC<AdminPanelProps> = ({
                 }}
                 disabled={loading}
               />
-              {uploadedImage && (
+              {image && (
                 <Typography color={"primary"}>
-                  Image uploaded: {uploadedImage.name}
+                  Image uploaded: {image.name}
                 </Typography>
               )}
               <Button variant="outlined" component="label" disabled={loading}>

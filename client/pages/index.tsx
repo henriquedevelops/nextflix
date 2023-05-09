@@ -1,5 +1,5 @@
 import Main from "@/components/Main";
-import axios from "@/utils/axios";
+import axios from "../utils/axios";
 import {
   LoggedUserContext,
   MessageAlertContext,
@@ -13,6 +13,7 @@ import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import { FunctionComponent as FC, useEffect, useState } from "react";
+import Head from "next/head";
 
 /* 
 This page performs server side rendering logic to check if the user is logged in.
@@ -73,11 +74,15 @@ const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
 
   return (
     <>
+      <Head>
+        <title>Movies - Nextflix</title>
+      </Head>
+
       <ThemeProvider theme={createTheme()}>
         <Snackbar
           open={messageAlertIsOpen}
           autoHideDuration={messageAlert.length * 100}
-          anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+          anchorOrigin={{ horizontal: "center", vertical: "top" }}
           onClose={() => setMessageAlertIsOpen(false)}
           TransitionProps={{ onExited: () => setMessageAlert("") }}
           sx={{ zIndex: 9999 }}
