@@ -7,26 +7,24 @@ import {
   validateCredentialsLength,
   validatePasswordsMatch,
 } from "@/utils/validators";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
-  Button,
-  CardMedia,
   Container,
   Grid,
-  IconButton,
   Link,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { NextPageContext } from "next";
+import Head from "next/head";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import React, { useEffect, useState } from "react";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import Head from "next/head";
 
 export async function getServerSideProps(context: NextPageContext) {
   const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
@@ -51,6 +49,7 @@ const Auth = () => {
   const [helperText, setHelperText] = useState("");
   const [loading, setLoading] = useState(false);
   const nextRouter = useRouter();
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => resetStates(), [selectedForm]);
 
@@ -81,7 +80,7 @@ const Auth = () => {
 
     if (selectedForm === "Sign in") {
       try {
-        await axios.post("/auth", {
+        const response = await axios.post("/auth", {
           username,
           password,
         });
@@ -105,12 +104,13 @@ const Auth = () => {
       if (!passwordsMatch) return;
 
       try {
-        await axios.post("/users", {
+        const response = await axios.post("/users", {
           username,
           password,
         });
 
-        await axios.post<User>("/auth", {
+        console.log(response);
+        await axios.post("/auth", {
           username,
           password,
         });
@@ -152,137 +152,146 @@ const Auth = () => {
             alignItems: "center",
           }}
         >
-          <CardMedia
-            component="img"
+          <Image
             src="/images/Logo1.png"
             alt="Logo"
-            sx={{
-              marginTop: 6,
-              marginBottom: 8,
+            style={{
+              marginTop: 60,
+              marginBottom: 80,
               marginRight: "auto",
               marginLeft: "auto",
-              width: "245px",
             }}
+            width={245}
+            height={245}
+            priority={true}
+            onLoadingComplete={() => setImageLoaded(true)}
           />
-          <Typography component="h1" variant="h4" alignSelf="flex-start">
-            {selectedForm === "Sign in"
-              ? "Welcome back"
-              : "Create your account"}
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate>
-            <TextField
-              margin="dense"
-              required
-              fullWidth
-              label="Username"
-              name="username"
-              size="small"
-              type="username"
-              helperText={usernameHelperTextToBoolean(helperText) && helperText}
-              error={usernameErrorToBoolean(helperText)}
-              disabled={loading}
-              value={username}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setUsername(event.target.value);
-              }}
-            />
-            <TextField
-              margin="dense"
-              required
-              fullWidth
-              label="Password"
-              type="password"
-              name="password"
-              size="small"
-              helperText={
-                selectedForm === "Sign in" &&
-                passwordErrorToBoolean(helperText) &&
-                helperText
-              }
-              error={passwordErrorToBoolean(helperText)}
-              disabled={loading}
-              value={password}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPassword(event.target.value);
-              }}
-            />
-            {selectedForm === "Sign up" && (
-              <TextField
-                margin="dense"
-                required
-                fullWidth
-                label="Confirm password"
-                type="password"
-                size="small"
-                name="password-confirm"
-                error={passwordErrorToBoolean(helperText)}
-                helperText={passwordErrorToBoolean(helperText) && helperText}
-                disabled={loading}
-                value={passwordConfirm}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setPasswordConfirm(event.target.value);
-                }}
-              />
-            )}
-            <LoadingButton
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                my: 1,
-              }}
-              color="secondary"
-              loading={loading}
-            >
-              {selectedForm}
-            </LoadingButton>
-          </Box>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
+          {imageLoaded && (
+            <>
+              <Typography component="h1" variant="h4" alignSelf="flex-start">
+                {selectedForm === "Sign in"
+                  ? "Welcome back"
+                  : "Create your account"}
+              </Typography>
+              <Box component="form" onSubmit={handleSubmit} noValidate>
+                <TextField
+                  margin="dense"
+                  required
+                  fullWidth
+                  label="Username"
+                  name="username"
+                  size="small"
+                  type="username"
+                  helperText={
+                    usernameHelperTextToBoolean(helperText) && helperText
+                  }
+                  error={usernameErrorToBoolean(helperText)}
+                  disabled={loading}
+                  value={username}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setUsername(event.target.value);
+                  }}
+                />
+                <TextField
+                  margin="dense"
+                  required
+                  fullWidth
+                  label="Password"
+                  type="password"
+                  name="password"
+                  size="small"
+                  helperText={
+                    selectedForm === "Sign in" &&
+                    passwordErrorToBoolean(helperText) &&
+                    helperText
+                  }
+                  error={passwordErrorToBoolean(helperText)}
+                  disabled={loading}
+                  value={password}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setPassword(event.target.value);
+                  }}
+                />
+                {selectedForm === "Sign up" && (
+                  <TextField
+                    margin="dense"
+                    required
+                    fullWidth
+                    label="Confirm password"
+                    type="password"
+                    size="small"
+                    name="password-confirm"
+                    error={passwordErrorToBoolean(helperText)}
+                    helperText={
+                      passwordErrorToBoolean(helperText) && helperText
+                    }
+                    disabled={loading}
+                    value={passwordConfirm}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      setPasswordConfirm(event.target.value);
+                    }}
+                  />
+                )}
+                <LoadingButton
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    my: 1,
+                  }}
+                  color="secondary"
+                  loading={loading}
+                >
+                  {selectedForm}
+                </LoadingButton>
+              </Box>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Typography
+                    variant="body2"
+                    onClick={() =>
+                      !loading &&
+                      setSelectedForm((currentForm) =>
+                        currentForm === "Sign in" ? "Sign up" : "Sign in"
+                      )
+                    }
+                    style={{
+                      cursor: !loading ? "pointer" : "default",
+                    }}
+                    color={"primary"}
+                  >
+                    {selectedForm === "Sign in"
+                      ? "Don't have an account? Sign up"
+                      : "Already have an account? Sign in"}
+                  </Typography>
+                </Grid>
+              </Grid>
               <Typography
                 variant="body2"
-                onClick={() =>
-                  !loading &&
-                  setSelectedForm((currentForm) =>
-                    currentForm === "Sign in" ? "Sign up" : "Sign in"
-                  )
-                }
-                style={{
-                  cursor: !loading ? "pointer" : "default",
-                }}
-                color={"primary"}
+                color="text.secondary"
+                align="center"
+                sx={{ mt: 12, mb: 1.6 }}
               >
-                {selectedForm === "Sign in"
-                  ? "Don't have an account? Sign up"
-                  : "Already have an account? Sign in"}
+                Henrique Buzon, 2023
               </Typography>
-            </Grid>
-          </Grid>
-
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            sx={{ mt: 12, mb: 1.6 }}
-          >
-            Henrique Buzon, 2023
-          </Typography>
-          <Stack direction={"row"} spacing={1.4}>
-            <Link
-              href="https://github.com/henriquebuzon"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <GitHubIcon fontSize="large" />
-            </Link>
-            <Link
-              href="https://linkedin.com/in/henriquebuzon/"
-              rel=""
-              target="_blank"
-            >
-              <LinkedInIcon fontSize="large" />
-            </Link>
-          </Stack>
+              <Stack direction={"row"} spacing={1.4}>
+                <Link
+                  href="https://github.com/henriquebuzon"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <GitHubIcon fontSize="large" />
+                </Link>
+                <Link
+                  href="https://linkedin.com/in/henriquebuzon"
+                  rel=""
+                  target="_blank"
+                >
+                  <LinkedInIcon fontSize="large" />
+                </Link>
+              </Stack>
+            </>
+          )}
         </Box>
       </Container>
     </>
