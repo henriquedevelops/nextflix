@@ -1,4 +1,4 @@
-# Nextflix 🔴 https://nextflix.cloud/
+# Nextflix 🔴 [**NEXTFLIX**](https://nextflix.cloud)
 
 Your next type of movie streaming platform.
 
@@ -13,7 +13,7 @@ Your next type of movie streaming platform.
 - Docker compose up.
 - Create the tables in the database by running "npx prisma migrate deploy" inside the API container.
 
-## Features
+## Features 💡
 
 - Secure and stateless JWT authentication
 - SSL termination
@@ -33,7 +33,7 @@ Your next type of movie streaming platform.
 - Reverse proxy
 - And more
 
-## Future Implementations
+## Future Implementations 🌱
 
 - Payments with Stripe
 - Movie ratings
