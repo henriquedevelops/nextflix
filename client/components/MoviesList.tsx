@@ -7,10 +7,12 @@ import {
   CardMedia,
   CircularProgress,
   Container,
+  Dialog,
   Grid,
   IconButton,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { FunctionComponent as FC, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -18,6 +20,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import SelectedMovie from "./SelectedMovie";
 import EditIcon from "@mui/icons-material/Edit";
 import { useLoggedUser } from "@/utils/contexts";
+import theme from "@/MUITheme/theme";
 
 /* 
 
@@ -39,6 +42,7 @@ const MoviesList: FC<MoviesListProps> = ({
   const [selectedMovie, setSelectedMovie] = useState<Movie | undefined>(
     undefined
   );
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleOpenAdminDialog = (
     adminSelectedAction: string,
@@ -50,12 +54,19 @@ const MoviesList: FC<MoviesListProps> = ({
 
   return (
     <>
-      {selectedMovie && (
-        <SelectedMovie
-          selectedMovie={selectedMovie}
-          setSelectedMovie={setSelectedMovie}
-        />
-      )}
+      <Dialog
+        open={Boolean(selectedMovie)}
+        onClose={() => setSelectedMovie(undefined)}
+        maxWidth={false}
+        fullScreen={isSmallScreen}
+      >
+        {selectedMovie && (
+          <SelectedMovie
+            selectedMovie={selectedMovie}
+            setSelectedMovie={setSelectedMovie}
+          />
+        )}
+      </Dialog>
       <Container
         maxWidth={false}
         sx={{

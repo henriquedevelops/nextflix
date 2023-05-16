@@ -11,6 +11,17 @@ export const getMyList = tryCatch(async (req: Request, res: Response) => {
 
   const title = req.query.title?.toString();
 
+  const totalAmountOfMovies = await prisma.myList.count({
+    where: {
+      AND: [
+        { userId },
+        title ? { movieTitle: { contains: title, mode: "insensitive" } } : {},
+      ],
+    },
+  });
+
+  if (totalAmountOfMovies === 0) return res.sendStatus(204);
+
   const oneSliceOfMoviesRaw = (
     await prisma.myList.findMany({
       where: {
@@ -24,17 +35,6 @@ export const getMyList = tryCatch(async (req: Request, res: Response) => {
       take: 18,
     })
   ).map(({ movie }) => movie);
-
-  if (oneSliceOfMoviesRaw.length === 0) return res.sendStatus(204);
-
-  const totalAmountOfMovies = await prisma.myList.count({
-    where: {
-      AND: [
-        { userId },
-        title ? { movieTitle: { contains: title, mode: "insensitive" } } : {},
-      ],
-    },
-  });
 
   const oneSliceOfMovies = oneSliceOfMoviesRaw.map((movie) => {
     const base64Image = movie.image.toString("base64");

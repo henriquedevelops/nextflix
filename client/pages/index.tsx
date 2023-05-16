@@ -48,7 +48,7 @@ const Home: FC<{ loggedUser: User }> = ({ loggedUser }) => {
   const nextRouter = useRouter();
 
   useEffect(() => {
-    if (!loggedUser) nextRouter.push("/auth");
+    if (!loggedUser) nextRouter.push("/login");
 
     fetchMyListIds();
   }, [loggedUser, nextRouter]);
