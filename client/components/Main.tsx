@@ -83,12 +83,6 @@ const Main: FC = () => {
     fetchMovies();
   }, [selectedGenre, searchTitle, infiniteLoader, setMessageAlert]);
 
-  /* "fetchMovies" function is responsible for fetching from the 
-  resource "movies" as well as for the resource "myList". The request
-  includes query parameters for pagination and 2 optional filters: genre
-  and search title. After fetching, it updates the "moviesRendered" state
-  accordingly  */
-
   const drawerWidth = 270;
 
   return (

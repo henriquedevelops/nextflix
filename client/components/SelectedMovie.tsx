@@ -24,11 +24,13 @@ import { genericErrorAlert } from "@/utils/validators";
 import { useRouter } from "next/router";
 
 /* 
+
 This modal component opens up when the user selects a movie from the list.
 It contains the movie title, genre, description and two buttons: "Watch now",
 and "Watch later" (or "Remove from my list").
 
 On large screen sizes it also contains the movie image.
+
 */
 
 const SelectedMovie: FC<SelectedMovieProps> = ({

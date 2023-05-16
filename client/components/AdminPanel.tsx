@@ -15,10 +15,6 @@ import { useAddRemoveToMyList, useMessageAlert } from "../utils/contexts";
 import { AdminPanelProps, Movie } from "../utils/types";
 import { validateAndCropImage } from "../utils/validators";
 import theme from "@/MUITheme/theme";
-/* 
-This modal component contains panel that allows the admin to Add, update
-and delete movies directly from the index page
-*/
 
 const AdminPanel: FC<AdminPanelProps> = ({
   selectedAction,
@@ -38,10 +34,6 @@ const AdminPanel: FC<AdminPanelProps> = ({
   const { setMessageAlert } = useMessageAlert();
   const { setTotalAmountOfMovies } = useAddRemoveToMyList();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    validateAndCropImage(event, setImage, setMessageAlert);
-  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -126,7 +118,6 @@ const AdminPanel: FC<AdminPanelProps> = ({
 
   const handleCloseAdminDialog = () => {
     setSelectedAction("");
-    setSelectedMovie(undefined);
     resetStates();
   };
 
@@ -233,7 +224,9 @@ const AdminPanel: FC<AdminPanelProps> = ({
                   hidden
                   accept="image/*"
                   type="file"
-                  onChange={handleImageUpload}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    validateAndCropImage(event, setImage, setMessageAlert)
+                  }
                   disabled={loading}
                 />
               </Button>
