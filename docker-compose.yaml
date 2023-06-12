@@ -10,9 +10,9 @@ services:
 
   api:
     build: ./api
-    # volumes:
-    #   - ./api:/app
-    #   - /app/node_modules
+    volumes:
+      - ./api:/app
+      - /app/node_modules
     env_file:
       - .env
     depends_on:
@@ -20,9 +20,9 @@ services:
 
   client:
     build: ./client
-    # volumes:
-    #   - ./client:/app
-    #   - /app/node_modules
+    volumes:
+      - ./client:/app
+      - /app/node_modules
     depends_on:
       - api
 

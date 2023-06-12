@@ -1,5 +1,4 @@
 import axios from "@/utils/axios";
-import { User } from "@/utils/types";
 import {
   passwordErrorToBoolean,
   usernameErrorToBoolean,
@@ -49,7 +48,6 @@ const Auth = () => {
   const [helperText, setHelperText] = useState("");
   const [loading, setLoading] = useState(false);
   const nextRouter = useRouter();
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => resetStates(), [selectedForm]);
 
@@ -164,134 +162,126 @@ const Auth = () => {
             width={245}
             height={245}
             priority={true}
-            onLoadingComplete={() => setImageLoaded(true)}
           />
-          {imageLoaded && (
-            <>
-              <Typography component="h1" variant="h4" alignSelf="flex-start">
-                {selectedForm === "Sign in"
-                  ? "Welcome back"
-                  : "Create your account"}
-              </Typography>
-              <Box component="form" onSubmit={handleSubmit} noValidate>
-                <TextField
-                  margin="dense"
-                  required
-                  fullWidth
-                  label="Username"
-                  name="username"
-                  size="small"
-                  type="username"
-                  helperText={
-                    usernameHelperTextToBoolean(helperText) && helperText
-                  }
-                  error={usernameErrorToBoolean(helperText)}
-                  disabled={loading}
-                  value={username}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setUsername(event.target.value);
-                  }}
-                />
-                <TextField
-                  margin="dense"
-                  required
-                  fullWidth
-                  label="Password"
-                  type="password"
-                  name="password"
-                  size="small"
-                  helperText={
-                    selectedForm === "Sign in" &&
-                    passwordErrorToBoolean(helperText) &&
-                    helperText
-                  }
-                  error={passwordErrorToBoolean(helperText)}
-                  disabled={loading}
-                  value={password}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setPassword(event.target.value);
-                  }}
-                />
-                {selectedForm === "Sign up" && (
-                  <TextField
-                    margin="dense"
-                    required
-                    fullWidth
-                    label="Confirm password"
-                    type="password"
-                    size="small"
-                    name="password-confirm"
-                    error={passwordErrorToBoolean(helperText)}
-                    helperText={
-                      passwordErrorToBoolean(helperText) && helperText
-                    }
-                    disabled={loading}
-                    value={passwordConfirm}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setPasswordConfirm(event.target.value);
-                    }}
-                  />
-                )}
-                <LoadingButton
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    my: 1,
-                  }}
-                  color="secondary"
-                  loading={loading}
-                >
-                  {selectedForm}
-                </LoadingButton>
-              </Box>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Typography
-                    variant="body2"
-                    onClick={() =>
-                      !loading &&
-                      setSelectedForm((currentForm) =>
-                        currentForm === "Sign in" ? "Sign up" : "Sign in"
-                      )
-                    }
-                    style={{
-                      cursor: !loading ? "pointer" : "default",
-                    }}
-                    color={"primary"}
-                  >
-                    {selectedForm === "Sign in"
-                      ? "Don't have an account? Sign up"
-                      : "Already have an account? Sign in"}
-                  </Typography>
-                </Grid>
-              </Grid>
+
+          <Typography component="h1" variant="h4" alignSelf="flex-start">
+            {selectedForm === "Sign in"
+              ? "Welcome back"
+              : "Create your account"}
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} noValidate>
+            <TextField
+              margin="dense"
+              required
+              fullWidth
+              label="Username"
+              name="username"
+              size="small"
+              type="username"
+              helperText={usernameHelperTextToBoolean(helperText) && helperText}
+              error={usernameErrorToBoolean(helperText)}
+              disabled={loading}
+              value={username}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setUsername(event.target.value);
+              }}
+            />
+            <TextField
+              margin="dense"
+              required
+              fullWidth
+              label="Password"
+              type="password"
+              name="password"
+              size="small"
+              helperText={
+                selectedForm === "Sign in" &&
+                passwordErrorToBoolean(helperText) &&
+                helperText
+              }
+              error={passwordErrorToBoolean(helperText)}
+              disabled={loading}
+              value={password}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setPassword(event.target.value);
+              }}
+            />
+            {selectedForm === "Sign up" && (
+              <TextField
+                margin="dense"
+                required
+                fullWidth
+                label="Confirm password"
+                type="password"
+                size="small"
+                name="password-confirm"
+                error={passwordErrorToBoolean(helperText)}
+                helperText={passwordErrorToBoolean(helperText) && helperText}
+                disabled={loading}
+                value={passwordConfirm}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setPasswordConfirm(event.target.value);
+                }}
+              />
+            )}
+            <LoadingButton
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                my: 1,
+              }}
+              color="secondary"
+              loading={loading}
+            >
+              {selectedForm}
+            </LoadingButton>
+          </Box>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
               <Typography
                 variant="body2"
-                color="text.secondary"
-                align="center"
-                sx={{ mt: 12, mb: 1.6 }}
+                onClick={() =>
+                  !loading &&
+                  setSelectedForm((currentForm) =>
+                    currentForm === "Sign in" ? "Sign up" : "Sign in"
+                  )
+                }
+                style={{
+                  cursor: !loading ? "pointer" : "default",
+                }}
+                color={"primary"}
               >
-                Henrique Buzon, 2023
+                {selectedForm === "Sign in"
+                  ? "Don't have an account? Sign up"
+                  : "Already have an account? Sign in"}
               </Typography>
-              <Stack direction={"row"} spacing={1.4}>
-                <Link
-                  href="https://github.com/henriquebuzon"
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <GitHubIcon fontSize="large" />
-                </Link>
-                <Link
-                  href="https://linkedin.com/in/henriquebuzon"
-                  rel=""
-                  target="_blank"
-                >
-                  <LinkedInIcon fontSize="large" />
-                </Link>
-              </Stack>
-            </>
-          )}
+            </Grid>
+          </Grid>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="center"
+            sx={{ mt: 12, mb: 1.6 }}
+          >
+            Henrique Buzon, 2023
+          </Typography>
+          <Stack direction={"row"} spacing={1.4}>
+            <Link
+              href="https://github.com/henriquebuzon"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <GitHubIcon fontSize="large" />
+            </Link>
+            <Link
+              href="https://linkedin.com/in/henriquebuzon"
+              rel=""
+              target="_blank"
+            >
+              <LinkedInIcon fontSize="large" />
+            </Link>
+          </Stack>
         </Box>
       </Container>
     </>
