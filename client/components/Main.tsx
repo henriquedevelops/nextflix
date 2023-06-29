@@ -1,6 +1,6 @@
-import axios from "axios";
-import { Movie, ResponseDataFromFetchMovies } from "../utils/types";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import axios from 'axios'
+import { Movie, ResponseDataFromFetchMovies } from '../utils/types'
+import { Menu as MenuIcon } from '@mui/icons-material'
 import {
   AppBar,
   Box,
@@ -8,103 +8,102 @@ import {
   Drawer,
   IconButton,
   Toolbar,
-} from "@mui/material";
-import { FunctionComponent as FC, useEffect, useRef, useState } from "react";
-import MoviesList from "./MoviesList";
-import Sidebar from "./Sidebar";
-import { AddRemoveToMyListContext, useMessageAlert } from "../utils/contexts";
-import { genericErrorAlert } from "../utils/validators";
-import AdminPanel from "./AdminPanel";
-import { CancelToken } from "axios";
+} from '@mui/material'
+import { FunctionComponent as FC, useEffect, useRef, useState } from 'react'
+import MoviesList from './MoviesList'
+import Sidebar from './Sidebar'
+import { AddRemoveToMyListContext, useMessageAlert } from '../utils/contexts'
+import { genericErrorAlert } from '../utils/validators'
+import AdminPanel from './AdminPanel'
 
 /* 
 This component contains the entire content of the index page.
 */
 
 const Main: FC = () => {
-  const [moviesRendered, setMoviesRendered] = useState<Movie[]>([]);
-  const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1);
-  const [selectedGenre, setSelectedGenre] = useState<string>("All movies");
-  const [searchTitle, setSearchTitle] = useState<string>("");
-  const [infiniteLoader, setInfiniteLoader] = useState<number>(0);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const { setMessageAlert } = useMessageAlert();
-  const [adminSelectedAction, setAdminSelectedAction] = useState<string>("");
+  const [moviesRendered, setMoviesRendered] = useState<Movie[]>([])
+  const [totalAmountOfMovies, setTotalAmountOfMovies] = useState(1)
+  const [selectedGenre, setSelectedGenre] = useState<string>('All movies')
+  const [searchTitle, setSearchTitle] = useState<string>('')
+  const [infiniteLoader, setInfiniteLoader] = useState<number>(0)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const { setMessageAlert } = useMessageAlert()
+  const [adminSelectedAction, setAdminSelectedAction] = useState<string>('')
   const [adminSelectedMovie, setAdminSelectedMovie] = useState<
     Movie | undefined
-  >(undefined);
-  const previousController: any = useRef();
+  >(undefined)
+  const previousController: any = useRef()
 
   useEffect(() => {
     const fetchMovies = async () => {
       if (previousController.current) {
-        previousController.current.abort();
+        previousController.current.abort()
       }
 
       // A new instance of the AbortController is created before making the API request
-      const controller = new AbortController();
+      const controller = new AbortController()
 
       // grab a reference to its associated AbortSignal object using the AbortController.signal property
-      const signal = controller.signal;
+      const signal = controller.signal
 
-      previousController.current = controller;
+      previousController.current = controller
       try {
         const response = await axios.get<ResponseDataFromFetchMovies>(
-          `api/${selectedGenre === "My list" ? "myList" : "movies"}?skip=${
-            moviesRendered.length
-          }&genre=${selectedGenre === "All movies" ? "" : selectedGenre}${
-            searchTitle && "&title=" + searchTitle
-          }`,
+          `http://localhost:5000/${
+            selectedGenre === 'My list' ? 'myList' : 'movies'
+          }?skip=${moviesRendered.length}&genre=${
+            selectedGenre === 'All movies' ? '' : selectedGenre
+          }${searchTitle && '&title=' + searchTitle}`,
           {
             signal,
             withCredentials: true,
           }
-        );
+        )
 
         if (response.status === 204) {
-          setTotalAmountOfMovies(0);
-          return;
+          setTotalAmountOfMovies(0)
+          return
         }
 
-        const newSliceOfMovies = response.data.oneSliceOfMovies;
-        const totalAmount = response.data.totalAmountOfMovies;
+        const newSliceOfMovies = response.data.oneSliceOfMovies
+        const totalAmount = response.data.totalAmountOfMovies
 
-        setMoviesRendered([...moviesRendered, ...newSliceOfMovies]);
-        setTotalAmountOfMovies(totalAmount);
+        setMoviesRendered([...moviesRendered, ...newSliceOfMovies])
+        setTotalAmountOfMovies(totalAmount)
       } catch (error: any) {
         if (!axios.isCancel(error)) {
-          setMessageAlert(genericErrorAlert);
-          setTotalAmountOfMovies(0);
-          console.error(error);
+          setMessageAlert(genericErrorAlert)
+          setTotalAmountOfMovies(0)
+          console.error(error)
         }
       }
-    };
+    }
 
-    fetchMovies();
-  }, [selectedGenre, searchTitle, infiniteLoader, setMessageAlert]);
+    fetchMovies()
+  }, [selectedGenre, searchTitle, infiniteLoader, setMessageAlert])
 
-  const drawerWidth = 270;
+  const drawerWidth = 270
 
   return (
     <AddRemoveToMyListContext.Provider
       value={{ setMoviesRendered, setTotalAmountOfMovies, selectedGenre }}
     >
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <AppBar
           color="transparent"
           position="fixed"
           sx={{
-            backgroundColor: "black",
+            backgroundColor: 'black',
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
           }}
         >
-          <Toolbar sx={{ display: { sm: "none" } }}>
+          <Toolbar sx={{ display: { sm: 'none' } }}>
             <IconButton
               aria-label="open drawer"
               edge="start"
               onClick={() => {
-                setMobileOpen(!mobileOpen);
+                setMobileOpen(!mobileOpen)
               }}
               sx={{ mr: 2 }}
             >
@@ -112,7 +111,7 @@ const Main: FC = () => {
             </IconButton>
             <CardMedia
               component="img"
-              sx={{ width: "200px", marginTop: "1px" }}
+              sx={{ width: '200px', marginTop: '1px' }}
               image="/images/Logo2.png"
             />
           </Toolbar>
@@ -135,15 +134,15 @@ const Main: FC = () => {
             variant="temporary"
             open={mobileOpen}
             onClose={() => {
-              setMobileOpen(!mobileOpen);
+              setMobileOpen(!mobileOpen)
             }}
             ModalProps={{
               keepMounted: true, // Better open performance on mobile.
             }}
             sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
+              display: { xs: 'block', sm: 'none' },
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
                 width: drawerWidth,
               },
             }}
@@ -161,11 +160,11 @@ const Main: FC = () => {
           <Drawer
             variant="permanent"
             sx={{
-              display: { xs: "none", sm: "block" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
+              display: { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
                 width: drawerWidth,
-                borderRight: "none",
+                borderRight: 'none',
               },
             }}
             open
@@ -191,7 +190,7 @@ const Main: FC = () => {
         />
       </Box>
     </AddRemoveToMyListContext.Provider>
-  );
-};
+  )
+}
 
-export default Main;
+export default Main

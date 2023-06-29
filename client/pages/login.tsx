@@ -1,66 +1,65 @@
-import axios from "@/utils/axios";
+import axios from '@/utils/axios'
 import {
   passwordErrorToBoolean,
   usernameErrorToBoolean,
   usernameHelperTextToBoolean,
   validateCredentialsLength,
   validatePasswordsMatch,
-} from "@/utils/validators";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import { LoadingButton } from "@mui/lab";
+} from '@/utils/validators'
+import { LoadingButton } from '@mui/lab'
 import {
   Box,
+  CardMedia,
   Container,
   Grid,
   Link,
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
-import { NextPageContext } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { parseCookies } from "nookies";
-import React, { useEffect, useState } from "react";
+} from '@mui/material'
+import { NextPageContext } from 'next'
+import Head from 'next/head'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { parseCookies } from 'nookies'
+import React, { useEffect, useState } from 'react'
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { ["accessToken-Nextflix"]: accessToken } = parseCookies(context);
+  const { ['accessToken-Nextflix']: accessToken } = parseCookies(context)
 
   if (accessToken) {
     return {
       redirect: {
-        destination: "/",
+        destination: '/',
         permanent: false,
       },
-    };
+    }
   }
 
-  return { props: { userIsLoggedIn: true } };
+  return { props: { userIsLoggedIn: true } }
 }
 
 const Auth = () => {
-  const [selectedForm, setSelectedForm] = useState("Sign in");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [helperText, setHelperText] = useState("");
-  const [loading, setLoading] = useState(false);
-  const nextRouter = useRouter();
+  const [selectedForm, setSelectedForm] = useState('Sign in')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [helperText, setHelperText] = useState('')
+  const [loading, setLoading] = useState(false)
+  const nextRouter = useRouter()
 
-  useEffect(() => resetStates(), [selectedForm]);
+  useEffect(() => resetStates(), [selectedForm])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true);
+    event.preventDefault()
+    setLoading(true)
 
     if (!username) {
       setHelperText(
-        `Please enter ${selectedForm === "Sign in" ? "your" : "a"} username`
-      );
-      setLoading(false);
-      return;
+        `Please enter ${selectedForm === 'Sign in' ? 'your' : 'a'} username`
+      )
+      setLoading(false)
+      return
     }
 
     const credentialsLengthIsValid = validateCredentialsLength(
@@ -69,72 +68,72 @@ const Auth = () => {
       selectedForm,
       setHelperText,
       setLoading
-    );
-    if (!credentialsLengthIsValid) return;
+    )
+    if (!credentialsLengthIsValid) return
 
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
+    const formData = new FormData()
+    formData.append('username', username)
+    formData.append('password', password)
 
-    if (selectedForm === "Sign in") {
+    if (selectedForm === 'Sign in') {
       try {
-        const response = await axios.post("/auth", {
+        const response = await axios.post('/auth', {
           username,
           password,
-        });
+        })
       } catch (error) {
-        console.log(error);
-        setLoading(false);
-        setHelperText("Invalid credentials");
-        return;
+        console.log(error)
+        setLoading(false)
+        setHelperText('Invalid credentials')
+        return
       }
     }
 
-    if (selectedForm === "Sign up") {
-      formData.append("password-confirm", passwordConfirm);
+    if (selectedForm === 'Sign up') {
+      formData.append('password-confirm', passwordConfirm)
 
       const passwordsMatch = validatePasswordsMatch(
         password,
         passwordConfirm,
         setHelperText,
         setLoading
-      );
-      if (!passwordsMatch) return;
+      )
+      if (!passwordsMatch) return
 
       try {
-        const response = await axios.post("/users", {
+        const response = await axios.post('/users', {
           username,
           password,
-        });
+        })
 
-        console.log(response);
-        await axios.post("/auth", {
+        console.log(response)
+        await axios.post('/auth', {
           username,
           password,
-        });
+        })
       } catch (error: any) {
         if (error.response?.status === 409) {
-          setHelperText("Username unavailable");
+          setHelperText('Username unavailable')
         } else {
-          console.log(error);
-          setHelperText("Invalid credentials");
+          console.log(error)
+          setHelperText('Invalid credentials')
         }
 
-        setLoading(false);
-        return;
+        setLoading(false)
+        return
       }
     }
 
-    nextRouter.push("/");
-  };
+    nextRouter.push('/')
+  }
 
   const resetStates = () => {
-    setHelperText("");
-    setLoading(false);
-    setUsername("");
-    setPassword("");
-    setPasswordConfirm("");
-  };
+    setHelperText('')
+    setLoading(false)
+    setUsername('')
+    setPassword('')
+    setPasswordConfirm('')
+  }
 
   return (
     <>
@@ -144,10 +143,10 @@ const Auth = () => {
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Image
@@ -156,8 +155,8 @@ const Auth = () => {
             style={{
               marginTop: 60,
               marginBottom: 80,
-              marginRight: "auto",
-              marginLeft: "auto",
+              marginRight: 'auto',
+              marginLeft: 'auto',
             }}
             width={245}
             height={245}
@@ -165,9 +164,9 @@ const Auth = () => {
           />
 
           <Typography component="h1" variant="h4" alignSelf="flex-start">
-            {selectedForm === "Sign in"
-              ? "Welcome back"
-              : "Create your account"}
+            {selectedForm === 'Sign in'
+              ? 'Welcome back'
+              : 'Create your account'}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate>
             <TextField
@@ -183,7 +182,7 @@ const Auth = () => {
               disabled={loading}
               value={username}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setUsername(event.target.value);
+                setUsername(event.target.value)
               }}
             />
             <TextField
@@ -195,7 +194,7 @@ const Auth = () => {
               name="password"
               size="small"
               helperText={
-                selectedForm === "Sign in" &&
+                selectedForm === 'Sign in' &&
                 passwordErrorToBoolean(helperText) &&
                 helperText
               }
@@ -203,10 +202,10 @@ const Auth = () => {
               disabled={loading}
               value={password}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPassword(event.target.value);
+                setPassword(event.target.value)
               }}
             />
-            {selectedForm === "Sign up" && (
+            {selectedForm === 'Sign up' && (
               <TextField
                 margin="dense"
                 required
@@ -220,7 +219,7 @@ const Auth = () => {
                 disabled={loading}
                 value={passwordConfirm}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setPasswordConfirm(event.target.value);
+                  setPasswordConfirm(event.target.value)
                 }}
               />
             )}
@@ -244,17 +243,17 @@ const Auth = () => {
                 onClick={() =>
                   !loading &&
                   setSelectedForm((currentForm) =>
-                    currentForm === "Sign in" ? "Sign up" : "Sign in"
+                    currentForm === 'Sign in' ? 'Sign up' : 'Sign in'
                   )
                 }
                 style={{
-                  cursor: !loading ? "pointer" : "default",
+                  cursor: !loading ? 'pointer' : 'default',
                 }}
-                color={"primary"}
+                color={'primary'}
               >
-                {selectedForm === "Sign in"
+                {selectedForm === 'Sign in'
                   ? "Don't have an account? Sign up"
-                  : "Already have an account? Sign in"}
+                  : 'Already have an account? Sign in'}
               </Typography>
             </Grid>
           </Grid>
@@ -262,30 +261,44 @@ const Auth = () => {
             variant="body2"
             color="text.secondary"
             align="center"
-            sx={{ mt: 12, mb: 1.6 }}
+            sx={{ mt: 12, mb: 2 }}
           >
             Henrique Buzon, 2023
           </Typography>
-          <Stack direction={"row"} spacing={1.4}>
+          <Stack direction={'row'} spacing={2}>
             <Link
-              href="https://github.com/henriquebuzon"
+              href="https://www.github.com/henriquebuzon"
               rel="noreferrer"
               target="_blank"
             >
-              <GitHubIcon fontSize="large" />
+              <CardMedia
+                component="img"
+                src="/images/github.png"
+                alt="GitHub"
+                sx={{
+                  width: '2.2rem',
+                }}
+              />
             </Link>
             <Link
-              href="https://linkedin.com/in/henriquebuzon"
+              href="https://www.linkedin.com/in/henriquebuzon"
               rel=""
               target="_blank"
             >
-              <LinkedInIcon fontSize="large" />
+              <CardMedia
+                component="img"
+                src="/images/linkedin.png"
+                alt="Linkedin"
+                sx={{
+                  width: '2.2rem',
+                }}
+              />
             </Link>
           </Stack>
         </Box>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default Auth;
+export default Auth
