@@ -125,6 +125,7 @@ const MoviesList: FC<MoviesListProps> = ({
                 <Card
                   sx={{ height: '100%', cursor: 'pointer' }}
                   onClick={() => setSelectedMovie(movie)}
+                  data-cy="movie-card"
                 >
                   <Box style={{ position: 'relative' }}>
                     <CardMedia

@@ -130,6 +130,7 @@ const SelectedMovie: FC<SelectedMovieProps> = ({
                 variant="contained"
                 color="secondary"
                 onClick={() => nextRouter.push(`/${selectedMovie.id}`)}
+                data-cy="watch-button"
               >
                 Watch now
               </Button>

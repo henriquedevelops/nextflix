@@ -232,6 +232,7 @@ const Auth = () => {
               }}
               color="secondary"
               loading={loading}
+              data-cy="sigin-button"
             >
               {selectedForm}
             </LoadingButton>
