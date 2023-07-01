@@ -17,7 +17,7 @@ import { genericErrorAlert } from '../utils/validators'
 import AdminPanel from './AdminPanel'
 
 /* 
-This component contains the entire content of the index page.
+This component contains the entire content of the index page, except only for the notifications system.
 */
 
 const Main: FC = () => {
@@ -29,10 +29,10 @@ const Main: FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { setMessageAlert } = useMessageAlert()
   const [adminSelectedAction, setAdminSelectedAction] = useState<string>('')
+  const previousController: any = useRef()
   const [adminSelectedMovie, setAdminSelectedMovie] = useState<
     Movie | undefined
   >(undefined)
-  const previousController: any = useRef()
 
   useEffect(() => {
     const fetchMovies = async () => {
