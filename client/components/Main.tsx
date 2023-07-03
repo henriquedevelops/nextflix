@@ -49,11 +49,11 @@ const Main: FC = () => {
       previousController.current = controller
       try {
         const response = await axios.get<ResponseDataFromFetchMovies>(
-          `http://localhost:5000/${
-            selectedGenre === 'My list' ? 'myList' : 'movies'
-          }?skip=${moviesRendered.length}&genre=${
-            selectedGenre === 'All movies' ? '' : selectedGenre
-          }${searchTitle && '&title=' + searchTitle}`,
+          `api/${selectedGenre === 'My list' ? 'myList' : 'movies'}?skip=${
+            moviesRendered.length
+          }&genre=${selectedGenre === 'All movies' ? '' : selectedGenre}${
+            searchTitle && '&title=' + searchTitle
+          }`,
           {
             signal,
             withCredentials: true,
