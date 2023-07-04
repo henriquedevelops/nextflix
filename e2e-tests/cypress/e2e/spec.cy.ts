@@ -10,4 +10,11 @@ describe('Core functionality', () => {
     cy.get('[data-cy="watch-button"]').click()
     cy.get('video').should('exist')
   })
+
+  it('filters movies by genre', () => {
+    cy.intercept('api/movies*').as('moviesRequest')
+    cy.contains('Action').click()
+    cy.wait('@moviesRequest')
+    cy.get('[data-cy="movie-card"]').should('contain', 'Action')
+  })
 })
