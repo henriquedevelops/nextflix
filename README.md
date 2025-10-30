@@ -1,4 +1,4 @@
-# [**Nextflix**](https://nextflix.cloud) 🔴
+# [**Nextflix**](https://app.nextflix.com) 🔴
 
 Your next type of movie streaming platform.
 
